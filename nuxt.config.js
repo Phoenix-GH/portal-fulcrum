@@ -38,7 +38,7 @@ module.exports = {
     '@nuxtjs/tailwindcss'
   ],
   tailwindcss: {
-    purgeCSSInDev: true // turn on for production testing once we get this setup properly we can turn back off
+    purgeCSSInDev: false // turn on for production testing
   },
   purgeCSS: {
     // TODO figure this out... tailwindui has some special cases we want to make sure we address
@@ -49,6 +49,15 @@ module.exports = {
     //   //return contentWithoutStyleBlocks.match(/[A-Za-z0-9-_/:.]*[A-Za-z0-9-_/]+/g) || [];
     //   return []
     // }
+    extractors: [
+      {
+        extractor(content) {
+          const contentWithoutStyleBlocks = content.replace(/<style[^]+?<\/style>/gi, '')
+          return contentWithoutStyleBlocks.match(/[A-Za-z0-9-_/:.]*[A-Za-z0-9-_/]+/g) || []
+        },
+        extensions: ['html', 'vue' /*, 'js' */] // why would we need it for .js ??? 🤔
+      }
+    ]
   },
   /*
    ** Nuxt.js modules
@@ -72,6 +81,6 @@ module.exports = {
     /*
      ** You can extend webpack config here
      */
-    extend(config, ctx) { }
+    extend(config, ctx) {}
   }
 }

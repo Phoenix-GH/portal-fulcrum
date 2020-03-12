@@ -7,5 +7,6 @@
 html,
 body {
   height: 100%;
+  @apply bg-cool-gray-200;
 }
 </style>
