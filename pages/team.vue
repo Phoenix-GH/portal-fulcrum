@@ -1,48 +1,71 @@
 <template lang="pug">
-.container
-  div
-    h1.title Team management
-    .links.pt-3
-      a.button--green.px-4.py-2.bg-gray-500(href="https://nuxtjs.org/" target="_blank" class="hover:bg-gray-800") Documentation
-      a.button--grey.px-4.py-2(href="https://github.com/nuxt/nuxt.js" target="_blank") GitHub
+.flex.flex-col
+  .-my-2.py-2.overflow-x-auto(class='sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8')
+    .align-middle.inline-block.min-w-full.shadow.overflow-hidden.border-b.border-gray-200(class='sm:rounded-lg')
+      table.min-w-full
+        thead
+          tr
+            th.px-6.py-3.border-b.border-gray-200.bg-gray-50.text-left.text-xs.leading-4.font-medium.text-gray-500.uppercase.tracking-wider
+              | Name
+            th.px-6.py-3.border-b.border-gray-200.bg-gray-50.text-left.text-xs.leading-4.font-medium.text-gray-500.uppercase.tracking-wider
+              | Title
+            th.px-6.py-3.border-b.border-gray-200.bg-gray-50.text-left.text-xs.leading-4.font-medium.text-gray-500.uppercase.tracking-wider
+              | Email
+            th.px-6.py-3.border-b.border-gray-200.bg-gray-50.text-left.text-xs.leading-4.font-medium.text-gray-500.uppercase.tracking-wider
+              | Role
+            th.px-6.py-3.border-b.border-gray-200.bg-gray-50
+        tbody.bg-white
+          tr
+            td.px-6.py-4.whitespace-no-wrap.border-b.border-gray-200.text-sm.leading-5.font-medium.text-gray-900
+              | Bernard Lane
+            td.px-6.py-4.whitespace-no-wrap.border-b.border-gray-200.text-sm.leading-5.text-gray-500
+              | Director, Human Resources
+            td.px-6.py-4.whitespace-no-wrap.border-b.border-gray-200.text-sm.leading-5.text-gray-500
+              | bernardlane@example.com
+            td.px-6.py-4.whitespace-no-wrap.border-b.border-gray-200.text-sm.leading-5.text-gray-500
+              | Owner
+            td.px-6.py-4.whitespace-no-wrap.text-right.border-b.border-gray-200.text-sm.leading-5.font-medium
+              a.text-indigo-600(href='#' class='hover:text-indigo-900 focus:outline-none focus:underline') Edit
+          tr
+            td.px-6.py-4.whitespace-no-wrap.border-b.border-gray-200.text-sm.leading-5.font-medium.text-gray-900
+              | Bernard Lane
+            td.px-6.py-4.whitespace-no-wrap.border-b.border-gray-200.text-sm.leading-5.text-gray-500
+              | Director, Human Resources
+            td.px-6.py-4.whitespace-no-wrap.border-b.border-gray-200.text-sm.leading-5.text-gray-500
+              | bernardlane@example.com
+            td.px-6.py-4.whitespace-no-wrap.border-b.border-gray-200.text-sm.leading-5.text-gray-500
+              | Owner
+            td.px-6.py-4.whitespace-no-wrap.text-right.border-b.border-gray-200.text-sm.leading-5.font-medium
+              a.text-indigo-600(href='#' class='hover:text-indigo-900 focus:outline-none focus:underline') Edit
+          tr
+            td.px-6.py-4.whitespace-no-wrap.border-b.border-gray-200.text-sm.leading-5.font-medium.text-gray-900
+              | Bernard Lane
+            td.px-6.py-4.whitespace-no-wrap.border-b.border-gray-200.text-sm.leading-5.text-gray-500
+              | Director, Human Resources
+            td.px-6.py-4.whitespace-no-wrap.border-b.border-gray-200.text-sm.leading-5.text-gray-500
+              | bernardlane@example.com
+            td.px-6.py-4.whitespace-no-wrap.border-b.border-gray-200.text-sm.leading-5.text-gray-500
+              | Owner
+            td.px-6.py-4.whitespace-no-wrap.text-right.border-b.border-gray-200.text-sm.leading-5.font-medium
+              a.text-indigo-600(href='#' class='hover:text-indigo-900 focus:outline-none focus:underline') Edit
+          tr
+            td.px-6.py-4.whitespace-no-wrap.text-sm.leading-5.font-medium.text-gray-900
+              | Bernard Lane
+            td.px-6.py-4.whitespace-no-wrap.text-sm.leading-5.text-gray-500
+              | Director, Human Resources
+            td.px-6.py-4.whitespace-no-wrap.text-sm.leading-5.text-gray-500
+              | bernardlane@example.com
+            td.px-6.py-4.whitespace-no-wrap.text-sm.leading-5.text-gray-500
+              | Owner
+            td.px-6.py-4.whitespace-no-wrap.text-right.text-sm.leading-5.font-medium
+              a.text-indigo-600(href='#' class='hover:text-indigo-900 focus:outline-none focus:underline') Edit
+
 </template>
 
 <script>
-import Logo from '~/components/Logo.vue'
-
 export default {
-  components: {
-    Logo
-  }
 }
 </script>
 
 <style>
-/* Sample `apply` at-rules with Tailwind CSS */
-.container {
-  @apply min-h-screen flex justify-center items-center text-center mx-auto;
-}
-/*
-.container {
-  margin: 0 auto;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
-*/
-.title {
-  font-family: 'Quicksand', 'Source Sans Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue',
-    Arial, sans-serif;
-  display: block;
-  font-weight: 300;
-  font-size: 100px;
-  color: #35495e;
-  letter-spacing: 1px;
-}
-
-.links {
-  padding-top: 15px;
-}
 </style>
