@@ -68,11 +68,7 @@ export default {
   name: 'TeamManagement',
   components: {},
   data() {},
-  methods: {
-    onMount() {
-      alert('aef')
-    }
-  }
+  methods: {}
 }
 </script>
 
