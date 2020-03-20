@@ -4,10 +4,9 @@
       .flex.items-center.justify-between.h-16
         .flex.items-center
           .flex-shrink-0: img.h-8.w-8(src="/img/logos/workflow-mark-on-dark.svg" alt="")
-          .hidden(class="md:block")(v-for="section in sections" v-bind:key="section.label")
+          .hidden(class="md:block")(v-for="section in sections" v-bind:key="section.id")
             .ml-6.flex.items-baseline
-              //- a.ml-4.px-3.py-2.rounded-md.text-sm.font-medium.text-white.bg-gray-900(href="/" class="focus:outline-none focus:text-white focus:bg-gray-700") Dashboard
-              a.ml-4.px-3.py-2.rounded-md.text-sm.font-medium.text-gray-300(v-bind:href="section.link" class="hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700") {{section.label}}
+              a.ml-4.px-3.py-2.rounded-md.text-sm.font-medium(v-bind:href="section.link" class="hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700" :class="{'bg-gray-900': selectedMenu===section.link, 'text-white': selectedMenu===section.link, 'text-gray-300': selectedMenu !==section.link}") {{section.label}}
 
         .hidden(class="md:block")
           .ml-4.flex.items-center(class="md:ml-6")
@@ -62,18 +61,26 @@ export default {
         },
         {
           label: 'Projects',
-          link: 'projects'
+          link: '/projects'
         },
         {
           label: 'Calendar',
-          link: 'calendar'
+          link: '/calendar'
         },
         {
           label: 'Reports',
-          link: 'reports'
+          link: '/reports'
         }
-      ],
-      activeSection: 0 // this is temporary
+      ]
+    }
+  },
+  computed: {
+    selectedMenu() {
+      let link = this.$route.name
+      if (link === 'index') {
+        link = ''
+      }
+      return `/${link}`
     }
   },
   methods: {}
