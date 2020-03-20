@@ -23,7 +23,7 @@
             td.px-6.py-4.whitespace-no-wrap.border-b.border-gray-200.text-sm.leading-5.text-gray-500
               | {{team.team_status}}
             td.px-6.py-4.whitespace-no-wrap.border-b.border-gray-200.text-sm.leading-5.text-gray-500
-              | {{Date(team.create_datetime)}}
+              | {{team.create_datetime}}
             td.px-6.py-4.whitespace-no-wrap.text-right.border-b.border-gray-200.text-sm.leading-5.font-medium
               a.text-indigo-600(href='#' class='hover:text-indigo-900 focus:outline-none focus:underline') Edit
 
@@ -42,8 +42,8 @@ export default {
           team_name: 'Team 1',
           description: 'Dummy team 1',
           team_status: 'active',
-          create_datetime: 20200306172513.426,
-          update_datetime: 20200306172513.426
+          create_datetime: 20200306172713.426,
+          update_datetime: 20200306172713.426
         },
         {
           team_id: 2,
