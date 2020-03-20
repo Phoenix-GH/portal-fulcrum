@@ -4,13 +4,11 @@
       .flex.items-center.justify-between.h-16
         .flex.items-center
           .flex-shrink-0: img.h-8.w-8(src="/img/logos/workflow-mark-on-dark.svg" alt="")
-          .hidden(class="md:block")
+          .hidden(class="md:block")(v-for="section in sections" v-bind:key="section.label")
             .ml-6.flex.items-baseline
-              a.ml-4.px-3.py-2.rounded-md.text-sm.font-medium.text-white.bg-gray-900(href="/" class="focus:outline-none focus:text-white focus:bg-gray-700") Dashboard
-              a.ml-4.px-3.py-2.rounded-md.text-sm.font-medium.text-gray-300(href="/team" class="hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700") Team
-              a.ml-4.px-3.py-2.rounded-md.text-sm.font-medium.text-gray-300(href="/projects" class="hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700") Projects
-              a.ml-4.px-3.py-2.rounded-md.text-sm.font-medium.text-gray-300(href="/calendar" class="hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700") Calendar
-              a.ml-4.px-3.py-2.rounded-md.text-sm.font-medium.text-gray-300(href="/reports" class="hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700") Reports
+              //- a.ml-4.px-3.py-2.rounded-md.text-sm.font-medium.text-white.bg-gray-900(href="/" class="focus:outline-none focus:text-white focus:bg-gray-700") Dashboard
+              a.ml-4.px-3.py-2.rounded-md.text-sm.font-medium.text-gray-300(v-bind:href="section.link" class="hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700") {{section.label}}
+
         .hidden(class="md:block")
           .ml-4.flex.items-center(class="md:ml-6")
             button.p-1.border-2.border-transparent.text-gray-400.rounded-full(class="hover:text-white focus:outline-none focus:text-white focus:bg-gray-700"): svg.h-6.w-6(stroke="currentColor" fill="none" viewBox="0 0 24 24"): path(stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9")
@@ -53,7 +51,28 @@ export default {
   data() {
     return {
       open: true,
-      sections: ['Dashboard', 'Team', 'Projects', 'Calendar', 'Reports'],
+      sections: [
+        {
+          label: 'Dashboard',
+          link: '/'
+        },
+        {
+          label: 'Team',
+          link: '/team'
+        },
+        {
+          label: 'Projects',
+          link: 'projects'
+        },
+        {
+          label: 'Calendar',
+          link: 'calendar'
+        },
+        {
+          label: 'Reports',
+          link: 'reports'
+        }
+      ],
       activeSection: 0 // this is temporary
     }
   },
