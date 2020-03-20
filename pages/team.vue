@@ -63,7 +63,17 @@
 </template>
 
 <script>
-export default {}
+export default {
+  layout: 'default',
+  name: 'TeamManagement',
+  components: {},
+  data() {},
+  methods: {
+    onMount() {
+      alert('aef')
+    }
+  }
+}
 </script>
 
 <style></style>
