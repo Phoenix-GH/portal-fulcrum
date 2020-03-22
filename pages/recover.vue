@@ -19,9 +19,9 @@
               | Reset Password
     p.mt-4.text-sm.text-center 
       | Don't have an account? 
-      a.font-medium.text-indigo-600.transition.ease-in-out.duration-150(href='/register', class='hover:text-indigo-500 focus:outline-none focus:underline') register      
+      nuxt-link.font-medium.text-indigo-600.transition.ease-in-out.duration-150(to='/register', class='hover:text-indigo-500 focus:outline-none focus:underline') register      
       | -- or go 
-      a.font-medium.text-indigo-600.transition.ease-in-out.duration-150(href="/login") back 
+      nuxt-link.font-medium.text-indigo-600.transition.ease-in-out.duration-150(to="/login") back 
       | .
     p.mt-12.text-xs.text-center 
       a.font-medium.text-cool-gray-500.transition.ease-in-out.duration-150(href="//www.fulcrumsaas.com" class="hover:text-indigo-600") www.fulcrumsaas.com
@@ -33,6 +33,7 @@ export default {
   name: 'ResetPage',
   layout: 'blank',
   components: {},
+  meta: { isPublic: true },
   data() {
     return {}
   },
