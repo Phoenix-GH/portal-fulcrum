@@ -57,12 +57,12 @@ export default {
     }
   },
   async mounted() {
-    // const { data } = await this.$axios({
-    //   baseURL: 'http://api-v1.fulcrumsaas.net/api',
-    //   method: 'post',
-    //   url: '/auth/get'
-    // })
-    // console.log('auth_id----', data.response.auth.auth_id)
+    const { data } = await this.$axios({
+      baseURL: 'http://api-v1.fulcrumsaas.net/api',
+      method: 'post',
+      url: '/auth/get'
+    })
+    this.teams = [...data.response.teams]
   },
   methods: {}
 }
