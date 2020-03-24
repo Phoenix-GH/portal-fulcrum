@@ -25,7 +25,8 @@
             td.px-6.py-4.whitespace-no-wrap.border-b.border-gray-200.text-sm.leading-5.text-gray-500
               | {{team.description}}
             td.px-6.py-4.whitespace-no-wrap.border-b.border-gray-200.text-sm.leading-5.text-gray-500
-              | {{team.team_status}}
+              span.px-2.inline-flex.text-xs.leading-5.font-semibold.rounded-full(:class="{'bg-green-100': team.team_status==='active', 'text-green-800': team.team_status==='active', 'bg-red-100': team.team_status==='inactive', 'text-red-800': team.team_status==='inactive'}")
+                | {{team.team_status}}
             td.px-6.py-4.whitespace-no-wrap.border-b.border-gray-200.text-sm.leading-5.text-gray-500
               | {{team.create_datetime}}
             td.px-6.py-4.whitespace-no-wrap.text-right.border-b.border-gray-200.text-sm.leading-5.font-medium
