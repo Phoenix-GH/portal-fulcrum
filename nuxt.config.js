@@ -17,7 +17,7 @@ module.exports = {
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
   },
   router: {
-    middleware: ['log', 'session', 'visits', 'auth']
+    middleware: ['log', 'session', 'auth']
   },
   /*
    ** Customize the progress-bar color
