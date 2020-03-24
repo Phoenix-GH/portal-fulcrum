@@ -19,7 +19,8 @@ module.exports = {
   ],
   // add your custom rules here
   rules: {
+    "prettier/prettier": 'warn',
     'nuxt/no-cjs-in-config': 'off',
-    'camelcase' : 'off'
+    'camelcase': 'off'
   }
 }
