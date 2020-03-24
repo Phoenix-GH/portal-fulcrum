@@ -6,6 +6,12 @@
   .mt-8(class='sm:mx-auto sm:w-full sm:max-w-md')
     .bg-white.py-8.px-4.shadow(class='sm:rounded-lg sm:px-10')
       form(@submit.prevent="onSubmit")
+        div.bg-red-100.border.rounded.border-red-700.p-2.mb-4.flex.items-center.text-red-700(v-if="errors.length > 0")
+          ul
+            template(v-for="error in errors")
+              //-svg.w-5.h-5(viewBox="0 0 20 20" fill="currentColor" strokewidth="2")
+                path(fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd")
+              li.text-red-700.ml-2 {{ error.text }}
         div
           label.block.text-sm.font-medium.leading-5.text-gray-700(for='email') Email address
           .mt-1.rounded-md.shadow-sm
@@ -28,9 +34,12 @@
     p.mt-12.text-xs.text-center 
       a.font-medium.text-cool-gray-500.transition.ease-in-out.duration-150(href="//www.fulcrumsaas.com" class="hover:text-indigo-600") www.fulcrumsaas.com
     
+
+    //- p.bg-gray-50.p-1: pre Session Key {{ $store.state.sessionKey }}
 </template>
 
 <script>
+import bcrypt from 'bcryptjs'
 export default {
   layout: 'blank',
   name: 'LoginPage',
@@ -45,8 +54,9 @@ export default {
   data() {
     return {
       auth_id: '41e38190-60fe-11ea-880a-fb4e90c9f219',
-      username: 'eric@zibix.com',
-      password: 'testing'
+      username: 'mgambill+456@nmyvision.com',
+      password: 'password2@',
+      errors: []
     }
   },
   // async mounted() {
@@ -57,12 +67,14 @@ export default {
     async login() {
       try {
         const { username: email, password } = this
-
+        const salt = await bcrypt.genSaltSync(10)
+        const passwordHash = await bcrypt.hash(password, salt)
         const { data } = await this.$axios.post('/user/login', {
+          auth_id: '0379da40-6bed-11ea-802c-fbb9d7b60434',
           email,
-          password
+          password: passwordHash
         })
-
+        debugger
         if (data.error_state) {
           // TODO
           alert('Invalid credentials, unable to login')
@@ -72,7 +84,10 @@ export default {
         // eslint-disable-next-line
         console.log(data)
       } catch (err) {
-        console.error(err)
+        console.log(Object.values(err.response.data.errors))
+        if (err.response.status === 409) {
+          this.errors = Object.values(err.response.data.errors)
+        }
       }
     },
     async onSubmit() {

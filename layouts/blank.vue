@@ -1,9 +1,8 @@
 <template lang="pug">
   div
-    h3 blnk
     nuxt
     
-    pre.p-3.bg-gray-800.text-gray-50 {{ $store.state }}
+    pre.text-xs.p-3.bg-gray-800.text-gray-50 {{ $store.state.sessionKey }}
 </template>
 
 <script>
