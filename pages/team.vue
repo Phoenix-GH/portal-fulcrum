@@ -43,7 +43,7 @@
           h3.text-lg.leading-6.font-medium.text-gray-900 Delete team
           .mt-2: p.text-sm.leading-5.text-gray-500 Are you sure you want to delete this team? All of your data will be permanantly removed from our servers forever. This action cannot be undone.
       .mt-5(class="sm:mt-4 sm:flex sm:flex-row-reverse")
-        span.flex.w-full.rounded-md.shadow-sm(class="sm:ml-3 sm:w-auto"): button.inline-flex.justify-center.w-full.rounded-md.border.border-transparent.px-4.py-2.bg-red-600.text-base.leading-6.font-medium.text-white.shadow-sm.transition.ease-in-out.duration-150(@click="deleteModalOpen = false;" type="button" class="hover:bg-red-500 focus:outline-none focus:border-red-700 focus:shadow-outline-red sm:text-sm sm:leading-5") Deactivate
+        span.flex.w-full.rounded-md.shadow-sm(class="sm:ml-3 sm:w-auto"): button.inline-flex.justify-center.w-full.rounded-md.border.border-transparent.px-4.py-2.bg-red-600.text-base.leading-6.font-medium.text-white.shadow-sm.transition.ease-in-out.duration-150(@click="deleteTeam()" type="button" class="hover:bg-red-500 focus:outline-none focus:border-red-700 focus:shadow-outline-red sm:text-sm sm:leading-5") Deactivate
         span.mt-3.flex.w-full.rounded-md.shadow-sm(class="sm:mt-0 sm:w-auto"): button.inline-flex.justify-center.w-full.rounded-md.border.border-gray-300.px-4.py-2.bg-white.text-base.leading-6.font-medium.text-gray-700.shadow-sm.transition.ease-in-out.duration-150(@click="deleteModalOpen = false;" type="button" class="hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline sm:text-sm sm:leading-5") Cancel
 </template>
 
@@ -55,6 +55,8 @@ export default {
   data() {
     return {
       deleteModalOpen: false,
+      selectedTeamId: null,
+      auth_id: null,
       teams: [
         {
           team_id: 1,
@@ -76,17 +78,43 @@ export default {
     }
   },
   async mounted() {
-    const { data } = await this.$axios({
-      baseURL: 'http://api-v1.fulcrumsaas.net/api',
-      method: 'post',
-      url: '/auth/get'
-    })
-    this.teams = this.teams || [...data.response.teams]
+    await this.loadData()
   },
   methods: {
+    async loadData() {
+      const { data } = await this.$axios({
+        baseURL: 'http://api-v1.fulcrumsaas.net/api',
+        method: 'post',
+        url: '/auth/get'
+      })
+      this.auth_id = data.response.auth.auth_id
+      this.teams = this.teams || [...data.response.teams]
+    },
     createTeam() {},
     showDeleteTeamModal(id) {
       this.deleteModalOpen = true
+      this.selectedTeamId = id
+    },
+    async deleteTeam() {
+      await this.$axios({
+        baseURL: 'http://api-v1.fulcrumsaas.net/api',
+        method: 'post',
+        url: '/team/delete',
+        data: {
+          auth_id: this.auth_id,
+          team_id: this.selectedTeamId
+        }
+      })
+        .then((data) => {
+          this.loadData()
+        })
+        .catch((e) => {
+          alert(e.message || 'An error has occured, please try again later.')
+        })
+        .finally((f) => {
+          this.selectedTeamId = null
+          this.deleteModalOpen = false
+        })
     }
   }
 }
