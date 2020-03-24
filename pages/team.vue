@@ -91,7 +91,9 @@ export default {
       this.auth_id = data.response.auth.auth_id
       this.teams = this.teams || [...data.response.teams]
     },
-    createTeam() {},
+    createTeam() {
+      this.$router.push('team-create')
+    },
     showDeleteTeamModal(id) {
       this.deleteModalOpen = true
       this.selectedTeamId = id
