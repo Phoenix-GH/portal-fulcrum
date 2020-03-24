@@ -26,6 +26,8 @@
               | {{team.create_datetime}}
             td.px-6.py-4.whitespace-no-wrap.text-right.border-b.border-gray-200.text-sm.leading-5.font-medium
               a.text-indigo-600(href='#' class='hover:text-indigo-900 focus:outline-none focus:underline') Edit
+              span &nbsp;|&nbsp;
+              a.text-red-600.leading-4(href='#' class='hover:text-indigo-900 focus:outline-none focus:underline') Delete
 
 </template>
 
@@ -62,7 +64,7 @@ export default {
       method: 'post',
       url: '/auth/get'
     })
-    this.teams = [...data.response.teams]
+    this.teams = this.teams || [...data.response.teams]
   },
   methods: {}
 }
