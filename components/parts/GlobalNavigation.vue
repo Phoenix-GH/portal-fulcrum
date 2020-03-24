@@ -49,7 +49,7 @@ export default {
   components: {},
   data() {
     return {
-      open: true,
+      open: false,
       sections: [
         {
           label: 'Dashboard',
