@@ -57,7 +57,6 @@ export default {
     return {
       deleteModalOpen: false,
       selectedTeamId: null,
-      auth_id: null,
       teams: [
         {
           team_id: 1,
@@ -88,7 +87,6 @@ export default {
         method: 'post',
         url: '/auth/get'
       })
-      this.auth_id = data.response.auth.auth_id
       this.teams = this.teams || [...data.response.teams]
     },
     createTeam() {
@@ -104,7 +102,7 @@ export default {
         method: 'post',
         url: '/team/delete',
         data: {
-          auth_id: this.auth_id,
+          auth_id: this.$state.sessionKey.auth_id,
           team_id: this.selectedTeamId
         }
       })
