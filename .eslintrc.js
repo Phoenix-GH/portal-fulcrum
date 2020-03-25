@@ -21,6 +21,8 @@ module.exports = {
   rules: {
     "prettier/prettier": 'warn',
     'nuxt/no-cjs-in-config': 'off',
-    'camelcase': 'off'
+    'camelcase': 'off',
+    'spaced-comment': 'warn',
+    'no-unused-vars': 'warn'
   }
 }

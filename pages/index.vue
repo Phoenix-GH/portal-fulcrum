@@ -1,7 +1,7 @@
 <template lang="pug">
 .container
   div
-    logo
+    
     h1.title portal-fulcrumsaas-net
     h2.subtitle Portal at fulcrumsaas.net
 
@@ -16,6 +16,7 @@
 import Logo from '~/components/Logo.vue'
 
 export default {
+  name: 'IndexPage',
   components: {
     Logo
   }

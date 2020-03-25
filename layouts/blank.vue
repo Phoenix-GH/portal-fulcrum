@@ -2,15 +2,11 @@
   div
     nuxt
     
-    pre.text-xs.p-3.bg-gray-800.text-gray-50 {{ $store.state.sessionKey }}
+    pre.text-xs.p-3.bg-gray-800.text-gray-50 {{ $state }}
 </template>
 
 <script>
-export default {
-  async fetch({ store }) {
-    await store.dispatch('SET_SESSION')
-  }
-}
+export default {}
 </script>
 
 <style>

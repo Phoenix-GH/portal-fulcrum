@@ -63,7 +63,6 @@
 </template>
 
 <script>
-import bcrypt from 'bcryptjs'
 export default {
   name: 'RegisterPage',
   layout: 'blank',
@@ -82,15 +81,13 @@ export default {
   methods: {
     async register() {
       const { email, password } = this
-      const salt = await bcrypt.genSaltSync(10)
-      const passwordHash = await bcrypt.hash(password, salt)
       // eslint-disable-next-line
       const { data } = await this.$axios({
         method: 'post',
         url: '/user/create',
         data: {
           email,
-          password: passwordHash,
+          password,
           custom_user_params: {
             'p.firstname': this.firstName,
             'p.lastname': this.lastName,

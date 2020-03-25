@@ -39,7 +39,9 @@
 </template>
 
 <script>
-import bcrypt from 'bcryptjs'
+// eslint-disable-next-line
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
+
 export default {
   layout: 'blank',
   name: 'LoginPage',
@@ -59,35 +61,37 @@ export default {
       errors: []
     }
   },
-  // async mounted() {
-  //   await this.getAuth()
-  // },
+  async mounted() {
+    await this.$store.dispatch('GET_SESSION')
+  },
 
   methods: {
     async login() {
+      await sleep(0)
+      console.log(this.$store)
       try {
+        const auth_id = this.$state.sessionKey.auth_id
         const { username: email, password } = this
-        const salt = await bcrypt.genSaltSync(10)
-        const passwordHash = await bcrypt.hash(password, salt)
         const { data } = await this.$axios.post('/user/login', {
-          auth_id: '0379da40-6bed-11ea-802c-fbb9d7b60434',
+          auth_id,
           email,
-          password: passwordHash
+          password
         })
-        debugger
+
         if (data.error_state) {
           // TODO
           alert('Invalid credentials, unable to login')
         }
 
-        this.$router.push('/campaigns')
-        // eslint-disable-next-line
-        console.log(data)
+        await this.$store.dispatch('LOAD_STATE')
+
+        this.$router.push(this.$route.query.p || '/')
       } catch (err) {
-        console.log(Object.values(err.response.data.errors))
-        if (err.response.status === 409) {
+        console.error(err)
+        // console.log(Object.values(err.response.data.errors))
+        if (err.response && err.response.status === 409) {
           this.errors = Object.values(err.response.data.errors)
-        }
+        } else this.errors = [err.message]
       }
     },
     async onSubmit() {
