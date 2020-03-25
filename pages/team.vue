@@ -77,13 +77,9 @@ export default {
       ]
     }
   },
-  async mounted() {
-    await this.loadData()
-  },
   methods: {
     async loadData() {
       const { data } = await this.$axios({
-        baseURL: 'http://api-v1.fulcrumsaas.net/api',
         method: 'post',
         url: '/auth/get'
       })
@@ -98,7 +94,6 @@ export default {
     },
     async deleteTeam() {
       await this.$axios({
-        baseURL: 'http://api-v1.fulcrumsaas.net/api',
         method: 'post',
         url: '/team/delete',
         data: {
@@ -113,6 +108,7 @@ export default {
           alert(e.message || 'An error has occured, please try again later.')
         })
         .finally((f) => {
+          this.loadData()
           this.selectedTeamId = null
           this.deleteModalOpen = false
         })
