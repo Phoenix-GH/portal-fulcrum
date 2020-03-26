@@ -57,25 +57,11 @@ export default {
     return {
       deleteModalOpen: false,
       selectedTeamId: null,
-      teams: [
-        {
-          team_id: 1,
-          team_name: 'Team 1',
-          description: 'Dummy team 1',
-          team_status: 'active',
-          create_datetime: 20200306172713.426,
-          update_datetime: 20200306172713.426
-        },
-        {
-          team_id: 2,
-          team_name: 'Team 2',
-          description: 'Dummy team 2',
-          team_status: 'inactive',
-          create_datetime: 20200306172713.426,
-          update_datetime: 20200306172813.426
-        }
-      ]
+      teams: null
     }
+  },
+  mounted() {
+    this.teams = this.$store.state.teams
   },
   methods: {
     async loadData() {
@@ -83,7 +69,7 @@ export default {
         method: 'post',
         url: '/auth/get'
       })
-      this.teams = this.teams || [...data.response.teams]
+      this.teams = [...data.response.teams]
     },
     createTeam() {
       this.$router.push('team-create')
