@@ -11,10 +11,10 @@
             .mt-6.grid.grid-cols-1.row-gap-6.col-gap-4(class="sm:grid-cols-6")
               div(class="sm:col-span-4")
                 label.block.text-sm.font-medium.leading-5.text-gray-700(for="teamname") Team Name
-                .mt-1.flex.rounded-md.shadow-sm: input#teamname.flex-1.form-input.block.w-full.rounded-none.rounded-r-md.transition.duration-150.ease-in-out(class="sm:text-sm sm:leading-5")
+                .mt-1.flex.rounded-md.shadow-sm: input#teamname.flex-1.form-input.block.w-full.rounded-none.rounded-r-md.transition.duration-150.ease-in-out(v-model="team_name" class="sm:text-sm sm:leading-5")
               div(class="sm:col-span-6")
                 label.block.text-sm.font-medium.leading-5.text-gray-700(for="description") Team Description
-                .mt-1.rounded-md.shadow-sm: textarea#description.form-textarea.block.w-full.transition.duration-150.ease-in-out(rows="3" class="sm:text-sm sm:leading-5")
+                .mt-1.rounded-md.shadow-sm: textarea#description.form-textarea.block.w-full.transition.duration-150.ease-in-out(rows="3" class="sm:text-sm sm:leading-5" v-model="description")
                 p.mt-2.text-sm.text-gray-500 Write a few sentences about the team.
             .mt-8.border-t.border-gray-200.pt-5
               .flex.justify-end
@@ -28,10 +28,31 @@ export default {
   name: 'TeamCreate',
   components: {},
   data() {
-    return {}
+    return {
+      team_name: '',
+      description: ''
+    }
   },
   methods: {
-    save() {}
+    save() {
+      this.$axios({
+        method: 'post',
+        url: '/team/create',
+        data: {
+          auth_id: this.$state.sessionKey.auth_id,
+          team_name: this.team_name,
+          custom_team_params: {
+            description: this.description
+          }
+        }
+      })
+        .then((response) => {
+          alert('Successfully added!')
+        })
+        .catch((e) => {
+          alert(e.message || 'An error has occured, please try again later.')
+        })
+    }
   }
 }
 </script>
