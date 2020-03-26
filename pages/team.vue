@@ -83,7 +83,6 @@ export default {
         method: 'post',
         url: '/auth/get'
       })
-      await this.$store.dispatch('LOAD_STATE')
       this.teams = this.teams || [...data.response.teams]
     },
     createTeam() {
@@ -93,25 +92,26 @@ export default {
       this.deleteModalOpen = true
       this.selectedTeamId = id
     },
-    async deleteTeam() {
-      try {
-        await this.$axios({
-          method: 'post',
-          url: '/team/delete',
-          data: {
-            auth_id: this.$state.sessionKey.auth_id,
-            team_id: this.selectedTeamId
-          }
+    deleteTeam() {
+      this.$axios({
+        method: 'post',
+        url: '/team/delete',
+        data: {
+          auth_id: this.$state.sessionKey.auth_id,
+          team_id: this.selectedTeamId
+        }
+      })
+        .then((data) => {
+          this.loadData()
         })
-
-        await this.loadData()
-      } catch (e) {
-        alert(e.message || 'An error has occured, please try again later.')
-      } finally {
-        this.loadData()
-        this.selectedTeamId = null
-        this.deleteModalOpen = false
-      }
+        .catch((e) => {
+          alert(e.message || 'An error has occured, please try again later.')
+        })
+        .finally((f) => {
+          this.loadData()
+          this.selectedTeamId = null
+          this.deleteModalOpen = false
+        })
     }
   }
 }
