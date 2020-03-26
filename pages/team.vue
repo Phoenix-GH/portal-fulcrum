@@ -92,8 +92,8 @@ export default {
       this.deleteModalOpen = true
       this.selectedTeamId = id
     },
-    async deleteTeam() {
-      await this.$axios({
+    deleteTeam() {
+      this.$axios({
         method: 'post',
         url: '/team/delete',
         data: {
