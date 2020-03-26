@@ -17,12 +17,22 @@ module.exports = {
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
   },
   router: {
-    middleware: ['auth']
+    middleware: ['auth'],
+    extendRoutes(routes, resolve) {
+      routes.push({
+        name: 'logout',
+        path: '/logout',
+        beforeEnter(to, from, next) {
+          console.log('ROUTER', to, from)
+          next('/')
+        }
+      })
+    }
   },
   /*
    ** Customize the progress-bar color
    */
-  loading: { color: '#fff' },
+  loading: { color: '#5850ec' },
   /*
    ** Global CSS
    */

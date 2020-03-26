@@ -29,6 +29,7 @@ const loadState = (o) => {
 }
 
 export const clearState = () => {
+  Object.keys(state).forEach((k) => (state[k] = null))
   localStorage.removeItem(STORAGE_KEY)
   _hasState = false
 }
@@ -42,7 +43,7 @@ export const mapCache = (...args) => {
       },
       set(value) {
         this.$set(state, x, value)
-        saveState(value)
+        saveState()
       }
     }
   })

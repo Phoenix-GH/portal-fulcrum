@@ -55,14 +55,10 @@ export default {
   },
   data() {
     return {
-      auth_id: '41e38190-60fe-11ea-880a-fb4e90c9f219',
       username: 'mgambill+456@nmyvision.com',
       password: 'password2@',
       errors: []
     }
-  },
-  async mounted() {
-    await this.$store.dispatch('GET_SESSION')
   },
 
   methods: {

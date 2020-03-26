@@ -17,9 +17,9 @@
               div: button.z-20.max-w-xs.flex.items-center.text-sm.rounded-full.text-white(@click="open = !open" class="focus:outline-none focus:shadow-solid"): img.h-8.w-8.rounded-full(src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="")
               .origin-top-right.z-20.absolute.right-0.mt-2.w-48.rounded-md.shadow-lg(v-show="open" x-transition:enter="transition ease-out duration-100" x-transition:enter-start="transform opacity-0 scale-95" x-transition:enter-end="transform opacity-100 scale-100" x-transition:leave="transition ease-in duration-75" x-transition:leave-start="transform opacity-100 scale-100" x-transition:leave-end="transform opacity-0 scale-95")
                 .py-1.rounded-md.bg-white.shadow-xs
-                  a.block.px-4.py-2.text-sm.text-gray-700(href="#" class="hover:bg-gray-100") Your Profile
+                  nuxt-link.block.px-4.py-2.text-sm.text-gray-700(to="/user" class="hover:bg-gray-100") Your Profile
                   a.block.px-4.py-2.text-sm.text-gray-700(href="#" class="hover:bg-gray-100") Settings
-                  a.block.px-4.py-2.text-sm.text-gray-700(href="#" class="hover:bg-gray-100") Sign out
+                  a.block.px-4.py-2.text-sm.text-gray-700(href="#" @click.prevent="signOut" class="hover:bg-gray-100") Sign out
         .-mr-2.flex(class="md:hidden")
           button.inline-flex.items-center.justify-center.p-2.rounded-md.text-gray-400(@click="open = !open" class="hover:text-white hover:bg-gray-700 focus:outline-none focus:bg-gray-700 focus:text-white")
             svg.h-6.w-6(stroke="currentColor" fill="none" viewBox="0 0 24 24")
@@ -85,7 +85,20 @@ export default {
       return `/${link}`
     }
   },
-  methods: {}
+  methods: {
+    async signOut() {
+      try {
+        await this.$axios.post('/user/logout', {
+          auth_id: this.$state.sessionKey.auth_id
+        })
+        this.$store.commit('CLEAR_STATE')
+
+        this.$router.push('/logout')
+      } catch (err) {
+        alert(err)
+      }
+    }
+  }
 }
 </script>
 

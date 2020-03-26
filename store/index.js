@@ -1,3 +1,5 @@
+import { clearState } from '../plugins/session'
+
 export const state = () => ({
   authenticated: false,
   session: null,
@@ -25,6 +27,14 @@ export const mutations = {
     state.invites = source.invites
     state.user_emails = source.user_emails
     state.authenticated = true
+  },
+  CLEAR_STATE(state, source) {
+    console.log('M::CLEAR_STATE', source)
+    state.user = null
+    state.teams = null
+    state.invites = null
+    state.user_emails = null
+    state.authenticated = false
   }
 }
 
