@@ -16,7 +16,35 @@
               .mt-6(class="sm:mt-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5")
                 label.block.text-sm.font-medium.leading-5.text-gray-700(for="about" class="sm:mt-px sm:pt-2") Members list
                 .mt-1(class="sm:mt-0 sm:col-span-2")
-
+                  table.min-w-full
+                    thead
+                      tr
+                        th.px-6.py-3.border-b.border-gray-200.bg-gray-50.text-left.text-xs.leading-4.font-medium.text-gray-500.uppercase.tracking-wider
+                          | First Name
+                        th.px-6.py-3.border-b.border-gray-200.bg-gray-50.text-left.text-xs.leading-4.font-medium.text-gray-500.uppercase.tracking-wider
+                          | Last Name
+                        th.px-6.py-3.border-b.border-gray-200.bg-gray-50.text-left.text-xs.leading-4.font-medium.text-gray-500.uppercase.tracking-wider
+                          | Company Name
+                        th.px-6.py-3.border-b.border-gray-200.bg-gray-50.text-left.text-xs.leading-4.font-medium.text-gray-500.uppercase.tracking-wider
+                          | Team Role
+                        th.px-6.py-3.border-b.border-gray-200.bg-gray-50
+                    tbody.bg-white(v-for="user in users" v-bind:key="user.user_id")
+                      tr
+                        td.px-6.py-4.whitespace-no-wrap.border-b.border-gray-200.text-sm.leading-5.text-gray-500
+                          | {{user['p.firstname']}}
+                        td.px-6.py-4.whitespace-no-wrap.border-b.border-gray-200.text-sm.leading-5.text-gray-500
+                          | {{user['p.lastname']}}
+                        td.px-6.py-4.whitespace-no-wrap.border-b.border-gray-200.text-sm.leading-5.text-gray-500
+                          | {{user['p.companyname']}}
+                        td.px-6.py-4.whitespace-no-wrap.border-b.border-gray-200.text-sm.leading-5.text-gray-500
+                          | {{user.team_role}}
+                        td.px-6.py-4.whitespace-no-wrap.text-right.border-b.border-gray-200.text-sm.leading-5.font-medium
+                          a.text-indigo-600(href='#' class='hover:text-indigo-900 focus:outline-none focus:underline') Edit
+                          span &nbsp;|&nbsp;
+                          a.text-red-600.leading-4(v-on:click='showDeleteUserModal(user.user_id)' class='hover:text-indigo-900 focus:outline-none focus:underline') Delete
+              .mt-6(class="sm:mt-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5")
+                label.block.text-sm.font-medium.leading-5.text-gray-700(for="about" class="sm:mt-px sm:pt-2") Invitations list
+                .mt-1(class="sm:mt-0 sm:col-span-2")
 
 </template>
 
@@ -27,13 +55,13 @@ export default {
   components: {},
   data() {
     return {
-      teamInfo: null,
-      teamId: null
+      teamId: null,
+      users: []
     }
   },
   mounted() {
-    this.teams = this.$store.state.teams
-    console.log('teams---', this.teams)
+    this.teamId = this.$store.state.teams.find((item) => item.team_status === 'active').team_id
+    this.loadData()
   },
   methods: {
     async loadData() {
@@ -42,11 +70,13 @@ export default {
         url: '/team/get-info',
         data: {
           auth_id: this.$state.sessionKey.auth_id,
-          team_id: 3
+          team_id: this.teamId
         }
       })
-      this.teamInfo = [...data.response]
-    }
+      this.users = data.response.users
+      console.log('users---', this.users)
+    },
+    showDeleteUserModal() {}
   }
 }
 </script>
