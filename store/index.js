@@ -4,6 +4,7 @@ export const state = () => ({
   authenticated: false,
   session: null,
   sessionKey: null,
+  selectedTeam: null,
   // sessionError: null,
   user: null,
   teams: [],
@@ -24,6 +25,7 @@ export const mutations = {
     // console.log('M::SET_STATE', source)
     state.user = source.user
     state.teams = source.teams
+    state.selectedTeam = source.selectedTeam
     state.invites = source.invites
     state.user_emails = source.user_emails
     state.authenticated = true
@@ -32,6 +34,7 @@ export const mutations = {
     // console.log('M::CLEAR_STATE', source)
     state.user = null
     state.teams = null
+    state.selectedteam = null
     state.invites = null
     state.user_emails = null
     state.authenticated = false
