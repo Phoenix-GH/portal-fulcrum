@@ -21,6 +21,10 @@ export const mutations = {
   //   console.log('M::ADD_SESSION_ERROR', error)
   //   state.sessionKey = error
   // },
+  SELECT_TEAM(state, source) {
+    state.selectedTeam = source.selectedTeam
+    localStorage.setItem('SELECTED_TEAM', source.selectedTeam)
+  },
   SET_STATE(state, source) {
     // console.log('M::SET_STATE', source)
     state.user = source.user
@@ -59,6 +63,7 @@ export const actions = {
     //   commit(' ADD_SESSION_ERROR', data.errors)
     //   return
     // }
+    response.selectedTeam = parseInt(localStorage.getItem('SELECTED_TEAM'))
     commit('SET_STATE', response)
   }
 }

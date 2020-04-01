@@ -84,14 +84,12 @@ export default {
   components: {},
   data() {
     return {
-      teamId: null,
       team: null,
       users: [],
       invitations: []
     }
   },
   mounted() {
-    this.teamId = this.$store.state.teams.find((item) => item.team_status === 'active').team_id
     this.loadData()
   },
   methods: {
@@ -101,7 +99,7 @@ export default {
         url: '/team/get-info',
         data: {
           auth_id: this.$state.sessionKey.auth_id,
-          team_id: this.teamId
+          team_id: this.$store.state.selectedTeam
         }
       })
       this.team = data.response.team

@@ -5,8 +5,7 @@ let _loaded = false
 let _hasState = false
 
 const state = Vue.observable({
-  sessionKey: null,
-  selectedTeam: null
+  sessionKey: null
 })
 
 const saveState = () => {
