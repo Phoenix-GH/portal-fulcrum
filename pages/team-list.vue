@@ -14,9 +14,8 @@
             th.px-6.py-3.border-b.border-gray-200.bg-gray-50.text-left.text-xs.leading-4.font-medium.text-gray-500.uppercase.tracking-wider
               | Description
             th.px-6.py-3.border-b.border-gray-200.bg-gray-50.text-left.text-xs.leading-4.font-medium.text-gray-500.uppercase.tracking-wider
-              | Status
-            th.px-6.py-3.border-b.border-gray-200.bg-gray-50.text-left.text-xs.leading-4.font-medium.text-gray-500.uppercase.tracking-wider
               | Created at
+            th.px-6.py-3.border-b.border-gray-200.bg-gray-50
             th.px-6.py-3.border-b.border-gray-200.bg-gray-50
         tbody.bg-white(v-for="team in teams" v-bind:key="team.team_id")
           tr
@@ -25,10 +24,9 @@
             td.px-6.py-4.whitespace-no-wrap.border-b.border-gray-200.text-sm.leading-5.text-gray-500
               | {{team.description}}
             td.px-6.py-4.whitespace-no-wrap.border-b.border-gray-200.text-sm.leading-5.text-gray-500
-              span.px-2.inline-flex.text-xs.leading-5.font-semibold.rounded-full(:class="{'bg-green-100': team.team_status==='active', 'text-green-800': team.team_status==='active', 'bg-red-100': team.team_status==='inactive', 'text-red-800': team.team_status==='inactive'}")
-                | {{team.team_status}}
-            td.px-6.py-4.whitespace-no-wrap.border-b.border-gray-200.text-sm.leading-5.text-gray-500
               | {{team.create_datetime}}
+            td.px-6.py-4.whitespace-no-wrap.border-b.border-gray-200.text-sm.leading-5.text-gray-500
+              a.text-indigo-600(href='#' class="hover:text-indigo-900 focus:outline-none focus:underline" v-on:click='selectTeam(team.team_id)' v-if="currentTeam !== team.team_id") Select
             td.px-6.py-4.whitespace-no-wrap.text-right.border-b.border-gray-200.text-sm.leading-5.font-medium
               a.text-indigo-600(href='#' class='hover:text-indigo-900 focus:outline-none focus:underline') Edit
               span &nbsp;|&nbsp;
@@ -57,7 +55,8 @@ export default {
     return {
       deleteModalOpen: false,
       selectedTeamId: null,
-      teams: null
+      teams: null,
+      currentTeam: this.$store.state.selectedTeam
     }
   },
   mounted() {
@@ -77,6 +76,10 @@ export default {
     showDeleteTeamModal(id) {
       this.deleteModalOpen = true
       this.selectedTeamId = id
+    },
+    selectTeam(id) {
+      this.$store.commit('SELECT_TEAM', { selectedTeam: id })
+      this.$router.push('team')
     },
     deleteTeam() {
       this.$axios({

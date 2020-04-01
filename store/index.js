@@ -4,6 +4,7 @@ export const state = () => ({
   authenticated: false,
   session: null,
   sessionKey: null,
+  selectedTeam: null,
   // sessionError: null,
   user: null,
   teams: [],
@@ -20,10 +21,15 @@ export const mutations = {
   //   console.log('M::ADD_SESSION_ERROR', error)
   //   state.sessionKey = error
   // },
+  SELECT_TEAM(state, source) {
+    state.selectedTeam = source.selectedTeam
+    localStorage.setItem('SELECTED_TEAM', source.selectedTeam)
+  },
   SET_STATE(state, source) {
     // console.log('M::SET_STATE', source)
     state.user = source.user
     state.teams = source.teams
+    state.selectedTeam = source.selectedTeam
     state.invites = source.invites
     state.user_emails = source.user_emails
     state.authenticated = true
@@ -32,6 +38,7 @@ export const mutations = {
     // console.log('M::CLEAR_STATE', source)
     state.user = null
     state.teams = null
+    state.selectedteam = null
     state.invites = null
     state.user_emails = null
     state.authenticated = false
@@ -56,6 +63,7 @@ export const actions = {
     //   commit(' ADD_SESSION_ERROR', data.errors)
     //   return
     // }
+    response.selectedTeam = parseInt(localStorage.getItem('SELECTED_TEAM'))
     commit('SET_STATE', response)
   }
 }
