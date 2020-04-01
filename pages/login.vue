@@ -28,7 +28,7 @@
           span.block.w-full.rounded-md.shadow-sm
             button.w-full.flex.justify-center.py-2.px-4.border.border-transparent.text-sm.font-medium.rounded-md.text-white.bg-cool-gray-600.transition.duration-150.ease-in-out(type='submit' class='hover:bg-cool-gray-500 focus:outline-none focus:border-cool-gray-700 focus:shadow-outline-cool-gray active:bg-cool-gray-700') Sign in
     p.mt-4.text-sm.text-center 
-      | Don't have an account? 
+      span.mr-1 Don't have an account?
       nuxt-link.font-medium.text-indigo-600.transition.ease-in-out.duration-150(to='/register' class='hover:text-indigo-500 focus:outline-none focus:underline') Sign up
     //-p: pre {{ auth_id }}
     p.mt-12.text-xs.text-center 
@@ -39,13 +39,13 @@
 </template>
 
 <script>
-// eslint-disable-next-line
-const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
+import ErrorHandlerMixin from '../utils/mixins/ErrorHandler'
 
 export default {
   layout: 'blank',
   name: 'LoginPage',
   components: {},
+  mixins: [ErrorHandlerMixin],
   meta: { isPublic: false },
   asyncData({ store, route, userAgent }) {
     return {
@@ -56,15 +56,12 @@ export default {
   data() {
     return {
       username: 'mgambill+456@nmyvision.com',
-      password: 'password2@',
-      errors: []
+      password: 'password2@'
     }
   },
 
   methods: {
     async login() {
-      await sleep(0)
-      console.log(this.$store)
       try {
         const auth_id = this.$state.sessionKey.auth_id
         const { username: email, password } = this
@@ -83,11 +80,7 @@ export default {
 
         this.$router.push(this.$route.query.p || '/')
       } catch (err) {
-        console.error(err)
-        // console.log(Object.values(err.response.data.errors))
-        if (err.response && err.response.status === 409) {
-          this.errors = Object.values(err.response.data.errors)
-        } else this.errors = [err.message]
+        this.handleErrors(err)
       }
     },
     async onSubmit() {
