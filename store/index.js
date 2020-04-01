@@ -21,7 +21,7 @@ export const mutations = {
   //   state.sessionKey = error
   // },
   SET_STATE(state, source) {
-    console.log('M::SET_STATE', source)
+    // console.log('M::SET_STATE', source)
     state.user = source.user
     state.teams = source.teams
     state.invites = source.invites
@@ -29,7 +29,7 @@ export const mutations = {
     state.authenticated = true
   },
   CLEAR_STATE(state, source) {
-    console.log('M::CLEAR_STATE', source)
+    // console.log('M::CLEAR_STATE', source)
     state.user = null
     state.teams = null
     state.invites = null
@@ -40,7 +40,7 @@ export const mutations = {
 
 export const actions = {
   async LOAD_STATE({ state, commit }) {
-    console.log('A::LOAD_STATE')
+    // console.log('A::LOAD_STATE')
     const auth_id = this.$state.sessionKey.auth_id
 
     const {

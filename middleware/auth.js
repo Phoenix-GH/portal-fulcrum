@@ -16,7 +16,7 @@ export default async (context) => {
 
   // If the user is not authenticated
   if (store.state.user === null) {
-    const param = route.fullPath.length === 1 ? '' : `?p=${route.fullPath}`
+    const param = route.fullPath.length === 1 || route.fullPath === '/logout' ? '' : `?p=${route.fullPath}`
     return redirect(`/login${param}`)
   }
 

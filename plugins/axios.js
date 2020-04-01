@@ -11,10 +11,12 @@ export default function({ $axios, redirect, store, app, $state }) {
   // if (process.server) {
   //   this.$axios.setBaseURL('http://api.example.com')
   $axios.onRequest((config) => {
-    console.log('Making request to ' + config.url, app.$state, $state)
+    console.log('Making xhr request to ' + config.url)
     // TODO: update this logic
-    if (store.state.sessionKey) {
-      config.data = Object.assign({}, config.data, { auth_id: store.state.sessionKey.auth_id })
+    if (app.$state.sessionKey && config.data && config.data.auth_id === undefined) {
+      console.log('BEFORE >', config.data)
+      config.data = Object.assign({}, config.data, { auth_id: app.$state.sessionKey.auth_id })
+      console.log('UPDATE < ', config.data)
     }
   })
 
