@@ -179,7 +179,7 @@ export default {
     console.log(':', this.user)
     return {
       currentEmail: {},
-      modalOpen: true,
+      modalOpen: false,
       localUser: {},
       emails: []
     }
