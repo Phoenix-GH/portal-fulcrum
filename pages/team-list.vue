@@ -14,8 +14,6 @@
             th.px-6.py-3.border-b.border-gray-200.bg-gray-50.text-left.text-xs.leading-4.font-medium.text-gray-500.uppercase.tracking-wider
               | Description
             th.px-6.py-3.border-b.border-gray-200.bg-gray-50.text-left.text-xs.leading-4.font-medium.text-gray-500.uppercase.tracking-wider
-              | Status
-            th.px-6.py-3.border-b.border-gray-200.bg-gray-50.text-left.text-xs.leading-4.font-medium.text-gray-500.uppercase.tracking-wider
               | Created at
             th.px-6.py-3.border-b.border-gray-200.bg-gray-50
         tbody.bg-white(v-for="team in teams" v-bind:key="team.team_id")
@@ -24,9 +22,6 @@
               | {{team.team_name}}
             td.px-6.py-4.whitespace-no-wrap.border-b.border-gray-200.text-sm.leading-5.text-gray-500
               | {{team.description}}
-            td.px-6.py-4.whitespace-no-wrap.border-b.border-gray-200.text-sm.leading-5.text-gray-500
-              span.px-2.inline-flex.text-xs.leading-5.font-semibold.rounded-full(:class="{'bg-green-100': team.team_status==='active', 'text-green-800': team.team_status==='active', 'bg-red-100': team.team_status==='inactive', 'text-red-800': team.team_status==='inactive'}")
-                | {{team.team_status}}
             td.px-6.py-4.whitespace-no-wrap.border-b.border-gray-200.text-sm.leading-5.text-gray-500
               | {{team.create_datetime}}
             td.px-6.py-4.whitespace-no-wrap.text-right.border-b.border-gray-200.text-sm.leading-5.font-medium
