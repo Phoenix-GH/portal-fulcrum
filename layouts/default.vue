@@ -1,44 +1,17 @@
 <template lang="pug">
 div
-  GlobalNavigation
-  header.bg-white.shadow-sm: .flex.max-w-7xl.mx-auto.py-4.px-4(class="sm:px-6 lg:px-8")
-    .fixed.inset-0.transition-opacity.bg-blue-200.opacity-25(@click="open=false" v-if="open"): .absolute.inset-0
-    .relative
-      a.flex.items-center.px-2.h-6(@click="open = true")
-        svg.w-5.h-5(viewBox="0 0 20 20" fill="currentColor" strokewidth="1")
-          path(fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd")
-    
-      .z-20.absolute.mt-2.w-48.rounded-md.shadow-lg(v-show="open" x-transition:enter="transition ease-out duration-100" x-transition:enter-start="transform opacity-0 scale-95" x-transition:enter-end="transform opacity-100 scale-100" x-transition:leave="transition ease-in duration-75" x-transition:leave-start="transform opacity-100 scale-100" x-transition:leave-end="transform opacity-0 scale-95")
-        .py-1.rounded-md.bg-white.shadow-xs
-          template(v-for="link in links")
-            a.block.px-4.py-2.text-sm.text-gray-700(href="#" class="hover:bg-gray-100") {{ link.label }}
-    h2.text-lg.leading-6.font-semibold.text-gray-900 Dashboard
-  main: .max-w-7xl.mx-auto.py-6(class="sm:px-6 lg:px-8"): .px-4.py-4(class="sm:px-0"): .border-4.border-dashed.border-gray-200.rounded-lg
-    nuxt
+  .min-h-screen
+    GlobalNavigation
+    Navigation
+    main: .max-w-7xl.mx-auto.py-6(class="sm:px-6 lg:px-8"): .px-4.py-4(class="sm:px-0")
+      nuxt
   pre.text-xs.p-3.bg-gray-800.text-gray-50 {{  [ $state , $store.state ] }}
 </template>
 <script>
 import GlobalNavigation from '@/components/parts/GlobalNavigation.vue'
+import Navigation from '@/components/parts/Navigation.vue'
 export default {
-  components: { GlobalNavigation },
-  data() {
-    return {
-      open: true,
-      links: [
-        { label: 'Dashboard', to: '' },
-        { label: 'Browse users', to: '' },
-        { label: 'Customer journey', to: '' },
-        { label: 'User segments', to: '' },
-        { label: 'Content management', to: '' },
-        { label: 'Persona management', to: '' },
-        { label: 'Url analyzer', to: '' },
-        { label: 'Plugins', to: '' },
-        { label: 'Email notifications', to: '' },
-        { label: 'Instance code', to: '' },
-        { label: 'A/B tests', to: '' }
-      ]
-    }
-  }
+  components: { GlobalNavigation, Navigation }
 }
 </script>
 <style>
