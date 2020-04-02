@@ -76,6 +76,8 @@ export default {
       editModalOpen: false,
       selectedTeamId: null,
       teams: null,
+      team_name: null,
+      description: null,
       currentTeam: this.$store.state.selectedTeam
     }
   },
@@ -83,12 +85,13 @@ export default {
     this.teams = this.$store.state.teams
   },
   methods: {
-    async loadData() {
-      const { data } = await this.$axios({
+    loadData() {
+      this.$axios({
         method: 'post',
         url: '/auth/get'
+      }).then((data) => {
+        this.teams = this.$store.state.teams
       })
-      this.teams = [...data.response.teams]
     },
     createTeam() {
       this.$router.push('team-create')
@@ -100,6 +103,9 @@ export default {
     showEditTeamModal(id) {
       this.editModalOpen = true
       this.selectedTeamId = id
+      const selectedItem = this.teams.find((item) => item.team_id === id)
+      this.team_name = selectedItem.team_name
+      this.description = selectedItem.description
     },
     selectTeam(id) {
       this.$store.commit('SELECT_TEAM', { selectedTeam: id })
@@ -128,8 +134,32 @@ export default {
     },
     cancel() {
       this.editModalOpen = false
+      this.team_name = null
+      this.description = null
     },
-    saveTeam() {}
+    saveTeam() {
+      this.$axios({
+        method: 'post',
+        url: '/team/edit',
+        data: {
+          auth_id: this.$state.sessionKey.auth_id,
+          team_id: this.selectedTeamId,
+          custom_team_params: {
+            team_name: this.team_name,
+            description: this.description
+          }
+        }
+      })
+        .then((response) => {
+          this.team_name = null
+          this.description = null
+          this.editModalOpen = false
+          this.loadData()
+        })
+        .catch((e) => {
+          alert(e.message || 'An error has occured, please try again later.')
+        })
+    }
   }
 }
 </script>
