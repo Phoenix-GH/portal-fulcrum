@@ -120,9 +120,6 @@ export default {
           team_id: this.selectedTeamId
         }
       })
-        .then((data) => {
-          this.loadData()
-        })
         .catch((e) => {
           alert(e.message || 'An error has occured, please try again later.')
         })
