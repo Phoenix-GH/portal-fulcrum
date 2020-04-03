@@ -85,13 +85,13 @@ export default {
     this.teams = this.$store.state.teams
   },
   methods: {
-    loadData() {
-      this.$axios({
-        method: 'post',
-        url: '/auth/get'
-      }).then((data) => {
-        this.teams = this.$store.state.teams
+    async loadData() {
+      const {
+        data: { response }
+      } = await this.$axios.post('/auth/get', {
+        auth_id: this.$state.sessionKey.auth_id
       })
+      this.teams = response.teams
     },
     createTeam() {
       this.$router.push('team-create')
