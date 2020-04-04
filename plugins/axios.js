@@ -17,7 +17,7 @@ export default function({ $axios, redirect, store, app, $state }) {
     // all other calls we will attempt to append the auth_id automagically
     console.log('Making xhr request to ' + config.url, config.headers['x-source'])
     // TODO: update this logic
-    if (store.state.session && store.state.session.auth_id && config.data.auth_id === undefined) {
+    if (store.state.session && store.state.session.auth_id && config.data && config.data.auth_id === undefined) {
       // console.log('BEFORE >', config.data)
       config.data = Object.assign({}, config.data, { auth_id: store.state.session.auth_id })
       // console.log('UPDATE < ', config.data)

@@ -4,6 +4,7 @@
       .flex.items-center.justify-between.h-16
         .flex.items-center
           .flex-shrink-0
+            nuxt-link(to="/")
               svg.h-10.text-cool-gray-400(fill-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="2" clip-rule="evenodd" viewBox="0 0 384 325")
                 path(fill="currentColor" d="M323 59.2A34.9 34.9 0 01348.4 0a35 35 0 11-10 68.6L254.8 194a35 35 0 11-55.5 5l-35.6-43.8a34.8 34.8 0 01-28.5 0L65 225.4A35 35 0 1152 213l69.2-69a35 35 0 1156.4 0l34.9 42.8a34.8 34.8 0 0127.2-2.5l83.5-125zM35 226a17.5 17.5 0 110 35 17.5 17.5 0 010-35zm193.8-26a17.5 17.5 0 110 35 17.5 17.5 0 010-35zm-79.5-94.2a17.5 17.5 0 110 35 17.5 17.5 0 010-35zm199-88.3a17.5 17.5 0 110 35 17.5 17.5 0 010-35z")
                 path(fill="#81bb47" d="M294.3 163.4v153.2c0 4.6-3.7 8.4-8.3 8.4H11.2a8.3 8.3 0 01-8.3-8.4v-33.5a51.1 51.1 0 0081-53.9v-.2l55.8-55.6a51.2 51.2 0 0018.2.1l22.6 27.8a50.9 50.9 0 1093.5-7.4l20.3-30.5z")
@@ -49,28 +50,7 @@ export default {
     return {
       open: false,
       openTeam: false,
-      sections: [
-        {
-          label: 'Dashboard',
-          link: '/'
-        },
-        {
-          label: 'Team',
-          link: '/team'
-        },
-        {
-          label: 'Projects',
-          link: '/projects'
-        },
-        {
-          label: 'Calendar',
-          link: '/calendar'
-        },
-        {
-          label: 'Reports',
-          link: '/reports'
-        }
-      ]
+      sections: []
     }
   },
   computed: {

@@ -18,16 +18,7 @@ module.exports = {
   },
   router: {
     middleware: ['auth', 'meta'],
-    extendRoutes(routes, resolve) {
-      routes.push({
-        name: 'logout',
-        path: '/logout',
-        beforeEnter(to, from, next) {
-          console.log('LOGOUT', to, from)
-          next('/')
-        }
-      })
-    }
+    extendRoutes(routes, resolve) {}
   },
   /*
    ** Customize the progress-bar color
