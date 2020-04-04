@@ -5,7 +5,7 @@ div
     div(class="md:grid md:grid-cols-3 md:gap-6")
       div(class="md:col-span-1")
         .px-4(class="sm:px-0")
-          h3.text-lg.font-medium.leading-6.text-gray-900 Personal Information
+          h3.text-lg.font-medium.leading-6.text-gray-900 General Information
           p.mt-1.text-sm.leading-5.text-gray-500 Provider information about yourself and your business.
       .mt-5(class="md:mt-0 md:col-span-2")
         form(method="POST" @submit.prevent="onSavePersonal")
