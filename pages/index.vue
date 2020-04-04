@@ -18,7 +18,7 @@
 import Logo from '~/components/Logo.vue'
 export default {
   name: 'IndexPage',
-  neta: { pageTitle: 'Home' },
+  meta: { pageTitle: 'Home' },
   components: {
     Logo
   }

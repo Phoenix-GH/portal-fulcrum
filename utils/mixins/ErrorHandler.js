@@ -20,6 +20,7 @@ export default {
      * @param {ErrorSet} errors
      */
     handleErrors(err) {
+      // eslint-disable-next-line
       console.error(err)
       if (err.response && err.response.status === 409) {
         this.errorSet = err.response.data.errors

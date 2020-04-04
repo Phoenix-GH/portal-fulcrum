@@ -1,12 +1,20 @@
-export default async (context) => {
-  const { store, redirect, route } = context
-  console.log('AUTH', {
-    authenticated: store.state.authenticated,
-    route,
-    meta: route.meta,
-    type: Array.isArray(route.meta),
-    browser: process.browser
-  })
+import { COOKIE_NAME } from '../utils'
+export default async ({ store, redirect, route, app }) => {
+  // Check cookie to see if the user has already logged in
+  const cookie = app.$cookies.get(COOKIE_NAME)
+  // edf98b48-44cb-4b48-9750-44052ad99966
+
+  // If the user is not authenticated
+  if (cookie === undefined) {
+    await store.dispatch('GENERATE_SESSION')
+  } else {
+    await store.dispatch('REFRESH_SESSION', cookie)
+  }
+
+  if (store.state.user) {
+    if (route.name === 'login') return redirect('/')
+    return // continue to page we are trying to load
+  }
 
   // If we are on the login page do nothing
   if (route.name === 'login') return
@@ -14,12 +22,9 @@ export default async (context) => {
   // If the page is public allow passage
   if (route.meta && route.meta[0] && route.meta[0].isPublic === true) return
 
-  // If the user is not authenticated
-  if (store.state.user === null) {
-    const param = route.fullPath.length === 1 || route.fullPath === '/logout' ? '' : `?p=${route.fullPath}`
-    return redirect(`/login${param}`)
-  }
+  const param = route.fullPath.length === 1 || route.fullPath === '/logout' ? '' : `?p=${route.fullPath}`
+  return redirect(`/login${param}`)
 
   // if user is loaded then refresh state
-  await store.dispatch('LOAD_STATE')
+  // await store.dispatch('LOAD_STATE')
 }
