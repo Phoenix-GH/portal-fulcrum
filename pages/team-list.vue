@@ -28,7 +28,7 @@
             td.px-6.py-4.whitespace-no-wrap.border-b.border-gray-200.text-sm.leading-5.text-gray-500
               a.text-indigo-600(href='#' class="hover:text-indigo-900 focus:outline-none focus:underline" v-on:click='selectTeam(team.team_id)' v-if="currentTeam !== team.team_id") Select
             td.px-6.py-4.whitespace-no-wrap.text-right.border-b.border-gray-200.text-sm.leading-5.font-medium
-              a.text-indigo-600(href='#' class='hover:text-indigo-900 focus:outline-none focus:underline') Edit
+              a.text-indigo-600(v-on:click='showEditTeamModal(team.team_id)' href='#' class='hover:text-indigo-900 focus:outline-none focus:underline') Edit
               span &nbsp;|&nbsp;
               a.text-red-600.leading-4(v-on:click='showDeleteTeamModal(team.team_id)' class='hover:text-indigo-900 focus:outline-none focus:underline') Delete
   script(src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.0.1/dist/alpine.js" defer="")
@@ -44,6 +44,25 @@
       .mt-5(class="sm:mt-4 sm:flex sm:flex-row-reverse")
         span.flex.w-full.rounded-md.shadow-sm(class="sm:ml-3 sm:w-auto"): button.inline-flex.justify-center.w-full.rounded-md.border.border-transparent.px-4.py-2.bg-red-600.text-base.leading-6.font-medium.text-white.shadow-sm.transition.ease-in-out.duration-150(@click="deleteTeam()" type="button" class="hover:bg-red-500 focus:outline-none focus:border-red-700 focus:shadow-outline-red sm:text-sm sm:leading-5") Deactivate
         span.mt-3.flex.w-full.rounded-md.shadow-sm(class="sm:mt-0 sm:w-auto"): button.inline-flex.justify-center.w-full.rounded-md.border.border-gray-300.px-4.py-2.bg-white.text-base.leading-6.font-medium.text-gray-700.shadow-sm.transition.ease-in-out.duration-150(@click="deleteModalOpen = false;" type="button" class="hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline sm:text-sm sm:leading-5") Cancel
+
+  .fixed.bottom-0.inset-x-0.px-4.pb-4(v-bind:x-data="'{ open:' + editModalOpen + '}'" x-show="open" class="sm:inset-0 sm:flex sm:items-center sm:justify-center")
+    .fixed.inset-0.transition-opacity(x-show="open" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"): .absolute.inset-0.bg-gray-500.opacity-75
+    .relative.bg-white.rounded-lg.px-4.pt-5.pb-4.overflow-hidden.shadow-xl.transform.transition-all(x-show="open" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100" x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" class="sm:max-w-lg sm:w-full sm:p-6")
+      .bg-white.border-gray-200
+        div
+          h3.text-lg.leading-6.font-medium.text-gray-900 Edit Team
+        .mt-6.grid.grid-cols-1.row-gap-6.col-gap-4(class="sm:grid-cols-6")
+          div(class="sm:col-span-4")
+            label.block.text-sm.font-medium.leading-5.text-gray-700(for="teamname") Team Name
+            .mt-1.flex.rounded-md.shadow-sm: input#teamname.flex-1.form-input.block.w-full.rounded-none.rounded-r-md.transition.duration-150.ease-in-out(v-model="team_name" class="sm:text-sm sm:leading-5")
+          div(class="sm:col-span-6")
+            label.block.text-sm.font-medium.leading-5.text-gray-700(for="description") Team Description
+            .mt-1.rounded-md.shadow-sm: textarea#description.form-textarea.block.w-full.transition.duration-150.ease-in-out(rows="3" class="sm:text-sm sm:leading-5" v-model="description")
+            p.mt-2.text-sm.text-gray-500 Write a few sentences about the team.
+        .mt-8.pt-5
+          .flex.justify-end
+            span.inline-flex.rounded-md.shadow-sm: button.py-2.px-4.border.border-gray-300.rounded-md.text-sm.leading-5.font-medium.text-gray-700.transition.duration-150.ease-in-out(type="button" class="hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-50 active:text-gray-800" v-on:click='cancel()') Cancel
+            span.ml-3.inline-flex.rounded-md.shadow-sm: button.inline-flex.justify-center.py-2.px-4.border.border-transparent.text-sm.leading-5.font-medium.rounded-md.text-white.bg-indigo-600.transition.duration-150.ease-in-out(type="submit" class="hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700" v-on:click='saveTeam()') Save
 </template>
 
 <script>
@@ -54,8 +73,11 @@ export default {
   data() {
     return {
       deleteModalOpen: false,
+      editModalOpen: false,
       selectedTeamId: null,
       teams: null,
+      team_name: null,
+      description: null,
       currentTeam: this.$store.state.selectedTeam
     }
   },
@@ -64,11 +86,12 @@ export default {
   },
   methods: {
     async loadData() {
-      const { data } = await this.$axios({
-        method: 'post',
-        url: '/auth/get'
+      const {
+        data: { response }
+      } = await this.$axios.post('/auth/get', {
+        auth_id: this.$state.sessionKey.auth_id
       })
-      this.teams = [...data.response.teams]
+      this.teams = response.teams
     },
     createTeam() {
       this.$router.push('team-create')
@@ -76,6 +99,13 @@ export default {
     showDeleteTeamModal(id) {
       this.deleteModalOpen = true
       this.selectedTeamId = id
+    },
+    showEditTeamModal(id) {
+      this.editModalOpen = true
+      this.selectedTeamId = id
+      const selectedItem = this.teams.find((item) => item.team_id === id)
+      this.team_name = selectedItem.team_name
+      this.description = selectedItem.description
     },
     selectTeam(id) {
       this.$store.commit('SELECT_TEAM', { selectedTeam: id })
@@ -90,9 +120,6 @@ export default {
           team_id: this.selectedTeamId
         }
       })
-        .then((data) => {
-          this.loadData()
-        })
         .catch((e) => {
           alert(e.message || 'An error has occured, please try again later.')
         })
@@ -100,6 +127,34 @@ export default {
           this.loadData()
           this.selectedTeamId = null
           this.deleteModalOpen = false
+        })
+    },
+    cancel() {
+      this.editModalOpen = false
+      this.team_name = null
+      this.description = null
+    },
+    saveTeam() {
+      this.$axios({
+        method: 'post',
+        url: '/team/edit',
+        data: {
+          auth_id: this.$state.sessionKey.auth_id,
+          team_id: this.selectedTeamId,
+          custom_team_params: {
+            team_name: this.team_name,
+            description: this.description
+          }
+        }
+      })
+        .then((response) => {
+          this.team_name = null
+          this.description = null
+          this.editModalOpen = false
+          this.loadData()
+        })
+        .catch((e) => {
+          alert(e.message || 'An error has occured, please try again later.')
         })
     }
   }
