@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import { COOKIE_NAME } from '../utils'
 
 const STORAGE_KEY = 'AppState'
 let _loaded = false
@@ -50,15 +51,19 @@ export const mapCache = (...args) => {
   return o
 }
 
-export default async ({ store, $axios }, inject) => {
+export default ({ store, $axios, $cookies, app }, inject) => {
   inject('state', state)
-
-  loadState(state)
-  if (!_hasState) {
-    const { data } = await $axios.post('/auth/get')
-    state.sessionKey = data.response.auth
-    saveState()
+  // A temporary solution
+  const auth_id = app.$cookies.get(COOKIE_NAME)
+  if (auth_id) {
+    state.sessionKey = { auth_id }
   }
+  // loadState(state)
+  // if (!_hasState) {
+  //   const { data } = await $axios.post('/auth/get')
+  //   state.sessionKey = data.response.auth
+  //   saveState()
+  // }
 }
 
 // Vue.prototype.$state = state

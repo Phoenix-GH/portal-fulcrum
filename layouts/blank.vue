@@ -2,7 +2,7 @@
   div
     nuxt
     
-    pre.text-xs.p-3.bg-gray-800.text-gray-50 {{ $state }}
+    pre.text-xs.p-3.bg-gray-800.text-gray-50 {{ $store.state }}
 </template>
 
 <script>

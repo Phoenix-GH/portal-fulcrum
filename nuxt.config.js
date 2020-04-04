@@ -17,13 +17,13 @@ module.exports = {
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
   },
   router: {
-    middleware: ['auth'],
+    middleware: ['auth', 'meta'],
     extendRoutes(routes, resolve) {
       routes.push({
         name: 'logout',
         path: '/logout',
         beforeEnter(to, from, next) {
-          console.log('ROUTER', to, from)
+          console.log('LOGOUT', to, from)
           next('/')
         }
       })
@@ -80,7 +80,8 @@ module.exports = {
     '@nuxtjs/axios',
     '@nuxtjs/pwa',
     // Doc: https://github.com/nuxt-community/dotenv-module
-    '@nuxtjs/dotenv'
+    '@nuxtjs/dotenv',
+    'cookie-universal-nuxt'
   ],
   /*
    ** Axios module configuration
@@ -96,7 +97,6 @@ module.exports = {
      */
     extend(config, ctx) {
       if (ctx.isDev) {
-        console.log(ctx)
         config.devtool = ctx.isClient ? 'source-map' : 'inline-source-map'
       }
     },

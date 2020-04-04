@@ -40,6 +40,7 @@
 
 <script>
 import ErrorHandlerMixin from '../utils/mixins/ErrorHandler'
+import { COOKIE_NAME } from '../utils'
 
 export default {
   layout: 'blank',
@@ -47,12 +48,6 @@ export default {
   components: {},
   mixins: [ErrorHandlerMixin],
   meta: { isPublic: false },
-  asyncData({ store, route, userAgent }) {
-    return {
-      userAgent,
-      slugs: ['foo', 'bar', 'baz']
-    }
-  },
   data() {
     return {
       username: 'mgambill+456@nmyvision.com',
@@ -63,7 +58,7 @@ export default {
   methods: {
     async login() {
       try {
-        const auth_id = this.$state.sessionKey.auth_id
+        const { auth_id } = this.$store.state.session
         const { username: email, password } = this
         const { data } = await this.$axios.post('/user/login', {
           auth_id,
