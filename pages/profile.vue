@@ -8,7 +8,7 @@ div
           h3.text-lg.font-medium.leading-6.text-gray-900 Personal Information
           p.mt-1.text-sm.leading-5.text-gray-500 Use a permanent address where you can receive mail.
       .mt-5(class="md:mt-0 md:col-span-2")
-        form(action="#" method="POST")
+        form(method="POST" @submit.prevent="onSavePersonal")
           .shadow.overflow-hidden(class="sm:rounded-md")
             .px-4.py-5.bg-white(class="sm:p-6")
               .grid.grid-cols-6.gap-6
@@ -18,11 +18,14 @@ div
                 .col-span-6(class="sm:col-span-3")
                   label.block.text-sm.font-medium.leading-5.text-gray-700(for="last_name") Last name
                   input#last_name.mt-1.form-input.block.w-full.py-2.px-3.border.border-gray-300.rounded-md.shadow-sm.transition.duration-150.ease-in-out(class="focus:outline-none focus:shadow-outline-blue focus:border-blue-300 sm:text-sm sm:leading-5" v-model="lastname")
-              //-  
                 .col-span-6(class="sm:col-span-4")
-                  label.block.text-sm.font-medium.leading-5.text-gray-700(for="email_address") Email address
-                  input#email_address.mt-1.form-input.block.w-full.py-2.px-3.border.border-gray-300.rounded-md.shadow-sm.transition.duration-150.ease-in-out(class="focus:outline-none focus:shadow-outline-blue focus:border-blue-300 sm:text-sm sm:leading-5")
+                  label.block.text-sm.font-medium.leading-5.text-gray-700(for="email_address") Company name
+                  input#email_address.mt-1.form-input.block.w-full.py-2.px-3.border.border-gray-300.rounded-md.shadow-sm.transition.duration-150.ease-in-out(class="focus:outline-none focus:shadow-outline-blue focus:border-blue-300 sm:text-sm sm:leading-5" v-model="companyname")
+                .col-span-6(class="sm:col-span-2")
+                  label.block.text-sm.font-medium.leading-5.text-gray-700(for="email_address") Zipcode
+                  input#email_address.mt-1.form-input.block.w-full.py-2.px-3.border.border-gray-300.rounded-md.shadow-sm.transition.duration-150.ease-in-out(class="focus:outline-none focus:shadow-outline-blue focus:border-blue-300 sm:text-sm sm:leading-5" v-model="postcode")
 
+              //-  
                 .col-span-6(class="sm:col-span-3")
                   label.block.text-sm.font-medium.leading-5.text-gray-700(for="country") Country / Region
                   select#country.mt-1.block.form-select.w-full.py-2.px-3.py-0.border.border-gray-300.bg-white.rounded-md.shadow-sm.transition.duration-150.ease-in-out(class="focus:outline-none focus:shadow-outline-blue focus:border-blue-300 sm:text-sm sm:leading-5")
@@ -41,7 +44,8 @@ div
                 .col-span-6(class="sm:col-span-3 lg:col-span-2")
                   label.block.text-sm.font-medium.leading-5.text-gray-700(for="postal_code") ZIP / Postal
                   input#postal_code.mt-1.form-input.block.w-full.py-2.px-3.border.border-gray-300.rounded-md.shadow-sm.transition.duration-150.ease-in-out(class="focus:outline-none focus:shadow-outline-blue focus:border-blue-300 sm:text-sm sm:leading-5")
-            .px-4.py-3.bg-gray-50.text-right(class="sm:px-6"): button.py-2.px-4.border.border-transparent.text-sm.leading-5.font-medium.rounded-md.text-white.bg-indigo-600.shadow-sm.transition.duration-150.ease-in-out(class="hover:bg-indigo-500 focus:outline-none focus:shadow-outline-blue active:bg-indigo-600") Save
+            .px-4.py-3.bg-gray-50.text-right(class="sm:px-6")
+              button.py-2.px-4.border.border-transparent.text-sm.leading-5.font-medium.rounded-md.text-white.bg-indigo-600.shadow-sm.transition.duration-150.ease-in-out(class="hover:bg-indigo-500 focus:outline-none focus:shadow-outline-blue active:bg-indigo-600") Save
     div
   .hidden(class="sm:block"): .py-5: .border-t.border-gray-200
   .mt-10(class="sm:mt-0")
@@ -55,28 +59,28 @@ div
           .shadow.overflow-hidden(class="sm:rounded-md")
             .px-4.py-5.bg-white(class="sm:p-6")
               .rounded-lg.border
-                template(v-for="(email, index) in emails")
-                  div.active-hover-anchor.p-4.h-20(:class="{'border-t border-gray-200': index > 0 }")
+                template(v-for="(item, index) in emails")
+                  div.active-hover-anchor.p-4.h-20(:class="{'border-t border-gray-200': index > 0 }" :key="item.email")
                     .flex.justify-between
                       div.flex.items-center
                         button.mr-2.flex.items-center(class="hover:text-indigo-600")
-                          | {{ email.email }}
+                          | {{ item.email }}
                           svg.w-4.h-4.ml-2.active-hover(fill="none" viewBox="0 0 24 24" stroke="currentColor")
                             path(stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z")
-                        //-template(v-if="email.email_status[0] === 'u'")
+                        //-template(v-if="item.email_status[0] === 'u'")
                           svg.w-4.h-4.text-gray-400(viewBox="0 0 20 20" fill="currentColor" strokewidth="2")
                             path(fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd")
                         //-template(v-else)
                           svg.w-4.h-4.text-green-600(viewBox="0 0 20 20" fill="currentColor" strokewidth="2")
                             path(fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd")
-                      button.text-red-700
+                      button.text-red-700(type="button" @click="onEmailDelete($event, item.email)")
                         svg.w-4.h-4.active-hover(fill="none" viewBox="0 0 24 24" stroke="currentColor" )
                           path(stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16")
 
-                    ul.mt-2.text-sm(v-if="email.email_status[0] === 'u'")
+                    ul.mt-2.text-sm(v-if="item.email_status[0] === 'u'")
                       li.text-xs 
                         span.font-bold.mr-3 Unverified
-                        a.text-indigo-600 Resend verification Email
+                        a.text-indigo-600(href="#" @click.prevent="onSendVerificationEmail") Resend verification Email
                     ul.mt-2.text-sm(v-else)
                       li.text-xs.flex
                           span.mr-3.text-green-600 Verified
@@ -85,10 +89,11 @@ div
 
 
 
-            .px-4.py-3.bg-gray-50.text-right(class="sm:px-6"): button.py-2.px-4.border.border-transparent.text-sm.leading-5.font-medium.rounded-md.text-white.bg-indigo-600.shadow-sm.transition.duration-150.ease-in-out(class="hover:bg-indigo-500 focus:outline-none focus:shadow-outline-blue active:bg-indigo-600" @click="onAddEmail") Add
+            .px-4.py-3.bg-gray-50.text-right(class="sm:px-6")
+              button.py-2.px-4.border.border-transparent.text-sm.leading-5.font-medium.rounded-md.text-white.bg-indigo-600.shadow-sm.transition.duration-150.ease-in-out(class="hover:bg-indigo-500 focus:outline-none focus:shadow-outline-blue active:bg-indigo-600" @click="onAddEmail" type="button") Add
     
   .hidden(class="sm:block"): .py-5: .border-t.border-gray-200
-  .mt-10(class="sm:mt-0")
+  //-.mt-10(class="sm:mt-0")
     div(class="md:grid md:grid-cols-3 md:gap-6")
       div(class="md:col-span-1")
         .px-4(class="sm:px-0")
@@ -133,7 +138,6 @@ div
                     label.ml-3(for="push_nothing"): span.block.text-sm.leading-5.font-medium.text-gray-700 No push notifications
             .px-4.py-3.bg-gray-50.text-right(class="sm:px-6"): button.py-2.px-4.border.border-transparent.text-sm.font-medium.rounded-md.text-white.bg-indigo-600.shadow-sm.transition.duration-150.ease-in-out(class="hover:bg-indigo-500 focus:outline-none focus:shadow-outline-blue focus:bg-indigo-500 active:bg-indigo-600") Save
 
-  //-script(src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.0.1/dist/alpine.js" defer="")
   template(v-if="modalOpen")
     .fixed.bottom-0.inset-x-0.px-4.pb-6( class="sm:inset-0 sm:p-0 sm:flex sm:items-center sm:justify-center")
       .fixed.inset-0.transition-opacity(@click="modalOpen=false"): .absolute.inset-0.bg-gray-500.opacity-75
@@ -141,47 +145,58 @@ div
         button.absolute.right-0.mr-4.-mt-2(@click="onEmailCancel")
           svg.w-5.h-5.text-gray-400(fill="none" viewBox="0 0 24 24" stroke="currentColor" strokewidth="2")
             path(stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12")
-        template
-          //-.mt-2.max-w-xl.text-sm.leading-5.text-gray-500: p Change the email address you want associated with your account.
-        div
-          //-.mx-auto.flex.items-center.justify-center.h-12.w-12.rounded-full.bg-green-100: svg.h-6.w-6.text-green-600(stroke="currentColor" fill="none" viewBox="0 0 24 24"): path(stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7")
-          //-.mt-3.text-center(class="sm:mt-5")
-            h3.text-lg.leading-6.font-medium.text-gray-900 Payment successful
-            .mt-2: p.text-sm.leading-5.text-gray-500 Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur amet labore.
-          h3.text-lg.leading-6.font-medium.text-gray-900 Update your email
-          .mt-5(class="sm:flex sm:items-center")
-            .w-full
-              label(for="email") Email Address
-              .relative.rounded-md.shadow-sm: input#email.form-input.block.w-full(placeholder="you@example.com" class="sm:text-sm sm:leading-5")
-          .mt-5(class="sm:flex sm:items-center")
-            .w-full
-              label(for="email") Label
-              .relative.rounded-md.shadow-sm
-                select#email.form-select.block.w-full(placeholder="you@example.com" class="sm:text-sm sm:leading-5")
-                  option 
-                  option Home
-                  option Work
-                  option Other
+        template(v-if="modalState === 'success'")
+            .mx-auto.flex.items-center.justify-center.h-12.w-12.rounded-full.bg-green-100: svg.h-6.w-6.text-green-600(stroke="currentColor" fill="none" viewBox="0 0 24 24"): path(stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7")
+            .mt-3.text-center(class="sm:mt-5")
+              h3.text-lg.leading-6.font-medium.text-gray-900 Address successfully added
+              .mt-2: p.text-sm.leading-5.text-gray-500 
+                | Please check your email account for a 
+                br 
+                | verification email.
+        template(v-else-if="modalState === 'error'")
+          p Error
+        template(v-else)
+            
+          form( @submit.prevent="onEmailSave" )
+            div
+              h3.text-lg.leading-6.font-medium.text-gray-900 Add an email address
+              .mt-5(class="sm:flex sm:items-center")
+                .w-full
+                  label(for="new_email") Email Address
+                  .relative.rounded-md.shadow-sm: input#new_email.form-input.block.w-full(placeholder="you@example.com" class="sm:text-sm sm:leading-5" v-model="currentEmail.address")
+              .mt-5(class="sm:flex sm:items-center")
+                .w-full
+                  label(for="new_email_label") Label
+                  .relative.rounded-md.shadow-sm
+                    select#new_email_label.form-select.block.w-full(placeholder="you@example.com" class="sm:text-sm sm:leading-5" v-model="currentEmail.label")
+                      option 
+                      option Home
+                      option Work
+                      option Other
 
-        .mt-5(class="sm:mt-6")
-          span.flex.w-full.rounded-md.shadow-sm
-            button.inline-flex.justify-center.w-full.rounded-md.border.border-transparent.px-4.py-2.bg-indigo-600.text-base.leading-6.font-medium.text-white.shadow-sm.transition.ease-in-out.duration-150(
-              @click="onEmailSave" 
-              type="button" 
-              class="hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo sm:text-sm sm:leading-5") Update email
+            .mt-5(class="sm:mt-6")
+              span.flex.w-full.rounded-md.shadow-sm
+                button.inline-flex.justify-center.w-full.rounded-md.border.border-transparent.px-4.py-2.bg-indigo-600.text-base.leading-6.font-medium.text-white.shadow-sm.transition.ease-in-out.duration-150(              
+                  class="hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo sm:text-sm sm:leading-5") Add an email address
 </template>
 
 <script>
+import AlertModal from '../components/parts/Modal'
+const defaultEmail = {
+  address: '',
+  label: 'work'
+}
 export default {
   name: 'ProfilePage',
-  components: {},
+  components: { AlertModal },
+
   data() {
     console.log(':', this.user)
     return {
-      currentEmail: {},
+      currentEmail: defaultEmail,
       modalOpen: false,
-      localUser: {},
-      emails: []
+      modalState: 'fill',
+      localUser: {}
     }
   },
   computed: {
@@ -190,7 +205,7 @@ export default {
         return this.localUser['p.firstname'] || this.user['p.firstname']
       },
       set(value) {
-        this.localUser['p.firstname'] = value
+        this.$set(this.localUser, 'p.firstname', value)
       }
     },
     lastname: {
@@ -198,27 +213,102 @@ export default {
         return this.localUser['p.lastname'] || this.user['p.lastname']
       },
       set(value) {
-        this.localUser['p.lastname'] = value
+        this.$set(this.localUser, 'p.lastname', value)
+      }
+    },
+    companyname: {
+      get() {
+        return this.localUser['p.companyname'] || this.user['p.companyname']
+      },
+      set(value) {
+        this.$set(this.localUser, 'p.companyname', value)
+      }
+    },
+    postcode: {
+      get() {
+        return this.localUser['p.postcode'] || this.user['p.postcode']
+      },
+      set(value) {
+        this.$set(this.localUser, 'p.postcode', value)
       }
     },
     user() {
       return this.$store.state.user
+    },
+    emails() {
+      return Array.from(this.$store.state.user_emails)
+    }
+  },
+  watch: {
+    modalOpen(state) {
+      if (state === false) this.modalState = 'fill'
     }
   },
   mounted() {
-    console.log('!', this.user)
-    this.emails = Array.from(this.$store.state.user_emails)
+    console.log('!', this)
   },
   methods: {
+    async onEmailDelete(e, email) {
+      if (window.confirm('Are you sure')) {
+        try {
+          e.target.blur()
+          const { data } = await this.$axios.post('/email/delete', { email })
+
+          this.$store.dispatch('LOAD_STATE')
+          // this.modalOpen = false
+        } catch (error) {
+          alert(error.message)
+          // AlertModal.
+        }
+      }
+    },
     onAddEmail() {
+      this.currentEmail = {
+        address: '',
+        label: 'work'
+      }
       this.modalOpen = true
     },
-    onEmailSave() {
-      this.modalOpen = false
+    async onEmailSave() {
+      try {
+        const { data } = await this.$axios.post('/email/create', {
+          email: this.currentEmail.address,
+          custom_user_email_params: {
+            label: this.currentEmail.label,
+            default: true
+          }
+        })
+        this.currentEmail = defaultEmail
+        this.modalState = 'success'
+        // this.modalOpen = false
+        this.$store.dispatch('LOAD_STATE')
+      } catch (error) {
+        alert(error.message)
+        this.modalState = 'error'
+        // AlertModal.
+      }
     },
     onEmailCancel() {
       this.modalOpen = false
-    }
+    },
+    async onSavePersonal() {
+      try {
+        const { data } = await this.$axios.post('/user/edit', {
+          custom_user_params: {
+            'p.firstname': this.firstname,
+            'p.lastname': this.lastname,
+            'p.companyname': this.companyname,
+            'p.postcode': this.postcode
+          }
+        })
+        this.$store.dispatch('LOAD_STATE')
+        alert('Saved')
+      } catch (error) {
+        alert(error.message)
+        // AlertModal.
+      }
+    },
+    onSendVerificationEmail() {}
   }
 }
 </script>
