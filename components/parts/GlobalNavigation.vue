@@ -70,11 +70,10 @@ export default {
     },
     async signOut() {
       try {
-        await this.$axios.post('/user/logout', {
-          auth_id: this.$state.sessionKey.auth_id
-        })
-        this.$store.commit('CLEAR_STATE')
+        await this.$axios.post('/user/logout')
+        await this.$store.dispatch('REFRESH_SESSION')
 
+        this.$store.commit('CLEAR_STATE')
         this.$router.push('/logout')
       } catch (err) {
         alert(err)

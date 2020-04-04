@@ -4,10 +4,7 @@
     
     h1.title portal-fulcrumsaas-net
     h2.subtitle Portal at fulcrumsaas.net
-
-    button.py-2.px-4.border.border-gray-300.rounded-md.text-sm.leading-5.font-medium.text-gray-700.transition.duration-150.ease-in-out(type="button" class="hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-50 active:text-gray-800 hover:bg-gray-50") TEST
-
-    .links.pt-3
+     .links.pt-3
       a.button--green.px-4.py-2.bg-gray-500(href="https://nuxtjs.org/" target="_blank" class="hover:bg-gray-800") Documentation
       a.button--grey.px-4.py-2(href="https://github.com/nuxt/nuxt.js" target="_blank") GitHub
       
@@ -15,13 +12,9 @@
 </template>
 
 <script>
-import Logo from '~/components/Logo.vue'
 export default {
   name: 'IndexPage',
-  meta: { pageTitle: 'Home' },
-  components: {
-    Logo
-  }
+  meta: { pageTitle: 'Home' }
 }
 </script>
 

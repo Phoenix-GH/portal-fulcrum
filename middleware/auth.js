@@ -9,7 +9,7 @@ export default async ({ store, redirect, route, app }) => {
     await store.dispatch('REFRESH_SESSION', cookie)
   }
 
-  if (store.state.user && store.state.user.length > 0) {
+  if (store.state.user && !Array.isArray(store.state.user)) {
     if (route.name === 'login') return redirect('/')
     return // continue to page we are trying to load
   }
