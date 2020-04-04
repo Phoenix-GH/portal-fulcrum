@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import Modal from '@/components/parts/Modal.vue'
+import Modal from '@/components/controls/Modal.vue'
 export default {
   layout: 'default',
   name: 'TeamCreate',
