@@ -94,7 +94,7 @@ export default {
       this.teams = response.teams
     },
     createTeam() {
-      this.$router.push('team-create')
+      this.$router.push('/teams/create')
     },
     showDeleteTeamModal(id) {
       this.deleteModalOpen = true

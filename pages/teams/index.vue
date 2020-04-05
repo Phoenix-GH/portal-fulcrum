@@ -109,7 +109,7 @@ export default {
     showDeleteUserModal() {},
     showDeleteInvitationModal() {},
     changeTeam() {
-      this.$router.push('team-list')
+      this.$router.push('/teams/id')
     }
   }
 }

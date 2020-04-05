@@ -29,8 +29,8 @@
                 svg.h-6.w-6(fill="none" viewBox="0 0 24 24" stroke="currentColor"): path(stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z")
               .origin-top-right.z-20.absolute.right-0.mt-2.w-48.rounded-md.shadow-lg(v-show="openTeam" x-transition:enter="transition ease-out duration-100" x-transition:enter-start="transform opacity-0 scale-95" x-transition:enter-end="transform opacity-100 scale-100" x-transition:leave="transition ease-in duration-75" x-transition:leave-start="transform opacity-100 scale-100" x-transition:leave-end="transform opacity-0 scale-95")
                 .py-1.rounded-md.bg-white.shadow-xs
-                  a.block.px-4.py-2.text-sm.text-gray-700(href="#" @click.prevent="navigate('/team')" class="hover:bg-gray-100") Team Info
-                  a.block.px-4.py-2.text-sm.text-gray-700(href="#" @click.prevent="navigate('/team-list')" class="hover:bg-gray-100") Change Team
+                  a.block.px-4.py-2.text-sm.text-gray-700(href="#" @click.prevent="navigate('/teams/')" class="hover:bg-gray-100") Team Info
+                  a.block.px-4.py-2.text-sm.text-gray-700(href="#" @click.prevent="navigate('/teams/id')" class="hover:bg-gray-100") Change Team
             .ml-3.relative
               div: button.z-20.max-w-xs.flex.items-center.text-sm.rounded-full.text-white(@click="open = !open" class="focus:outline-none focus:shadow-solid"): img.h-8.w-8.rounded-full(src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="")
               .origin-top-right.z-20.absolute.right-0.mt-2.w-48.rounded-md.shadow-lg(v-show="open" x-transition:enter="transition ease-out duration-100" x-transition:enter-start="transform opacity-0 scale-95" x-transition:enter-end="transform opacity-100 scale-100" x-transition:leave="transition ease-in duration-75" x-transition:leave-start="transform opacity-100 scale-100" x-transition:leave-end="transform opacity-0 scale-95")
