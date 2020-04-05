@@ -109,7 +109,7 @@ export default {
     },
     selectTeam(id) {
       this.$store.commit('SELECT_TEAM', { selectedTeam: id })
-      this.$router.push('team')
+      this.$router.push('/teams/')
     },
     deleteTeam() {
       this.$axios({
