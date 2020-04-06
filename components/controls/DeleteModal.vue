@@ -9,8 +9,8 @@
           h3.text-lg.leading-6.font-medium.text-gray-900 {{title}}
           .mt-2: p.text-sm.leading-5.text-gray-500 {{text}}
       .mt-5(class="sm:mt-4 sm:flex sm:flex-row-reverse")
-        span.flex.w-full.rounded-md.shadow-sm(class="sm:ml-3 sm:w-auto"): button.inline-flex.justify-center.w-full.rounded-md.border.border-transparent.px-4.py-2.bg-red-600.text-base.leading-6.font-medium.text-white.shadow-sm.transition.ease-in-out.duration-150(@click="deleteTeam()" type="button" class="hover:bg-red-500 focus:outline-none focus:border-red-700 focus:shadow-outline-red sm:text-sm sm:leading-5") {{okText}}
-        span.mt-3.flex.w-full.rounded-md.shadow-sm(class="sm:mt-0 sm:w-auto"): button.inline-flex.justify-center.w-full.rounded-md.border.border-gray-300.px-4.py-2.bg-white.text-base.leading-6.font-medium.text-gray-700.shadow-sm.transition.ease-in-out.duration-150(@click="deleteModalOpen = false;" type="button" class="hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline sm:text-sm sm:leading-5") {{cancelText}}
+        span.flex.w-full.rounded-md.shadow-sm(class="sm:ml-3 sm:w-auto"): button.inline-flex.justify-center.w-full.rounded-md.border.border-transparent.px-4.py-2.bg-red-600.text-base.leading-6.font-medium.text-white.shadow-sm.transition.ease-in-out.duration-150(@click="onOK" type="button" class="hover:bg-red-500 focus:outline-none focus:border-red-700 focus:shadow-outline-red sm:text-sm sm:leading-5") {{okText}}
+        span.mt-3.flex.w-full.rounded-md.shadow-sm(class="sm:mt-0 sm:w-auto"): button.inline-flex.justify-center.w-full.rounded-md.border.border-gray-300.px-4.py-2.bg-white.text-base.leading-6.font-medium.text-gray-700.shadow-sm.transition.ease-in-out.duration-150(@click="onCancel" type="button" class="hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline sm:text-sm sm:leading-5") {{cancelText}}
 </template>
 
 <script>
@@ -20,7 +20,7 @@ export default {
     text: {
       type: String,
       default:
-        'Are you sure you want to delete this team? All of your data will be permanantly removed from our servers forever. This action cannot be undone.'
+        'Are you sure you want to delete this? All of your data will be permanantly removed from our servers forever. This action cannot be undone.'
     },
     okText: { type: String, default: 'OK' },
     cancelText: { type: String, default: 'Cancel' },
