@@ -21,16 +21,16 @@
                 span.inline-flex.rounded-md.shadow-sm: button.py-2.px-4.border.border-gray-300.rounded-md.text-sm.leading-5.font-medium.text-gray-700.transition.duration-150.ease-in-out(type="button" class="hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-50 active:text-gray-800" v-on:click='cancel()') Cancel
                 span.ml-3.inline-flex.rounded-md.shadow-sm: button.inline-flex.justify-center.py-2.px-4.border.border-transparent.text-sm.leading-5.font-medium.rounded-md.text-white.bg-indigo-600.transition.duration-150.ease-in-out(type="submit" class="hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700" v-on:click='save()') Save
   script(src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.0.1/dist/alpine.js" defer="")
-  Modal(title="Success" :isOpen="alertModalOpen" :onClose="closeAlert" :text="message")
+  AlertModal(title="Success" :isOpen="alertModalOpen" :onClose="closeAlert" :text="message")
 </template>
 
 <script>
-import Modal from '@/components/parts/Modal.vue'
+import AlertModal from '@/components/controls/AlertModal.vue'
 export default {
   layout: 'default',
   name: 'TeamCreate',
   components: {
-    Modal
+    AlertModal
   },
   data() {
     return {

@@ -25,7 +25,7 @@ div
                   label.block.text-sm.font-medium.leading-5.text-gray-700(for="email_address") Zipcode
                   input#email_address.mt-1.form-input.block.w-full.py-2.px-3.border.border-gray-300.rounded-md.shadow-sm.transition.duration-150.ease-in-out(class="focus:outline-none focus:shadow-outline-blue focus:border-blue-300 sm:text-sm sm:leading-5" v-model="postcode")
 
-              //-  
+              //-
                 .col-span-6(class="sm:col-span-3")
                   label.block.text-sm.font-medium.leading-5.text-gray-700(for="country") Country / Region
                   select#country.mt-1.block.form-select.w-full.py-2.px-3.py-0.border.border-gray-300.bg-white.rounded-md.shadow-sm.transition.duration-150.ease-in-out(class="focus:outline-none focus:shadow-outline-blue focus:border-blue-300 sm:text-sm sm:leading-5")
@@ -78,7 +78,7 @@ div
                           path(stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16")
 
                     ul.mt-2.text-sm(v-if="item.email_status[0] === 'u'")
-                      li.text-xs 
+                      li.text-xs
                         span.font-bold.mr-3 Unverified
                         a.text-indigo-600(href="#" @click.prevent="onSendVerificationEmail") Resend verification Email
                     ul.mt-2.text-sm(v-else)
@@ -91,7 +91,7 @@ div
 
             .px-4.py-3.bg-gray-50.text-right(class="sm:px-6")
               button.py-2.px-4.border.border-transparent.text-sm.leading-5.font-medium.rounded-md.text-white.bg-indigo-600.shadow-sm.transition.duration-150.ease-in-out(class="hover:bg-indigo-500 focus:outline-none focus:shadow-outline-blue active:bg-indigo-600" @click="onAddEmail" type="button") Add
-    
+
   .hidden(class="sm:block"): .py-5: .border-t.border-gray-200
   //-.mt-10(class="sm:mt-0")
     div(class="md:grid md:grid-cols-3 md:gap-6")
@@ -149,14 +149,14 @@ div
             .mx-auto.flex.items-center.justify-center.h-12.w-12.rounded-full.bg-green-100: svg.h-6.w-6.text-green-600(stroke="currentColor" fill="none" viewBox="0 0 24 24"): path(stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7")
             .mt-3.text-center(class="sm:mt-5")
               h3.text-lg.leading-6.font-medium.text-gray-900 Address successfully added
-              .mt-2: p.text-sm.leading-5.text-gray-500 
-                | Please check your email account for a 
-                br 
+              .mt-2: p.text-sm.leading-5.text-gray-500
+                | Please check your email account for a
+                br
                 | verification email.
         template(v-else-if="modalState === 'error'")
           p Error
         template(v-else)
-            
+
           form( @submit.prevent="onEmailSave" )
             div
               h3.text-lg.leading-6.font-medium.text-gray-900 Add an email address
@@ -169,19 +169,19 @@ div
                   label(for="new_email_label") Label
                   .relative.rounded-md.shadow-sm
                     select#new_email_label.form-select.block.w-full(placeholder="you@example.com" class="sm:text-sm sm:leading-5" v-model="currentEmail.label")
-                      option 
+                      option
                       option Home
                       option Work
                       option Other
 
             .mt-5(class="sm:mt-6")
               span.flex.w-full.rounded-md.shadow-sm
-                button.inline-flex.justify-center.w-full.rounded-md.border.border-transparent.px-4.py-2.bg-indigo-600.text-base.leading-6.font-medium.text-white.shadow-sm.transition.ease-in-out.duration-150(              
+                button.inline-flex.justify-center.w-full.rounded-md.border.border-transparent.px-4.py-2.bg-indigo-600.text-base.leading-6.font-medium.text-white.shadow-sm.transition.ease-in-out.duration-150(
                   class="hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo sm:text-sm sm:leading-5") Add an email address
 </template>
 
 <script>
-import AlertModal from '../components/parts/Modal'
+import AlertModal from '@/components/controls/AlertModal'
 const defaultEmail = {
   address: '',
   label: 'work'
