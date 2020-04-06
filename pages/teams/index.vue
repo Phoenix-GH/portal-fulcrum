@@ -41,9 +41,9 @@
                         td.px-6.py-4.whitespace-no-wrap.border-b.border-gray-200.text-sm.leading-5.text-gray-500
                           | {{user.team_role}}
                         td.px-6.py-4.whitespace-no-wrap.text-right.border-b.border-gray-200.text-sm.leading-5.font-medium
-                          a.text-indigo-600(href='#' class='hover:text-indigo-900 focus:outline-none focus:underline') Edit
+                          a.text-indigo-600(v-on:click='showEditUserModal(user.user_id)' href='#' class='hover:text-indigo-900 focus:outline-none focus:underline') Edit
                           span &nbsp;|&nbsp;
-                          a.text-red-600.leading-4(v-on:click='showDeleteUserModal(user.user_id)' class='hover:text-indigo-900 focus:outline-none focus:underline') Delete
+                          a.text-red-600.leading-4(v-on:click='showDeleteMemberModal(user.user_id)' class='hover:text-indigo-900 focus:outline-none focus:underline') Delete
             .mt-6(class="sm:mt-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5")
               label.block.text-sm.font-medium.leading-5.text-gray-700(for="about" class="sm:mt-px sm:pt-2") Invitations
               .mt-1(class="sm:mt-0 sm:col-span-2")
@@ -74,42 +74,78 @@
                           a.text-indigo-600(href='#' class='hover:text-indigo-900 focus:outline-none focus:underline') Edit
                           span &nbsp;|&nbsp;
                           a.text-red-600.leading-4(v-on:click='showDeleteInvitationModal(invitation.invitation_code)' class='hover:text-indigo-900 focus:outline-none focus:underline') Delete
-
+  script(src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.0.1/dist/alpine.js" defer="")
+  DeleteModal(:isOpen="deleteMemberModalOpen" :onOK="deleteMember" :onCancel="closeDeleteMemberModal")
 </template>
 
 <script>
+import DeleteModal from '@/components/controls/DeleteModal'
 export default {
   layout: 'default',
   name: 'Team',
-  components: {},
+  components: {
+    DeleteModal
+  },
   data() {
     return {
       team: null,
       users: [],
-      invitations: []
+      invitations: [],
+      deleteMemberModalOpen: false,
+      selectedMemberId: null
     }
   },
   mounted() {
     this.loadData()
   },
   methods: {
-    async loadData() {
-      const { data } = await this.$axios({
+    loadData() {
+      this.$axios({
         method: 'post',
         url: '/team/get-info',
         data: {
           auth_id: this.$state.sessionKey.auth_id,
           team_id: this.$store.state.selectedTeam
         }
+      }).then((res) => {
+        const { data } = res
+        this.team = data.response.team
+        this.users = data.response.users
+        this.invitations = data.response.invitations
       })
-      this.team = data.response.team
-      this.users = data.response.users
-      this.invitations = data.response.invitations
     },
-    showDeleteUserModal() {},
+    showEditUserModal() {},
+    showDeleteMemberModal(id) {
+      this.deleteMemberModalOpen = true
+      this.selectedMemberId = id
+    },
     showDeleteInvitationModal() {},
     changeTeam() {
       this.$router.push('/teams/id')
+    },
+    deleteMember() {
+      this.$axios({
+        method: 'post',
+        url: '/team/member-delete',
+        data: {
+          auth_id: this.$state.sessionKey.auth_id,
+          team_id: this.$store.state.selectedTeam,
+          user_id: this.selectedMemberId,
+          current_member_team_role: 'admin'
+        }
+      })
+        .catch((e) => {
+          alert(e.message || 'An error has occured, please try again later.')
+        })
+        .finally((f) => {
+          this.loadData()
+          this.selectedMemberId = null
+          this.deleteMemberModalOpen = false
+        })
+    },
+    closeDeleteMemberModal() {
+      this.deleteMemberModalOpen = false
+      this.selectedMemberId = null
     }
   }
 }
