@@ -2,7 +2,7 @@
 header.bg-white.shadow-sm: .flex.max-w-7xl.mx-auto.py-4.px-4(class="sm:px-6 lg:px-8")
   .fixed.inset-0.transition-opacity.bg-blue-200.opacity-25(@click="open=false" v-if="open"): .absolute.inset-0
   .relative
-    a.flex.items-center.px-2.h-6.cursor-pointer(@click.prevent="toggle" :class="{ 'text-indigo-600': open}" class="hover:text-gray-500")
+    a.flex.items-center.pr-4.h-6.cursor-pointer(@click.prevent="toggle" :class="{ 'text-indigo-600': open}" class="hover:text-gray-500")
       svg.w-5.h-5(viewBox="0 0 20 20" fill="currentColor" strokewidth="1")
         path(fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd")
 
@@ -19,7 +19,8 @@ header.bg-white.shadow-sm: .flex.max-w-7xl.mx-auto.py-4.px-4(class="sm:px-6 lg:p
           template(v-for="link in links")
             a.block.px-4.py-2.text-sm.text-gray-700(href="#" class="hover:bg-gray-100") {{ link.label }}
 
-  h2.text-lg.leading-6.font-semibold.text-gray-900 {{ this.title }}
+  portal-target.inline-flex.items-center(name="navigation-title")
+    h2.text-lg.leading-6.font-semibold.text-gray-900 {{ this.title }}
   
 </template>
 

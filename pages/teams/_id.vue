@@ -99,6 +99,12 @@
           .flex.justify-end
             span.inline-flex.rounded-md.shadow-sm: button.py-2.px-4.border.border-gray-300.rounded-md.text-sm.leading-5.font-medium.text-gray-700.transition.duration-150.ease-in-out(type="button" class="hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-50 active:text-gray-800" v-on:click='editMemberModalOpen=false;') Cancel
             span.ml-3.inline-flex.rounded-md.shadow-sm: button.inline-flex.justify-center.py-2.px-4.border.border-transparent.text-sm.leading-5.font-medium.rounded-md.text-white.bg-indigo-600.transition.duration-150.ease-in-out(type="submit" class="hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700" v-on:click='saveMember()') Save
+  portal(to="navigation-title") 
+    nuxt-link.text-lg.leading-6.font-semibold.text-indigo-600(to="/teams" ) Teams
+    template(v-if="team")
+      span.mx-2.text-gray-400 
+        svg.h-5.w-5(fill="currentColor" viewBox="0 0 20 20"): path(fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd")
+      span.text-lg.leading-6.font-semibold.text-gray-900 {{ team.team_name || "unknown" }}
 </template>
 
 <script>
@@ -106,6 +112,10 @@ import DeleteModal from '@/components/controls/DeleteModal'
 export default {
   layout: 'default',
   name: 'Team',
+  middleware({ params, redirect }) {
+    // if id is not a number... then redirect back to teams page
+    if (/^\d+$/.test(params.id) === false) return redirect('/teams')
+  },
   components: {
     DeleteModal
   },
