@@ -1,9 +1,7 @@
 <template lang="pug">
-.min-h-screen.flex.flex-col.justify-center.py-12(class='sm:px-6 lg:px-8')
-  div(class='sm:mx-auto sm:w-full sm:max-w-md')
-    img.mx-auto.h-12.w-auto.mb-8(src='../assets/images/fulcrum-logo-300.svg', alt='Fulcrum')
+div
     .bg-white.py-8.px-4.shadow(class='sm:rounded-lg sm:px-10')
-      div.bg-red-100.border.rounded.border-red-700.p-2.mb-4.flex.items-center.text-red-700(v-if="errors.length > 0")
+      div.bg-red-100.border.rounded.border-red-700.p-2.mb-4.flex.items-center.text-red-700(v-if="hasErrors")
         ul.list-disc
           template(v-for="error in errors")
             li.text-red-700.text-sm.ml-6 {{ error.text || error }}
@@ -40,10 +38,15 @@
               div(class='sm:col-span-6')
                 label.block.text-sm.font-medium.leading-5.text-gray-700(for='email') Email address
                 .mt-1.relative.rounded-md.shadow-sm
-                  .absolute.inset-y-0.left-0.pl-3.flex.items-center.pointer-events-none
-                    svg.h-5.w-5.text-gray-400(fill='currentColor', viewBox='0 0 20 20')
-                      path(fill-rule='evenodd', d='M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884zM18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z', clip-rule='evenodd')
-                  input#email.form-input.block.w-full.pl-10(class='sm:text-sm sm:leading-5', placeholder='you@example.com' v-model="email")
+                  input#email.form-input.block.w-full.pl-10(required class='sm:text-sm sm:leading-5' placeholder='you@example.com' v-model.lazy="email" :class="[ emailValid ? 'border-red-300 text-red-700 focus:shadow-outline-red': '' ]")
+                  .absolute.inset-y-0.left-0.pl-3.flex.items-center.pointer-events-none( :class="[ emailValid ? 'text-red-600':'text-gray-400']")
+                    svg.h-5.w-5(fill='currentColor', viewBox='0 0 20 20')
+                      path(fill-rule='evenodd' d='M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884zM18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z' clip-rule='evenodd')
+                  .absolute.inset-y-0.right-0.pr-3.flex.items-center.pointer-events-none.text-red-600(v-if="emailValid")
+                    svg.h-5.w-5(fill='currentColor', viewBox='0 0 20 20')
+                      path(fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd")
+                p.mt-1.text-sm.text-red-600 {{ emailValid }}
+
 
               div(class='sm:col-span-4')
                 label.block.text-sm.font-medium.leading-5.text-gray-700(for='companyName') Company Name
@@ -56,34 +59,35 @@
               div(class='sm:col-span-2')
                 label.block.text-sm.font-medium.leading-5.text-gray-700(for='zipcode') Zipcode
                 .mt-1.relative.rounded-md.shadow-sm
-                  input#zipcode.form-input.block.w-full(class='sm:text-sm sm:leading-5', placeholder='12345' v-model="zipcode")
+                  input#zipcode.form-input.block.w-full(class='sm:text-sm sm:leading-5' placeholder='12345' v-model="zipcode")
 
               div(class='sm:col-span-6')
                 label.block.text-sm.font-medium.leading-5.text-gray-700(for='password') Password
+                PasswordField(v-model="password")
                 .mt-1.relative.rounded-md.shadow-sm
+                  input#password.form-input.block.w-full.pl-10(required class='sm:text-sm sm:leading-5' placeholder='you@example.com' type="password" v-model="password")
                   .absolute.inset-y-0.left-0.pl-3.flex.items-center.pointer-events-none
                     svg.w-5.h-5.text-gray-400(viewBox='0 0 20 20' fill='currentColor')
                       path(fill-rule='evenodd' d='M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z' clip-rule='evenodd')
 
-                  input#password.form-input.block.w-full.pl-10(class='sm:text-sm sm:leading-5', placeholder='you@example.com' type="password" v-model="password")
 
 
           .mt-6
             span.block.w-full.rounded-md.shadow-sm
               button.w-full.flex.justify-center.py-2.px-4.border.border-transparent.text-sm.font-medium.rounded-md.text-white.bg-cool-gray-600.transition.duration-150.ease-in-out(type='submit', class='hover:bg-cool-gray-500 focus:outline-none focus:border-cool-gray-700 focus:shadow-outline-cool-gray active:bg-cool-gray-700') Register
     p.mt-4.text-sm.text-center.mr-1 Already have an account?
-      nuxt-link.font-medium.text-indigo-600.transition.ease-in-out.duration-150(to='/login', class='hover:text-indigo-500 focus:outline-none focus:underline') Sign In
-    p.mt-12.text-xs.text-center
-      a.font-medium.text-cool-gray-500.transition.ease-in-out.duration-150(href="//www.fulcrumsaas.com" class="hover:text-indigo-600") www.fulcrumsaas.com
+      nuxt-link.font-medium.text-indigo-600.transition.ease-in-out.duration-150.ml-1(to='../login', class='hover:text-indigo-500 focus:outline-none focus:underline') Sign In
+ 
 
 </template>
 
 <script>
-import ErrorHandlerMixin from '../utils/mixins/ErrorHandler'
+import PasswordField from '../../components/controls/PasswordField'
+import ErrorHandlerMixin from '../../utils/mixins/ErrorHandler'
 export default {
   name: 'RegisterPage',
-  layout: 'blank',
-  components: {},
+  layout: 'account',
+  components: { PasswordField },
   mixins: [ErrorHandlerMixin],
   meta: { isPublic: true },
   data() {
@@ -94,7 +98,20 @@ export default {
       password: null,
       companyName: null,
       zipcode: null,
-      status: 'signup'
+      status: 'signup',
+      emailValid: null
+    }
+  },
+  watch: {
+    email: {
+      async handler(value) {
+        if (this.validEmail(value)) {
+          const { data } = await this.$axios.post('/email/inuse', { email: value })
+          this.emailValid = data.response.inuse ? 'Email address in use.' : null
+        } else {
+          this.emailValid = 'Invalid email.'
+        }
+      }
     }
   },
   methods: {
@@ -129,6 +146,10 @@ export default {
     },
     async onSubmit() {
       await this.register()
+    },
+    validEmail(email) {
+      const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      return re.test(email)
     }
   }
 }

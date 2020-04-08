@@ -1,9 +1,5 @@
 <template lang="pug">
-.min-h-screen.flex.flex-col.justify-center.py-12(class='sm:px-6 lg:px-8')
-  div(class='sm:mx-auto sm:w-full sm:max-w-md')
-    img.mx-auto.h-12.w-auto(src='../assets/images/fulcrum-logo-300.svg' alt='Fulcrum')
-
-  .mt-8(class='sm:mx-auto sm:w-full sm:max-w-md')
+  div
     .bg-white.py-8.px-4.shadow(class='sm:rounded-lg sm:px-10')
       form(@submit.prevent="onSubmit")
         div.bg-red-100.border.rounded.border-red-700.p-2.mb-4.flex.items-center.text-red-700(v-if="errors.length > 0")
@@ -20,8 +16,9 @@
           .flex.items-center.justify-between
             label.block.text-sm.font-medium.leading-5.text-gray-700(for='password') Password
             .text-xs.leading-5
-              a.font-medium.text-indigo-600.transition.ease-in-out.duration-150(href='/recover' class='hover:text-indigo-500 focus:outline-none focus:underline') Forgot your password?
-          .mt-1.rounded-md.shadow-sm
+              nuxt-link.font-medium.text-indigo-600.transition.ease-in-out.duration-150(to='/account/recover' class='hover:text-indigo-500 focus:outline-none focus:underline') Forgot your password?
+          PasswordField(v-model="password")
+          //-.mt-1.rounded-md.shadow-sm
             input#password.appearance-none.block.w-full.px-3.py-2.border.border-gray-300.rounded-md.placeholder-gray-400.transition.duration-150.ease-in-out(type='password' v-model="password" required='' class='focus:outline-none focus:shadow-outline-blue focus:border-blue-300 sm:text-sm sm:leading-5')
         
         .mt-6
@@ -29,23 +26,19 @@
             button.w-full.flex.justify-center.py-2.px-4.border.border-transparent.text-sm.font-medium.rounded-md.text-white.bg-cool-gray-600.transition.duration-150.ease-in-out(type='submit' class='hover:bg-cool-gray-500 focus:outline-none focus:border-cool-gray-700 focus:shadow-outline-cool-gray active:bg-cool-gray-700') Sign in
     p.mt-4.text-sm.text-center 
       span.mr-1 Don't have an account?
-      nuxt-link.font-medium.text-indigo-600.transition.ease-in-out.duration-150(to='/register' class='hover:text-indigo-500 focus:outline-none focus:underline') Sign up
-    //-p: pre {{ auth_id }}
-    p.mt-12.text-xs.text-center 
-      a.font-medium.text-cool-gray-500.transition.ease-in-out.duration-150(href="//www.fulcrumsaas.com" class="hover:text-indigo-600") www.fulcrumsaas.com
-    
-
-    //- p.bg-gray-50.p-1: pre Session Key {{ $store.state.sessionKey }}
+      nuxt-link.font-medium.text-indigo-600.transition.ease-in-out.duration-150(to='/account/register' class='hover:text-indigo-500 focus:outline-none focus:underline') Sign up
+ 
 </template>
 
 <script>
+import PasswordField from '../components/controls/PasswordField'
 import ErrorHandlerMixin from '../utils/mixins/ErrorHandler'
 import { COOKIE_NAME } from '../utils'
 
 export default {
-  layout: 'blank',
+  layout: 'account',
   name: 'LoginPage',
-  components: {},
+  components: { PasswordField },
   mixins: [ErrorHandlerMixin],
   meta: { isPublic: false },
   data() {

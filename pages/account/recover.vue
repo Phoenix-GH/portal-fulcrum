@@ -1,8 +1,5 @@
 <template lang="pug">
-.min-h-screen.flex.flex-col.justify-center.py-12(class='sm:px-6 lg:px-8')
-  div(class='sm:mx-auto sm:w-full sm:max-w-md')
-    img.mx-auto.h-12.w-auto(src='../assets/images/fulcrum-logo-300.svg' alt='Fulcrum')
- 
+div 
   .mt-8(class='sm:mx-auto sm:w-full sm:max-w-md')
     .bg-white.py-8.px-4.shadow(class='sm:rounded-lg sm:px-10')
       template(v-if="status === 'initial' || errors.length > 0")
@@ -29,7 +26,7 @@
       template(v-else-if="status === 'pending'")
         div Loading
       template(v-else-if="status === 'success'")
-        nuxt-link.flex.text-green-500.align-center(to="/login")
+        nuxt-link.flex.text-green-500.align-center(to="../login")
           div.flex.items-center
             svg.w-8.h-8(viewBox="0 0 20 20" fill="currentColor" strokewidth="2")
               path(fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd")
@@ -40,19 +37,18 @@
 
     p.mt-4.text-sm.text-center 
       | Don't have an account? 
-      nuxt-link.font-medium.text-indigo-600.transition.ease-in-out.duration-150(to='/register' class='hover:text-indigo-500 focus:outline-none focus:underline') register      
+      nuxt-link.font-medium.text-indigo-600.transition.ease-in-out.duration-150(to='./register' class='hover:text-indigo-500 focus:outline-none focus:underline') register      
       | -- or go 
-      nuxt-link.font-medium.text-indigo-600.transition.ease-in-out.duration-150(to="/login") back 
+      nuxt-link.font-medium.text-indigo-600.transition.ease-in-out.duration-150(to="../login") back 
       | .
-    p.mt-12.text-xs.text-center 
-      a.font-medium.text-cool-gray-500.transition.ease-in-out.duration-150(href="//www.fulcrumsaas.com" class="hover:text-indigo-600") www.fulcrumsaas.com
+
 
 </template>
 
 <script>
 export default {
   name: 'ResetPage',
-  layout: 'blank',
+  layout: 'account',
   components: {},
   meta: { isPublic: true },
   data() {

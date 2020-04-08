@@ -7,6 +7,9 @@ export default {
   computed: {
     errors() {
       return Object.values(this.errorSet)
+    },
+    hasErrors() {
+      return this.errors.length > 0
     }
   },
   methods: {
