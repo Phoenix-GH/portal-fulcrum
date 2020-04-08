@@ -41,9 +41,9 @@
                         td.px-6.py-4.whitespace-no-wrap.border-b.border-gray-200.text-sm.leading-5.text-gray-500
                           | {{user.team_role}}
                         td.px-6.py-4.whitespace-no-wrap.text-right.border-b.border-gray-200.text-sm.leading-5.font-medium
-                          a.text-indigo-600(v-on:click='showEditMemberModal(user.user_id)' href='#' class='hover:text-indigo-900 focus:outline-none focus:underline') Edit
+                          a.text-indigo-600(v-on:click='showEditMemberModal(user)' href='#' class='hover:text-indigo-900 focus:outline-none focus:underline') Edit
                           span &nbsp;|&nbsp;
-                          a.text-red-600.leading-4(v-on:click='showDeleteMemberModal(user.user_id)' class='hover:text-indigo-900 focus:outline-none focus:underline') Delete
+                          a.text-red-600.leading-4(v-on:click='showDeleteMemberModal(user)' class='hover:text-indigo-900 focus:outline-none focus:underline') Delete
             .mt-6(class="sm:mt-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5")
               label.block.text-sm.font-medium.leading-5.text-gray-700(for="about" class="sm:mt-px sm:pt-2") Invitations
               .mt-1(class="sm:mt-0 sm:col-span-2")
@@ -90,15 +90,13 @@
                 div
                   span.rounded-md.shadow-sm
                     button.inline-flex.justify-center.w-full.rounded-md.border.border-gray-300.px-4.py-2.bg-white.text-sm.leading-5.font-medium.text-gray-700.transition.ease-in-out.duration-150(@click="dropdownOpen = !dropdownOpen" type="button" class="hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-50 active:text-gray-800")
-                      | Select User role
+                      | {{ selectedRole && selectedRole.label || 'Select User Role'}}
                       svg.-mr-1.ml-2.h-5.w-5(fill="currentColor" viewBox="0 0 20 20"): path(fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd")
                 .origin-top-right.absolute.mt-2.w-56.rounded-md.shadow-lg(x-show="open" x-transition:enter="transition ease-out duration-100" x-transition:enter-start="transform opacity-0 scale-95" x-transition:enter-end="transform opacity-100 scale-100" x-transition:leave="transition ease-in duration-75" x-transition:leave-start="transform opacity-100 scale-100" x-transition:leave-end="transform opacity-0 scale-95")
                   .rounded-md.bg-white.shadow-xs
-                    .py-1
-                      a.block.px-4.py-2.text-sm.leading-5.text-gray-700(href="#" class="hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900") Owner
-                      a.block.px-4.py-2.text-sm.leading-5.text-gray-700(href="#" class="hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900") Admin
-                      a.block.px-4.py-2.text-sm.leading-5.text-gray-700(href="#" class="hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900") Lead
-                      .mt-8.pt-5
+                    .py-1(v-for="role in roles" v-bind:key="role.id")
+                      a.block.px-4.py-2.text-sm.leading-5.text-gray-700(href="#" class="hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" v-on:click="onSelectRole(role)") {{role.label}}
+                    .mt-8.pt-5
         .mt-8.pt-5
           .flex.justify-end
             span.inline-flex.rounded-md.shadow-sm: button.py-2.px-4.border.border-gray-300.rounded-md.text-sm.leading-5.font-medium.text-gray-700.transition.duration-150.ease-in-out(type="button" class="hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-50 active:text-gray-800" v-on:click='editMemberModalOpen=false;') Cancel
@@ -120,8 +118,23 @@ export default {
       invitations: [],
       deleteMemberModalOpen: false,
       editMemberModalOpen: false,
-      selectedMemberId: null,
-      dropdownOpen: false
+      selectedMember: null,
+      dropdownOpen: false,
+      roles: [
+        {
+          id: 'owner',
+          label: 'Owner'
+        },
+        {
+          id: 'admin',
+          label: 'Admin'
+        },
+        {
+          id: 'lead',
+          label: 'Lead'
+        }
+      ],
+      selectedRole: null
     }
   },
   mounted() {
@@ -143,17 +156,19 @@ export default {
         this.invitations = data.response.invitations
       })
     },
-    showEditMemberModal(id) {
+    showEditMemberModal(member) {
       this.editMemberModalOpen = true
-      this.selectedMemberId = id
+      this.selectedMember = member
+
+      this.selectedRole = this.roles.find((item) => item.id === member.team_role)
     },
-    showDeleteMemberModal(id) {
+    showDeleteMemberModal(member) {
       this.deleteMemberModalOpen = true
-      this.selectedMemberId = id
+      this.selectedMember = member
     },
     showDeleteInvitationModal() {},
     changeTeam() {
-      this.$router.push('/teams/id')
+      this.$router.push('/teams/')
     },
     deleteMember() {
       this.$axios({
@@ -162,8 +177,8 @@ export default {
         data: {
           auth_id: this.$state.sessionKey.auth_id,
           team_id: this.$store.state.selectedTeam,
-          user_id: this.selectedMemberId,
-          current_member_team_role: 'admin'
+          user_id: this.selectedMember.user_id,
+          current_member_team_role: this.selectedMember.team_role
         }
       })
         .catch((e) => {
@@ -171,15 +186,38 @@ export default {
         })
         .finally((f) => {
           this.loadData()
-          this.selectedMemberId = null
+          this.selectedMember = null
           this.deleteMemberModalOpen = false
         })
     },
     closeDeleteMemberModal() {
       this.deleteMemberModalOpen = false
-      this.selectedMemberId = null
+      this.selectedMember = null
     },
-    saveMember() {}
+    saveMember() {
+      this.$axios({
+        method: 'post',
+        url: '/team/member-edit',
+        data: {
+          auth_id: this.$state.sessionKey.auth_id,
+          team_id: this.$store.state.selectedTeam,
+          user_id: this.selectedMember.user_id,
+          current_member_team_role: this.selectedMember.team_role,
+          new_member_team_role: this.selectedRole.id
+        }
+      })
+        .catch((e) => {
+          alert(e.message || 'An error has occured, please try again later.')
+        })
+        .finally((f) => {
+          this.loadData()
+          this.editMemberModalOpen = false
+        })
+    },
+    onSelectRole(role) {
+      this.selectedRole = role
+      this.dropdownOpen = false
+    }
   }
 }
 </script>
