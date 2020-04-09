@@ -40,10 +40,10 @@
                           | {{user['p.companyname']}}
                         td.px-6.py-4.whitespace-no-wrap.border-b.border-gray-200.text-sm.leading-5.text-gray-500
                           | {{user.team_role}}
-                        td.px-6.py-4.whitespace-no-wrap.text-right.border-b.border-gray-200.text-sm.leading-5.font-medium
-                          a.text-indigo-600(v-on:click='showEditMemberModal(user.user_id)' href='#' class='hover:text-indigo-900 focus:outline-none focus:underline') Edit
+                        td.px-6.py-4.whitespace-no-wrap.text-right.border-b.border-gray-200.text-sm.leading-5.font-medium(v-if="user.team_role!=='owner'")
+                          a.text-indigo-600(v-on:click='showEditMemberModal(user)' href='#' class='hover:text-indigo-900 focus:outline-none focus:underline') Edit
                           span &nbsp;|&nbsp;
-                          a.text-red-600.leading-4(v-on:click='showDeleteMemberModal(user.user_id)' class='hover:text-indigo-900 focus:outline-none focus:underline') Delete
+                          a.text-red-600.leading-4(v-on:click='showDeleteMemberModal(user)' class='hover:text-indigo-900 focus:outline-none focus:underline') Delete
             .mt-6(class="sm:mt-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5")
               label.block.text-sm.font-medium.leading-5.text-gray-700(for="about" class="sm:mt-px sm:pt-2") Invitations
               .mt-1(class="sm:mt-0 sm:col-span-2")
@@ -71,9 +71,9 @@
                         td.px-6.py-4.whitespace-no-wrap.border-b.border-gray-200.text-sm.leading-5.text-gray-500
                           | {{invitation.email}}
                         td.px-6.py-4.whitespace-no-wrap.text-right.border-b.border-gray-200.text-sm.leading-5.font-medium
-                          a.text-indigo-600(href='#' class='hover:text-indigo-900 focus:outline-none focus:underline') Edit
+                          a.text-indigo-600(v-on:click='showEditInvitationModal(invitation)' href='#' class='hover:text-indigo-900 focus:outline-none focus:underline') Edit
                           span &nbsp;|&nbsp;
-                          a.text-red-600.leading-4(v-on:click='showDeleteInvitationModal(invitation.invitation_code)' class='hover:text-indigo-900 focus:outline-none focus:underline') Delete
+                          a.text-red-600.leading-4(v-on:click='showDeleteInvitationModal(invitation)' class='hover:text-indigo-900 focus:outline-none focus:underline') Delete
   script(src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.0.1/dist/alpine.js" defer="")
   DeleteModal(:isOpen="deleteMemberModalOpen" :onOK="deleteMember" :onCancel="closeDeleteMemberModal")
   .fixed.bottom-0.inset-x-0.px-4.pb-4(v-bind:x-data="'{ open:' + editMemberModalOpen + '}'" x-show="open" class="sm:inset-0 sm:flex sm:items-center sm:justify-center")
@@ -86,26 +86,22 @@
           div(class="sm:col-span-4")
             label.block.text-sm.font-medium.leading-5.text-gray-700(for="teamname") Member Role
             span.relative.z-0.inline-flex.shadow-sm
-              button.relative.inline-flex.items-center.px-4.py-2.rounded-l-md.border.border-gray-300.bg-white.text-sm.leading-5.font-medium.text-gray-700.transition.ease-in-out.duration-150(type="button" class="hover:text-gray-500 focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-100 active:text-gray-700") Select User role
-              span.-ml-px.relative.block(v-bind:x-data="'{ open:' + dropdownOpen + '}'")
-                button.relative.inline-flex.items-center.px-2.py-2.rounded-r-md.border.border-gray-300.bg-white.text-sm.leading-5.font-medium.text-gray-500.transition.ease-in-out.duration-150(@click="dropdownOpen = !dropdownOpen" @click.away="dropdownOpen = false" type="button" class="hover:text-gray-400 focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-100 active:text-gray-500"): svg.h-5.w-5(fill="currentColor" viewBox="0 0 20 20"): path(fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd")
-                .origin-top-right.absolute.right-0.mt-2.-mr-1.w-56.rounded-md.shadow-lg(x-show="open" style="display: none;" x-transition:enter="transition ease-out duration-100" x-transition:enter-start="transform opacity-0 scale-95" x-transition:enter-end="transform opacity-100 scale-100" x-transition:leave="transition ease-in duration-75" x-transition:leave-start="transform opacity-100 scale-100" x-transition:leave-end="transform opacity-0 scale-95")
+              .relative.inline-block.text-left(v-bind:x-data="'{ open: ' + dropdownOpen + '}'" @keydown.window.escape="dropdownOpen = false")
+                div
+                  span.rounded-md.shadow-sm
+                    button.inline-flex.justify-center.w-full.rounded-md.border.border-gray-300.px-4.py-2.bg-white.text-sm.leading-5.font-medium.text-gray-700.transition.ease-in-out.duration-150(@click="dropdownOpen = !dropdownOpen" type="button" class="hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-50 active:text-gray-800")
+                      | {{ selectedRole && selectedRole.label || 'Select User Role'}}
+                      svg.-mr-1.ml-2.h-5.w-5(fill="currentColor" viewBox="0 0 20 20"): path(fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd")
+                .origin-top-right.absolute.mt-2.w-56.rounded-md.shadow-lg(x-show="open" x-transition:enter="transition ease-out duration-100" x-transition:enter-start="transform opacity-0 scale-95" x-transition:enter-end="transform opacity-100 scale-100" x-transition:leave="transition ease-in duration-75" x-transition:leave-start="transform opacity-100 scale-100" x-transition:leave-end="transform opacity-0 scale-95")
                   .rounded-md.bg-white.shadow-xs
-                    .py-1
-                      a.block.px-4.py-2.text-sm.leading-5.text-gray-700(href="#" class="hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900") Owner
-                      a.block.px-4.py-2.text-sm.leading-5.text-gray-700(href="#" class="hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900") Admin
-                      a.block.px-4.py-2.text-sm.leading-5.text-gray-700(href="#" class="hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900") Lead
+                    .py-1(v-for="role in roles" v-bind:key="role.id")
+                      a.block.px-4.py-2.text-sm.leading-5.text-gray-700(href="#" class="hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" v-on:click="onSelectRole(role)") {{role.label}}
+                    .mt-8.pt-5
         .mt-8.pt-5
           .flex.justify-end
             span.inline-flex.rounded-md.shadow-sm: button.py-2.px-4.border.border-gray-300.rounded-md.text-sm.leading-5.font-medium.text-gray-700.transition.duration-150.ease-in-out(type="button" class="hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-50 active:text-gray-800" v-on:click='editMemberModalOpen=false;') Cancel
             span.ml-3.inline-flex.rounded-md.shadow-sm: button.inline-flex.justify-center.py-2.px-4.border.border-transparent.text-sm.leading-5.font-medium.rounded-md.text-white.bg-indigo-600.transition.duration-150.ease-in-out(type="submit" class="hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700" v-on:click='saveMember()') Save
-  
-  portal(to="navigation-title") 
-    nuxt-link.text-lg.leading-6.font-semibold.text-indigo-600(to="/teams" ) Teams
-    template(v-if="team")
-      span.mx-2.text-gray-400 
-        svg.h-5.w-5(fill="currentColor" viewBox="0 0 20 20"): path(fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd")
-      span.text-lg.leading-6.font-semibold.text-gray-900 {{ team.team_name || "unknown" }}
+  DeleteModal(:isOpen="deleteInvitationModalOpen" :onOK="deleteInvitation" :onCancel="closeDeleteMemberModal")
 </template>
 
 <script>
@@ -113,10 +109,6 @@ import DeleteModal from '@/components/controls/DeleteModal'
 export default {
   layout: 'default',
   name: 'Team',
-  middleware({ params, redirect }) {
-    // if id is not a number... then redirect back to teams page
-    if (/^\d+$/.test(params.id) === false) return redirect('/teams')
-  },
   components: {
     DeleteModal
   },
@@ -127,8 +119,26 @@ export default {
       invitations: [],
       deleteMemberModalOpen: false,
       editMemberModalOpen: false,
-      selectedMemberId: null,
-      dropdownOpen: false
+      deleteInvitationModalOpen: false,
+      editInvitationModalOpen: false,
+      selectedMember: null,
+      selectedInvitation: null,
+      dropdownOpen: false,
+      roles: [
+        {
+          id: 'owner',
+          label: 'Owner'
+        },
+        {
+          id: 'admin',
+          label: 'Admin'
+        },
+        {
+          id: 'lead',
+          label: 'Lead'
+        }
+      ],
+      selectedRole: null
     }
   },
   mounted() {
@@ -150,15 +160,24 @@ export default {
         this.invitations = data.response.invitations
       })
     },
-    showEditMemberModal(id) {
+    showEditMemberModal(member) {
       this.editMemberModalOpen = true
-      this.selectedMemberId = id
+      this.selectedMember = member
+
+      this.selectedRole = this.roles.find((item) => item.id === member.team_role)
     },
-    showDeleteMemberModal(id) {
+    showDeleteMemberModal(member) {
       this.deleteMemberModalOpen = true
-      this.selectedMemberId = id
+      this.selectedMember = member
     },
-    showDeleteInvitationModal() {},
+    showEditInvidationModal(invitation) {
+      this.selectedInvitation = invitation
+      this.showEditInvitationModal = true
+    },
+    showDeleteInvitationModal(invitation) {
+      this.selectedInvitation = invitation
+      this.showDeleteInvitationModal = true
+    },
     changeTeam() {
       this.$router.push('/teams/')
     },
@@ -169,8 +188,8 @@ export default {
         data: {
           auth_id: this.$state.sessionKey.auth_id,
           team_id: this.$store.state.selectedTeam,
-          user_id: this.selectedMemberId,
-          current_member_team_role: 'admin'
+          user_id: this.selectedMember.user_id,
+          current_member_team_role: this.selectedMember.team_role
         }
       })
         .catch((e) => {
@@ -178,15 +197,60 @@ export default {
         })
         .finally((f) => {
           this.loadData()
-          this.selectedMemberId = null
+          this.selectedMember = null
           this.deleteMemberModalOpen = false
         })
     },
     closeDeleteMemberModal() {
       this.deleteMemberModalOpen = false
-      this.selectedMemberId = null
+      this.selectedMember = null
     },
-    saveMember() {}
+    saveMember() {
+      this.$axios({
+        method: 'post',
+        url: '/team/member-edit',
+        data: {
+          auth_id: this.$state.sessionKey.auth_id,
+          team_id: this.$store.state.selectedTeam,
+          user_id: this.selectedMember.user_id,
+          current_member_team_role: this.selectedMember.team_role,
+          new_member_team_role: this.selectedRole.id
+        }
+      })
+        .catch((e) => {
+          alert(e.message || 'An error has occured, please try again later.')
+        })
+        .finally((f) => {
+          this.loadData()
+          this.editMemberModalOpen = false
+        })
+    },
+    onSelectRole(role) {
+      this.selectedRole = role
+      this.dropdownOpen = false
+    },
+    deleteInvitation() {
+      this.$axios({
+        method: 'post',
+        url: '/team/invite-delete',
+        data: {
+          auth_id: this.$state.sessionKey.auth_id,
+          invitation_code: this.selectedInvitation.invitation_code,
+          team_role: this.selectedInvitation.team_role
+        }
+      })
+        .catch((e) => {
+          alert(e.message || 'An error has occured, please try again later.')
+        })
+        .finally((f) => {
+          this.loadData()
+          this.selectedInvitation = null
+          this.deleteInvitationModalOpen = false
+        })
+    },
+    closeDeleteInvitationModal() {
+      this.deleteInvitationModalOpen = false
+    }
   }
 }
 </script>
