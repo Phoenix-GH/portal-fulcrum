@@ -15,24 +15,24 @@ div
               br
               b confirm your email address
               |  to get started.
-        .mt-5(class="sm:mt-6"): span.flex.w-full.rounded-md.shadow-sm: button.inline-flex.justify-center.w-full.rounded-md.border.border-transparent.px-4.py-2.bg-indigo-600.text-base.leading-6.font-medium.text-white.shadow-sm.transition.ease-in-out.duration-150(@click="open = false; setTimeout(() => open = true, 1000)" type="button" class="hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo sm:text-sm sm:leading-5") Go back to login
+        .mt-5(class="sm:mt-6"): span.flex.w-full.rounded-md.shadow-sm
+          button.inline-flex.justify-center.w-full.rounded-md.border.border-transparent.px-4.py-2.bg-indigo-600.text-base.leading-6.font-medium.text-white.shadow-sm.transition.ease-in-out.duration-150(
+            @click="$router.push('/')"
+            type="button" 
+            class="hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo sm:text-sm sm:leading-5") Go back to login
       template(v-else)
         form(@submit.prevent="onSubmit")
           div
             div
-              h3.text-lg.leading-6.font-medium.text-gray-900
-                | Personal Information
-              p.mt-1.text-sm.leading-5.text-gray-500
-                | A little information to get the process started.
+              h3.text-lg.leading-6.font-medium.text-gray-900 Personal Information
+              p.mt-1.text-sm.leading-5.text-gray-500 A little information to get the process started.
             .mt-6.grid.grid-cols-1.row-gap-6.col-gap-4(class='sm:grid-cols-6')
               div(class='sm:col-span-3')
-                label.block.text-sm.font-medium.leading-5.text-gray-700(for='first_name')
-                  | First name
+                label.block.text-sm.font-medium.leading-5.text-gray-700(for='first_name') First name
                 .mt-1.rounded-md.shadow-sm
                   input#first_name.form-input.block.w-full.transition.duration-150.ease-in-out(class='sm:text-sm sm:leading-5' v-model="firstName")
               div(class='sm:col-span-3')
-                label.block.text-sm.font-medium.leading-5.text-gray-700(for='last_name')
-                  | Last name
+                label.block.text-sm.font-medium.leading-5.text-gray-700(for='last_name') Last name
                 .mt-1.rounded-md.shadow-sm
                   input#last_name.form-input.block.w-full.transition.duration-150.ease-in-out(class='sm:text-sm sm:leading-5' v-model="lastName")
               div(class='sm:col-span-6')
@@ -73,8 +73,10 @@ div
 
 
           .mt-6
-            span.block.w-full.rounded-md.shadow-sm
-              button.w-full.flex.justify-center.py-2.px-4.border.border-transparent.text-sm.font-medium.rounded-md.text-white.bg-cool-gray-600.transition.duration-150.ease-in-out(type='submit', class='hover:bg-cool-gray-500 focus:outline-none focus:border-cool-gray-700 focus:shadow-outline-cool-gray active:bg-cool-gray-700') Register
+            span.block.w-full.rounded-md.shadow-sm              
+              button.w-full.flex.justify-center.py-2.px-4.border.border-transparent.text-sm.font-medium.rounded-md.text-white.bg-cool-gray-600.transition.duration-150.ease-in-out(
+                type='submit'
+                class='hover:bg-cool-gray-500 focus:outline-none focus:border-cool-gray-700 focus:shadow-outline-cool-gray active:bg-cool-gray-700') Register
     p.mt-4.text-sm.text-center.mr-1 Already have an account?
       nuxt-link.font-medium.text-indigo-600.transition.ease-in-out.duration-150.ml-1(to='../login', class='hover:text-indigo-500 focus:outline-none focus:underline') Sign In
  
