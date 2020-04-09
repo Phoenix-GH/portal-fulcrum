@@ -51,7 +51,6 @@ export default {
       open: false,
       openTeam: false,
       sections: [],
-      currentTeam: this.$store.state.selectedTeam
     }
   },
   computed: {
@@ -81,8 +80,9 @@ export default {
       }
     },
     navigateToTeamInfo() {
-      if (this.currentTeam) {
-        this.navigate(`/teams/${this.currentTeam}`)
+      const currentTeam = this.$store.state.selectedTeam
+      if (currentTeam) {
+        this.navigate(`/teams/${currentTeam}`)
       } else {
         this.navigate(`/teams/`)
       }
