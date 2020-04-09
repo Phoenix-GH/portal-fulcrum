@@ -28,13 +28,13 @@
 import AlertModal from '@/components/controls/AlertModal.vue'
 export default {
   layout: 'default',
-  name: 'TeamCreate',
+  name: 'TeamInvitationCreate',
   components: {
     AlertModal
   },
   data() {
     return {
-      team_name: '',
+      email: '',
       description: '',
       alertModalOpen: false,
       message: null
@@ -47,15 +47,15 @@ export default {
         url: '/team/create',
         data: {
           auth_id: this.$state.sessionKey.auth_id,
-          team_name: this.team_name,
-          custom_team_params: {
-            description: this.description
+          email: this.email,
+          custom_invitation_params: {
+            messsage: this.message
           }
         }
       })
         .then((response) => {
           this.showAlert('The team was added successfully!')
-          this.team_name = null
+          this.email = null
           this.description = null
         })
         .catch((e) => {
