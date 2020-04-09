@@ -71,9 +71,9 @@
                         td.px-6.py-4.whitespace-no-wrap.border-b.border-gray-200.text-sm.leading-5.text-gray-500
                           | {{invitation.email}}
                         td.px-6.py-4.whitespace-no-wrap.text-right.border-b.border-gray-200.text-sm.leading-5.font-medium
-                          a.text-indigo-600(href='#' class='hover:text-indigo-900 focus:outline-none focus:underline') Edit
+                          a.text-indigo-600(v-on:click='showEditInvitationModal(invitation)' href='#' class='hover:text-indigo-900 focus:outline-none focus:underline') Edit
                           span &nbsp;|&nbsp;
-                          a.text-red-600.leading-4(v-on:click='showDeleteInvitationModal(invitation.invitation_code)' class='hover:text-indigo-900 focus:outline-none focus:underline') Delete
+                          a.text-red-600.leading-4(v-on:click='showDeleteInvitationModal(invitation)' class='hover:text-indigo-900 focus:outline-none focus:underline') Delete
   script(src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.0.1/dist/alpine.js" defer="")
   DeleteModal(:isOpen="deleteMemberModalOpen" :onOK="deleteMember" :onCancel="closeDeleteMemberModal")
   .fixed.bottom-0.inset-x-0.px-4.pb-4(v-bind:x-data="'{ open:' + editMemberModalOpen + '}'" x-show="open" class="sm:inset-0 sm:flex sm:items-center sm:justify-center")
@@ -101,6 +101,7 @@
           .flex.justify-end
             span.inline-flex.rounded-md.shadow-sm: button.py-2.px-4.border.border-gray-300.rounded-md.text-sm.leading-5.font-medium.text-gray-700.transition.duration-150.ease-in-out(type="button" class="hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-50 active:text-gray-800" v-on:click='editMemberModalOpen=false;') Cancel
             span.ml-3.inline-flex.rounded-md.shadow-sm: button.inline-flex.justify-center.py-2.px-4.border.border-transparent.text-sm.leading-5.font-medium.rounded-md.text-white.bg-indigo-600.transition.duration-150.ease-in-out(type="submit" class="hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700" v-on:click='saveMember()') Save
+  DeleteModal(:isOpen="deleteInvitationModalOpen" :onOK="deleteInvitation" :onCancel="closeDeleteMemberModal")
 </template>
 
 <script>
@@ -118,7 +119,10 @@ export default {
       invitations: [],
       deleteMemberModalOpen: false,
       editMemberModalOpen: false,
+      deleteInvitationModalOpen: false,
+      editInvitationModalOpen: false,
       selectedMember: null,
+      selectedInvitation: null,
       dropdownOpen: false,
       roles: [
         {
@@ -166,7 +170,14 @@ export default {
       this.deleteMemberModalOpen = true
       this.selectedMember = member
     },
-    showDeleteInvitationModal() {},
+    showEditInvidationModal(invitation) {
+      this.selectedInvitation = invitation
+      this.showEditInvitationModal = true
+    },
+    showDeleteInvitationModal(invitation) {
+      this.selectedInvitation = invitation
+      this.showDeleteInvitationModal = true
+    },
     changeTeam() {
       this.$router.push('/teams/')
     },
@@ -217,6 +228,28 @@ export default {
     onSelectRole(role) {
       this.selectedRole = role
       this.dropdownOpen = false
+    },
+    deleteInvitation() {
+      this.$axios({
+        method: 'post',
+        url: '/team/invite-delete',
+        data: {
+          auth_id: this.$state.sessionKey.auth_id,
+          invitation_code: this.selectedInvitation.invitation_code,
+          team_role: this.selectedInvitation.team_role
+        }
+      })
+        .catch((e) => {
+          alert(e.message || 'An error has occured, please try again later.')
+        })
+        .finally((f) => {
+          this.loadData()
+          this.selectedInvitation = null
+          this.deleteInvitationModalOpen = false
+        })
+    },
+    closeDeleteInvitationModal() {
+      this.deleteInvitationModalOpen = false
     }
   }
 }
