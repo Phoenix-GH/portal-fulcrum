@@ -31,12 +31,11 @@
               a.text-indigo-600(v-on:click='showEditTeamModal(team.team_id)' href='#' class='hover:text-indigo-900 focus:outline-none focus:underline') Edit
               span &nbsp;|&nbsp;
               a.text-red-600.leading-4(v-on:click='showDeleteTeamModal(team.team_id)' class='hover:text-indigo-900 focus:outline-none focus:underline') Delete
-  script(src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.0.1/dist/alpine.js" defer="")
   DeleteModal(:isOpen="deleteModalOpen" :onOK="deleteTeam" :onCancel="closeDeleteModal")
 
-  .fixed.bottom-0.inset-x-0.px-4.pb-4(v-bind:x-data="'{ open:' + editModalOpen + '}'" x-show="open" class="sm:inset-0 sm:flex sm:items-center sm:justify-center")
+  .fixed.bottom-0.inset-x-0.px-4.pb-4(v-if="editModalOpen" class="sm:inset-0 sm:flex sm:items-center sm:justify-center")
     .fixed.inset-0.transition-opacity(x-show="open" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"): .absolute.inset-0.bg-gray-500.opacity-75
-    .relative.bg-white.rounded-lg.px-4.pt-5.pb-4.overflow-hidden.shadow-xl.transform.transition-all(x-show="open" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100" x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" class="sm:max-w-lg sm:w-full sm:p-6")
+    .relative.bg-white.rounded-lg.px-4.pt-5.pb-4.overflow-hidden.shadow-xl.transform.transition-all(x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100" x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" class="sm:max-w-lg sm:w-full sm:p-6")
       .bg-white.border-gray-200
         div
           h3.text-lg.leading-6.font-medium.text-gray-900 Edit Team
