@@ -77,7 +77,7 @@
                           a.text-red-600.leading-4(v-on:click='showDeleteInvitationModal(invitation)' class='hover:text-indigo-900 focus:outline-none focus:underline') Delete
   script(src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.0.1/dist/alpine.js" defer="")
   DeleteModal(:isOpen="deleteMemberModalOpen" :onOK="deleteMember" :onCancel="closeDeleteMemberModal")
-  .fixed.bottom-0.inset-x-0.px-4.pb-4(v-bind:x-data="'{ open:' + editMemberModalOpen + '}'" x-show="open" class="sm:inset-0 sm:flex sm:items-center sm:justify-center")
+  .fixed.bottom-0.inset-x-0.px-4.pb-4(v-if="editMemberModalOpen" x-show="open" class="sm:inset-0 sm:flex sm:items-center sm:justify-center")
     .fixed.inset-0.transition-opacity(x-show="open" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"): .absolute.inset-0.bg-gray-500.opacity-75
     .relative.bg-white.rounded-lg.px-4.pt-5.pb-4.overflow-hidden.shadow-xl.transform.transition-all(x-show="open" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100" x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" class="sm:max-w-lg sm:w-full sm:p-6")
       .bg-white.border-gray-200
@@ -87,7 +87,7 @@
           div(class="sm:col-span-4")
             label.block.text-sm.font-medium.leading-5.text-gray-700(for="teamname") Member Role
             span.relative.z-0.inline-flex.shadow-sm
-              .relative.inline-block.text-left(v-bind:x-data="'{ open: ' + dropdownOpen + '}'" @keydown.window.escape="dropdownOpen = false")
+              .relative.inline-block.text-left(v-if="dropdownOpen" @keydown.window.escape="dropdownOpen = false")
                 div
                   span.rounded-md.shadow-sm
                     button.inline-flex.justify-center.w-full.rounded-md.border.border-gray-300.px-4.py-2.bg-white.text-sm.leading-5.font-medium.text-gray-700.transition.ease-in-out.duration-150(@click="dropdownOpen = !dropdownOpen" type="button" class="hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-50 active:text-gray-800")
