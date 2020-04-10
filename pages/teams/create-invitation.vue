@@ -7,7 +7,6 @@
           div
             div
               h3.text-lg.leading-6.font-medium.text-gray-900 Invite new member
-              p.mt-1.text-sm.leading-5.text-gray-500 This information will be displayed publicly so be careful what you share.
             .mt-6.grid.grid-cols-1.row-gap-6.col-gap-4(class="sm:grid-cols-6")
               div(class="sm:col-span-4")
                 label.block.text-sm.font-medium.leading-5.text-gray-700(for="teamname") Email
