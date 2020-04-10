@@ -43,8 +43,8 @@ export default {
   meta: { isPublic: false },
   data() {
     return {
-      username: 'mgambill+456@nmyvision.com',
-      password: 'password2@'
+      username: process.env.DEFAULT_USER,
+      password: process.env.DEFAULT_PASSWORD
     }
   },
   methods: {

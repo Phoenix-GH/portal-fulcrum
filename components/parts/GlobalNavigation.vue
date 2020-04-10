@@ -1,5 +1,5 @@
 <template lang="pug">
-  nav.bg-gray-800( @keydown.window.escape="open = false")
+  nav.bg-gray-800( @keydown.window.escape="open=false")
     .max-w-7xl.mx-auto.px-4(class="sm:px-6 lg:px-8")
       .flex.items-center.justify-between.h-16
         .flex.items-center
@@ -21,36 +21,156 @@
 
         .hidden(class="md:block")
           .ml-4.relative.flex.items-center(class="md:ml-6")
-            div.fixed.inset-0.z-10.opacity-0.bg-black(v-if="open" @click="open=false; openTeam=false")
-            button.p-1.border-2.border-transparent.text-gray-400.rounded-full(class="hover:text-white focus:outline-none focus:text-white focus:bg-gray-700")
-              svg.h-6.w-6(stroke="currentColor" fill="none" viewBox="0 0 24 24"): path(stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9")
+            div.fixed.inset-0.z-10.opacity-0.bg-black(v-if="open" @click="open=false")
+
             .ml-3.relative
-              button.p-1.border-2.border-transparent.text-gray-400.rounded-full(class="hover:text-white focus:outline-none focus:text-white focus:bg-gray-700" @click="openTeam = !openTeam")
+              button.p-1.border-2.border-transparent.text-gray-400.rounded-full(class="hover:text-white focus:outline-none focus:text-white focus:bg-gray-700" @click="onOpen('notifications')" title="Manage Notifications")
+                template(v-if="hasNotifications")
+                  div.relative
+                    svg.h-6.w-6(stroke="currentColor" fill="none" viewBox="0 0 24 24")
+                      path(stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9")
+                    span.absolute.top-0.right-0.block.rounded-full.text-gray-800.shadow-solid.bg-red-600(class="h-1.5 w-1.5")
+                template(v-else)
+
+                  svg.w-6.h-6(viewBox="0 0 20 20" fill="currentColor" )
+                    path(d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9")
+        
+                    
+              transition( name="fade")
+                .origin-top-right.z-20.absolute.right-0.mt-2.w-96.rounded-md.shadow-lg(v-show="isOpen('notifications')")
+                  .py-1.rounded-md.bg-white.shadow-xs
+                    .overflow-y-auto(style="max-height: calc(100vh * .60)")
+                      template(v-if="notifications.length === 0")
+                        div.h-32.flex.justify-center.items-center
+                          p.text-gray-500 No Notifications
+
+                      template(v-else)
+                        template(v-for="(item, $index) in notifications")
+                          div.py-1.px-2.mb-1.text-sm(:class="{'border-t border-gray-300': $index > 0}")
+                            header.flex.justify-between
+                              h3.font-semibold.pr-1 {{item.title}}
+                              time.text-xs.whitespace-no-wrap.text-gray-500 {{ item.date }}
+                            main.my-1
+                              p.text-sm.text-gray-600 {{ item.description }}
+                            footer
+                              a.text-sm.text-indigo-600 Learn More
+                    div.flex.justify-between.px-2.py-1.border-t.border-gray-300.text-sm.text-gray-600.bg-gray-50
+                      a(href="#" class="hover:text-indigo-600" @click="onClear"): span(v-show="notifications.length > 0") Clear All
+                      a(href="#" class="hover:text-indigo-600") Manage
+
+            .ml-3.relative
+              button.p-1.border-2.border-transparent.text-gray-400.rounded-full(class="hover:text-white focus:outline-none focus:text-white focus:bg-gray-700" @click="onOpen('team')" title="Manage teams")
                 svg.h-6.w-6(fill="none" viewBox="0 0 24 24" stroke="currentColor"): path(stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z")
-              .origin-top-right.z-20.absolute.right-0.mt-2.w-48.rounded-md.shadow-lg(v-show="openTeam" x-transition:enter="transition ease-out duration-100" x-transition:enter-start="transform opacity-0 scale-95" x-transition:enter-end="transform opacity-100 scale-100" x-transition:leave="transition ease-in duration-75" x-transition:leave-start="transform opacity-100 scale-100" x-transition:leave-end="transform opacity-0 scale-95")
-                .py-1.rounded-md.bg-white.shadow-xs
-                  a.block.px-4.py-2.text-sm.text-gray-700(href="#" @click.prevent="navigateToTeamInfo" class="hover:bg-gray-100") Team Info
-                  a.block.px-4.py-2.text-sm.text-gray-700(href="#" @click.prevent="navigate('/teams/')" class="hover:bg-gray-100") Change Team
+              transition( name="fade")
+                .origin-top-right.z-20.absolute.right-0.mt-2.w-48.rounded-md.shadow-lg(v-show="isOpen('team')")
+                  .py-1.rounded-md.bg-white.shadow-xs
+                    a.block.px-4.py-2.text-sm.text-gray-700(href="#" @click.prevent="navigateToTeamInfo" class="hover:bg-gray-100") Team Info
+                    a.block.px-4.py-2.text-sm.text-gray-700(href="#" @click.prevent="navigate('/teams/')" class="hover:bg-gray-100") Change Team
             .ml-3.relative
-              div: button.z-20.max-w-xs.flex.items-center.text-sm.rounded-full.text-white(@click="open = !open" class="focus:outline-none focus:shadow-solid"): img.h-8.w-8.rounded-full(src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="")
-              .origin-top-right.z-20.absolute.right-0.mt-2.w-48.rounded-md.shadow-lg(v-show="open" x-transition:enter="transition ease-out duration-100" x-transition:enter-start="transform opacity-0 scale-95" x-transition:enter-end="transform opacity-100 scale-100" x-transition:leave="transition ease-in duration-75" x-transition:leave-start="transform opacity-100 scale-100" x-transition:leave-end="transform opacity-0 scale-95")
-                .py-1.rounded-md.bg-white.shadow-xs
-                  a.block.px-4.py-2.text-sm.text-gray-700(href="#" @click.prevent="navigate('/profile')" class="hover:bg-gray-100") Your Profile
-                  a.block.px-4.py-2.text-sm.text-gray-700(href="#" class="hover:bg-gray-100") Settings
-                  a.block.px-4.py-2.text-sm.text-gray-700(href="#" @click.prevent="signOut" class="hover:bg-gray-100") Sign out
+              button.p-1.border-2.border-transparent.text-gray-400.rounded-full(class="hover:text-white focus:outline-none focus:text-white focus:bg-gray-700" @click="onOpen('profile')" title="Show profile options")
+                //-div: button.z-20.max-w-xs.flex.items-center.text-sm.rounded-full.text-white(@click="onOpen('profile')" class="focus:outline-none focus:shadow-solid")
+                  img.h-8.w-8.rounded-full(src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="Manage Profile")
+                svg.w-6.h-6(viewBox="0 0 20 20" fill="currentColor")
+                  path(fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd")
+              transition( name="fade")
+                .origin-top-right.z-20.absolute.right-0.mt-2.w-48.rounded-md.shadow-lg(v-show="isOpen('profile')")
+                  .py-1.rounded-md.bg-white.shadow-xs
+                    a.block.px-4.py-2.text-sm.text-gray-700(href="#" @click.prevent="navigate('/profile')" class="hover:bg-gray-100") Your Profile
+                    //- a.block.px-4.py-2.text-sm.text-gray-700(href="#" class="hover:bg-gray-100") Settings
+                    a.block.px-4.py-2.text-sm.text-gray-700(href="#" @click.prevent="signOut" class="hover:bg-gray-100") Sign out
 
 
 </template>
 
 <script>
+const notifications = [
+  {
+    type: 'announcement',
+    title: 'New Chart - Number of builds per day',
+    date: 'a day ago',
+    description:
+      'Check out how many builds your team has ran per day in this new chart, available under Builds > Usage & insights.'
+  },
+  {
+    type: 'announcement',
+    title: 'Take the JAMstack community survey!',
+    date: '15 days ago',
+    description:
+      'Help your fellow developers and make your voice heard! We’ll share results online and at JAMstack Conf virtual. Survey closes April 19th.'
+  },
+  {
+    type: 'announcement',
+    title: 'New! Enhancements to Netlify Analytics!',
+    date: '22 days ago',
+    description:
+      'Get filtered data of how your site is used over a day, week, or month (30 days) and check a map of which countries visit your site most.'
+  },
+  {
+    type: 'announcement',
+    title: 'Manage your team’s build capacity',
+    date: 'a month ago',
+    description:
+      'You can adjust your concurrent build allowance to fit your team’s needs, available now under the Builds tab.'
+  },
+  {
+    type: 'announcement',
+    title: 'New chart - Build minutes used per day',
+    date: '3 months ago',
+    description:
+      'Check out how many build minutes your team has used per day in this new chart, available under Builds > Insights.'
+  },
+  {
+    type: 'announcement',
+    title: 'New Billing tab',
+    date: '4 months ago',
+    description:
+      'Find more information about your metered feature usage and service charges in our new Billing interface.'
+  },
+  {
+    type: 'announcement',
+    title: 'Node.js 12 for Netlify Functions',
+    date: '4 months ago',
+    description:
+      'Starting December 4th, JavaScript serverless functions on all new sites will use Node.js 12 as the default runtime.'
+  },
+  {
+    type: 'announcement',
+    title: 'New! Re-designed, re-organized docs',
+    date: '6 months ago',
+    description:
+      'Browse for the topics you need more easily, and find related information more quickly in our new docs.'
+  },
+  {
+    type: 'announcement',
+    title: 'New! Improved monorepo support',
+    date: '6 months ago',
+    description: 'Easily deploy multiple Netlify sites from a single Git repository.'
+  },
+  {
+    type: 'announcement',
+    title: 'Check out the new Builds tab in your dashboard',
+    date: '6 months ago',
+    description:
+      'View all your team’s builds together, including which builds succeed, which builds fail, and how long it takes for builds to deploy.'
+  },
+  {
+    type: 'announcement',
+    title: 'Get product updates in Netlify Community',
+    date: '10 months ago',
+    description: 'Find out about the latest improvements to the Netlify platform and services.'
+  }
+]
+
 export default {
   name: 'GlobalNavigation',
   components: {},
   data() {
     return {
-      open: false,
-      openTeam: false,
-      sections: []
+      open: true,
+      currentDropdown: 'notifications',
+      sections: [],
+      hasNotifications: true,
+      notifications
     }
   },
   computed: {
@@ -63,9 +183,22 @@ export default {
     }
   },
   methods: {
+    onClear() {
+      this.hasNotifications = false
+      this.open = false
+
+      this.notifications.length = 0
+    },
+    onOpen(key) {
+      this.currentDropdown = key
+      this.open = true
+    },
+    isOpen(key) {
+      return this.currentDropdown === key && this.open
+    },
     navigate(path) {
       this.open = false
-      this.openTeam = false
+      this.currentDropdown = null
       this.$router.push(path)
     },
     async signOut() {
