@@ -9,11 +9,11 @@
               h3.text-lg.leading-6.font-medium.text-gray-900 Invite new member
             .mt-6.grid.grid-cols-1.row-gap-6.col-gap-4(class="sm:grid-cols-6")
               div(class="sm:col-span-4")
-                label.block.text-sm.font-medium.leading-5.text-gray-700(for="teamname") Email
-                .mt-1.flex.rounded-md.shadow-sm: input#teamname.flex-1.form-input.block.w-full.rounded-none.rounded-r-md.transition.duration-150.ease-in-out(v-model="email" class="sm:text-sm sm:leading-5")
+                label.block.text-sm.font-medium.leading-5.text-gray-700(for="email") Email
+                .mt-1.flex.rounded-md.shadow-sm: input#email.form-input.block.w-full.rounded-none.rounded-r-md.transition.duration-150.ease-in-out(v-model="email" class="sm:text-sm sm:leading-5")
               div(class="sm:col-span-4")
-                label.block.text-sm.font-medium.leading-5.text-gray-700(for="teamname") Member Role
-                span.relative.z-0.inline-flex.shadow-sm
+                label.block.text-sm.font-medium.leading-5.text-gray-700(for="role") Member Role
+                span#role.relative.z-0.inline-flex.shadow-sm
                   .relative.inline-block.text-left
                     div
                       span.rounded-md.shadow-sm
@@ -25,8 +25,8 @@
                         .py-1(v-for="role in roles" v-bind:key="role.id")
                           a.block.px-4.py-2.text-sm.leading-5.text-gray-700(href="#" class="hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" v-on:click="onSelectRole(role)") {{role.label}}
               div(class="sm:col-span-6")
-                label.block.text-sm.font-medium.leading-5.text-gray-700(for="description") Message
-                .mt-1.rounded-md.shadow-sm: textarea#description.form-textarea.block.w-full.transition.duration-150.ease-in-out(rows="3" class="sm:text-sm sm:leading-5" v-model="message")
+                label.block.text-sm.font-medium.leading-5.text-gray-700(for="message") Message
+                .mt-1.rounded-md.shadow-sm: textarea#message.form-textarea.block.w-full.transition.duration-150.ease-in-out(rows="3" class="sm:text-sm sm:leading-5" v-model="message")
                 p.mt-2.text-sm.text-gray-500 Write a few sentences about the invitation.
             .mt-8.border-t.border-gray-200.pt-5
               .flex.justify-end
