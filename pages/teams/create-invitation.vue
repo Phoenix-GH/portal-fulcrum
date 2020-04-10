@@ -47,9 +47,10 @@ export default {
   data() {
     return {
       email: '',
-      description: '',
+      message: '',
       alertModalOpen: false,
-      alert: null,
+      alert: '',
+      selectedRole: null,
       roles: [
         {
           id: 'owner',
@@ -69,6 +70,7 @@ export default {
   },
   methods: {
     save() {
+      const selectedTeam = this.$store.state.selectedTeam
       this.$axios({
         method: 'post',
         url: '/team/invite-create',
@@ -76,14 +78,14 @@ export default {
           auth_id: this.$state.sessionKey.auth_id,
           email: this.email,
           team_role: this.selectedRole.id,
-          team_id: this.$store.state.selectedTeam,
+          team_id: selectedTeam,
           custom_invitation_params: {
-            messsage: this.message
+            message: this.message
           }
         }
       })
         .then((response) => {
-          this.showAlert('The team was added successfully!')
+          this.showAlert('The invitation was sent!')
           this.email = null
           this.message = null
         })
