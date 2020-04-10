@@ -1,15 +1,42 @@
+// import AlertModal from '@/components/controls/AlertModal.vue'
+
 export default {
+  // components: { AlertModal },
   data() {
     return {
-      errorSet: []
+      alertVisible: false,
+      alertTitle: null,
+      alertText: null,
+      showAlertButton: true,
+      sharedState: {
+        post: this.post,
+        // alert: this.alert,
+        hasErrors: false,
+        errorSet: [],
+        errors: []
+      }
+    }
+  },
+  provide() {
+    return { sharedState: this.sharedState }
+  },
+  watch: {
+    'sharedState.errorSet': {
+      deep: true,
+      handler(errorObject) {
+        console.log('watcher -->', errorObject)
+        const arr = errorObject && Object.values(errorObject)
+        this.sharedState.errors = arr
+        this.sharedState.hasErrors = arr.length > 0
+      }
     }
   },
   computed: {
     errors() {
-      return Object.values(this.errorSet)
+      return this.sharedState.errors
     },
     hasErrors() {
-      return this.errors.length > 0
+      return this.sharedState.hasErrors
     }
   },
   methods: {
@@ -24,10 +51,23 @@ export default {
      */
     handleErrors(err) {
       // eslint-disable-next-line
-      console.error(err)
+      console.error(err.response)
       if (err.response && err.response.status === 409) {
-        this.errorSet = err.response.data.errors
-      } else this.errorSet = [err.message]
+        this.sharedState.errorSet = err.response.data.errors
+      } else this.sharedState.errorSet = [err.message]
+    },
+    async post(url, payload) {
+      console.log('POST', url)
+      this.sharedState.errorSet = []
+      let data = null
+      try {
+        const response = await this.$axios.post(url, payload)
+        data = response
+        return data.response || data
+      } catch (err) {
+        this.handleErrors(err)
+      }
+      return data
     }
   }
 }

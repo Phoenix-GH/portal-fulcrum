@@ -64,13 +64,7 @@ div
               div(class='sm:col-span-6')
                 label.block.text-sm.font-medium.leading-5.text-gray-700(for='password') Password
                 PasswordField(v-model="password")
-                .mt-1.relative.rounded-md.shadow-sm
-                  input#password.form-input.block.w-full.pl-10(required class='sm:text-sm sm:leading-5' placeholder='you@example.com' type="password" v-model="password")
-                  .absolute.inset-y-0.left-0.pl-3.flex.items-center.pointer-events-none
-                    svg.w-5.h-5.text-gray-400(viewBox='0 0 20 20' fill='currentColor')
-                      path(fill-rule='evenodd' d='M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z' clip-rule='evenodd')
-
-
+              
 
           .mt-6
             span.block.w-full.rounded-md.shadow-sm              
