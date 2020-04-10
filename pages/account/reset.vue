@@ -21,7 +21,7 @@ div
           label.block.text-sm.font-medium.leading-5.text-gray-700(for='password') Password
         .mt-1.rounded-md.shadow-sm
           PasswordField(v-model="password")
-        input.block.w-full(:value="code")
+        
       .mt-6
         span.block.w-full.rounded-md.shadow-sm
           button.w-full.flex.justify-center.py-2.px-4.border.border-transparent.text-sm.font-medium.rounded-md.text-white.bg-cool-gray-600.transition.duration-150.ease-in-out(
