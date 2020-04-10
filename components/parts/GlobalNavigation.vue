@@ -50,7 +50,7 @@ export default {
     return {
       open: false,
       openTeam: false,
-      sections: [],
+      sections: []
     }
   },
   computed: {
