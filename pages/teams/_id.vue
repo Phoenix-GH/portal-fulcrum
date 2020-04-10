@@ -163,14 +163,13 @@ export default {
     showEditMemberModal(member) {
       this.editMemberModalOpen = true
       this.selectedMember = member
-
       this.selectedRole = this.roles.find((item) => item.id === member.team_role)
     },
     showDeleteMemberModal(member) {
       this.deleteMemberModalOpen = true
       this.selectedMember = member
     },
-    showEditInvidationModal(invitation) {
+    showEditInvitationModal(invitation) {
       this.selectedInvitation = invitation
       this.showEditInvitationModal = true
     },
