@@ -14,11 +14,11 @@ module.exports = {
         content: process.env.npm_package_description || ''
       }
     ],
-    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
+    link: [{ rel: 'icon', type: 'image/x-svg', href: '/icon-trans.svg' }]
   },
   router: {
     middleware: ['auth', 'meta'],
-    extendRoutes(routes, resolve) {}
+    extendRoutes(routes, resolve) { }
   },
   /*
    ** Customize the progress-bar color
