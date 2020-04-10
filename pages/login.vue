@@ -47,28 +47,18 @@ export default {
       password: 'password2@'
     }
   },
-
   methods: {
     async login() {
-      try {
-        const { auth_id } = this.$store.state.session
-        const { username: email, password } = this
-        const { data } = await this.$axios.post('/user/login', {
-          auth_id,
-          email,
-          password
-        })
+      const { username: email, password } = this
 
-        if (data.error_state) {
-          // TODO
-          alert('Invalid credentials, unable to login')
-        }
+      await this.post('/user/login', {
+        email,
+        password
+      })
 
+      if (!this.hasErrors) {
         await this.$store.dispatch('LOAD_STATE')
-
         this.$router.push(this.$route.query.p || '/')
-      } catch (err) {
-        this.handleErrors(err)
       }
     },
     async onSubmit() {

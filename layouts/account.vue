@@ -13,7 +13,11 @@ div
 </template>
 
 <script>
-export default {}
+// import ErrorHandlerMixin from '@/utils/mixins/ErrorHandler'
+export default {
+  name: 'BlankLayout'
+  // mixins: [ErrorHandlerMixin]
+}
 </script>
 
 <style>
