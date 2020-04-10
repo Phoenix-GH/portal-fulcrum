@@ -74,7 +74,6 @@
                           a.text-indigo-600(v-on:click='showEditInvitationModal(invitation)' href='#' class='hover:text-indigo-900 focus:outline-none focus:underline') Edit
                           span &nbsp;|&nbsp;
                           a.text-red-600.leading-4(v-on:click='showDeleteInvitationModal(invitation)' class='hover:text-indigo-900 focus:outline-none focus:underline') Delete
-  script(src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.0.1/dist/alpine.js" defer="")
   DeleteModal(:isOpen="deleteMemberModalOpen" :onOK="deleteMember" :onCancel="closeDeleteMemberModal")
   .fixed.bottom-0.inset-x-0.px-4.pb-4(v-if="editMemberModalOpen" x-show="open" class="sm:inset-0 sm:flex sm:items-center sm:justify-center")
     .fixed.inset-0.transition-opacity(x-show="open" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"): .absolute.inset-0.bg-gray-500.opacity-75
@@ -145,12 +144,14 @@ export default {
   },
   methods: {
     loadData() {
+      const teamId = this.$route.params.id || this.$store.state.selectedTeam
+
       this.$axios({
         method: 'post',
         url: '/team/get-info',
         data: {
           auth_id: this.$state.sessionKey.auth_id,
-          team_id: this.$store.state.selectedTeam
+          team_id: parseInt(teamId)
         }
       }).then((res) => {
         const { data } = res
@@ -175,7 +176,7 @@ export default {
     },
     showDeleteInvitationModal(invitation) {
       this.selectedInvitation = invitation
-      this.showDeleteInvitationModal = true
+      this.deleteInvitationModalOpen = true
     },
     changeTeam() {
       this.$router.push('/teams/')
