@@ -17,7 +17,7 @@
               | Created at
             th.px-6.py-3.border-b.border-gray-200.bg-gray-50
             th.px-6.py-3.border-b.border-gray-200.bg-gray-50
-        tbody.bg-white(v-for="team in teams" v-bind:key="team.team_id")
+        tbody.bg-white(v-for="team in teams" v-bind:key="team.team_id" v-if="teams && teams.length > 0")
           tr
             td.px-6.py-4.whitespace-no-wrap.border-b.border-gray-200.text-sm.leading-5.font-medium.text-gray-900
               | {{team.team_name}}
@@ -31,6 +31,10 @@
               a.text-indigo-600(v-on:click='showEditTeamModal(team.team_id)' href='#' class='hover:text-indigo-900 focus:outline-none focus:underline') Edit
               span &nbsp;|&nbsp;
               a.text-red-600.leading-4(v-on:click='showDeleteTeamModal(team.team_id)' class='hover:text-indigo-900 focus:outline-none focus:underline') Delete
+        tbody.bg-white(v-if="!teams || teams.length == 0")
+          tr
+            td.px-6.py-4.whitespace-no-wrap.border-b.border-gray-200.text-sm.leading-5.font-medium.text-gray-900(colspan=5)
+              | No teams are available. Please create a new one.
   DeleteModal(:isOpen="deleteModalOpen" :onOK="deleteTeam" :onCancel="closeDeleteModal")
 
   .fixed.bottom-0.inset-x-0.px-4.pb-4(v-if="editModalOpen" class="sm:inset-0 sm:flex sm:items-center sm:justify-center")
