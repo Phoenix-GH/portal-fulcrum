@@ -5,7 +5,7 @@ div
     Navigation
     main: .max-w-7xl.mx-auto.py-6(class="sm:px-6 lg:px-8"): .px-4.py-4(class="sm:px-0")
       nuxt
-  pre.text-xs.p-3.bg-gray-800.text-gray-50 {{  [ $state , $store.state ] }}
+  pre.text-xs.p-3.bg-gray-800.text-gray-50.whitespace-pre-wrap {{  [ $state , $store.state ] }}
   
   portal-target(name="modal")
 </template>
