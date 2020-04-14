@@ -58,7 +58,12 @@ export default {
 
       if (!this.hasErrors) {
         await this.$store.dispatch('LOAD_STATE')
-        this.$router.push(this.$route.query.p || '/')
+        const currentTeam = this.$store.state.selectedTeam
+        if (currentTeam) {
+          this.$router.push(`/teams/${currentTeam}`)
+        } else {
+          this.$router.push(`/teams/`)
+        }
       }
     },
     async onSubmit() {
