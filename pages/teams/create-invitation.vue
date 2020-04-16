@@ -102,9 +102,11 @@ export default {
       this.alertModalOpen = true
     },
     closeAlert() {
-      this.$router.go(-1)
       this.alert = null
       this.alertModalOpen = false
+      this.$router.go(-1)
+      /* Temporary solution */
+      setTimeout(this.$router.go(-1), 500)
     },
     onSelectRole(role) {
       this.selectedRole = role

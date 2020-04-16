@@ -36,7 +36,7 @@ export default {
       team_name: '',
       description: '',
       alertModalOpen: false,
-      message: null
+      message: ''
     }
   },
   methods: {
@@ -69,9 +69,9 @@ export default {
       this.alertModalOpen = true
     },
     closeAlert() {
+      this.$router.go(-1)
       this.message = null
       this.alertModalOpen = false
-      this.$router.go(-1)
     }
   }
 }
