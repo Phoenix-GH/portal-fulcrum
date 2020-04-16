@@ -70,7 +70,11 @@ export default {
   methods: {
     save() {
       const selectedTeam = this.$store.state.selectedTeam
-      if (this.selectedRole && selectedTeam) {
+      if (!this.selectedRole) {
+        alert('Please select a team role!')
+        return
+      }
+      if (selectedTeam) {
         this.$axios({
           method: 'post',
           url: '/team/invite-create',
