@@ -102,6 +102,7 @@ export default {
     closeAlert() {
       this.alert = null
       this.alertModalOpen = false
+      this.$router.go(-1)
     },
     onSelectRole(role) {
       this.selectedRole = role

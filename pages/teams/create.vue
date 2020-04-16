@@ -71,6 +71,7 @@ export default {
     closeAlert() {
       this.message = null
       this.alertModalOpen = false
+      this.$router.go(-1)
     }
   }
 }
