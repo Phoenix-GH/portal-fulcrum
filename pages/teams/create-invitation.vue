@@ -70,27 +70,33 @@ export default {
   methods: {
     save() {
       const selectedTeam = this.$store.state.selectedTeam
-      this.$axios({
-        method: 'post',
-        url: '/team/invite-create',
-        data: {
-          auth_id: this.$state.sessionKey.auth_id,
-          email: this.email,
-          team_role: this.selectedRole.id,
-          team_id: selectedTeam,
-          custom_invitation_params: {
-            message: this.message
+      if (!this.selectedRole) {
+        alert('Please select a team role!')
+        return
+      }
+      if (selectedTeam) {
+        this.$axios({
+          method: 'post',
+          url: '/team/invite-create',
+          data: {
+            auth_id: this.$state.sessionKey.auth_id,
+            email: this.email,
+            team_role: this.selectedRole.id,
+            team_id: selectedTeam,
+            custom_invitation_params: {
+              message: this.message
+            }
           }
-        }
-      })
-        .then((response) => {
-          this.showAlert('The invitation was sent!')
-          this.email = null
-          this.message = null
         })
-        .catch((e) => {
-          alert(e.message || 'An error has occured, please try again later.')
-        })
+          .then((response) => {
+            this.showAlert('The invitation was sent!')
+            this.email = null
+            this.message = null
+          })
+          .catch((e) => {
+            alert(e.message || 'An error has occured, please try again later.')
+          })
+      }
     },
     cancel() {
       this.$router.go(-1)
@@ -102,6 +108,9 @@ export default {
     closeAlert() {
       this.alert = null
       this.alertModalOpen = false
+      this.$router.go(-1)
+      /* Temporary solution */
+      setTimeout(this.$router.go(-1), 500)
     },
     onSelectRole(role) {
       this.selectedRole = role
