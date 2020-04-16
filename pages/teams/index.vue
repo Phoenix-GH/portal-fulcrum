@@ -17,8 +17,8 @@
               | Created at
             th.px-6.py-3.border-b.border-gray-200.bg-gray-50
             th.px-6.py-3.border-b.border-gray-200.bg-gray-50
-        tbody.bg-white(v-for="team in teams" v-bind:key="team.team_id" v-if="teams && teams.length > 0")
-          tr
+        tbody.bg-white(v-for="team in teams" v-bind:key="team.team_id")
+          tr(v-if="teams && teams.length > 0")
             td.px-6.py-4.whitespace-no-wrap.border-b.border-gray-200.text-sm.leading-5.font-medium.text-gray-900
               | {{team.team_name}}
             td.px-6.py-4.whitespace-no-wrap.border-b.border-gray-200.text-sm.leading-5.text-gray-500
