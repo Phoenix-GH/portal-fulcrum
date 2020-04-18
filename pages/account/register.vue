@@ -113,6 +113,7 @@ export default {
   methods: {
     async register() {
       try {
+        this.resetErrors()
         const { email, password } = this
         // eslint-disable-next-line
         const { data } = await this.$axios({
