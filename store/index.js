@@ -73,7 +73,7 @@ export const actions = {
         commit('SET_STATE', response)
       }
     } catch (err) {
-      console.error(err)
+      if (err.response) console.error(err.response.status, err.response.data)
     }
   },
   async LOAD_STATE({ state, commit }) {
