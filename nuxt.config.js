@@ -17,8 +17,8 @@ module.exports = {
     link: [{ rel: 'icon', type: 'image/x-svg', href: '/icon-trans.svg' }]
   },
   router: {
-    middleware: ['auth', 'meta'],
-    extendRoutes(routes, resolve) { }
+    middleware: ['auth', 'meta', 'redirect'],
+    extendRoutes(routes, resolve) {}
   },
   /*
    ** Customize the progress-bar color

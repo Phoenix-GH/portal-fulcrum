@@ -65,13 +65,3 @@ export default {
   components: { AlertModal, GeneralSection, EmailSection }
 }
 </script>
-
-<style>
-.active-hover-anchor .active-hover {
-  opacity: 0.2;
-}
-
-.active-hover-anchor:hover .active-hover {
-  opacity: 1;
-}
-</style>

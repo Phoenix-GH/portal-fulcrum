@@ -19,7 +19,7 @@
             .mt-8.border-t.border-gray-200.pt-5
               .flex.justify-end
                 span.inline-flex.rounded-md.shadow-sm: button.py-2.px-4.border.border-gray-300.rounded-md.text-sm.leading-5.font-medium.text-gray-700.transition.duration-150.ease-in-out(type="button" class="hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-50 active:text-gray-800" v-on:click='cancel()') Cancel
-                span.ml-3.inline-flex.rounded-md.shadow-sm: button.inline-flex.justify-center.py-2.px-4.border.border-transparent.text-sm.leading-5.font-medium.rounded-md.text-white.bg-indigo-600.transition.duration-150.ease-in-out(type="submit" class="hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700" v-on:click='save()') Save
+                span.ml-3.inline-flex.rounded-md.shadow-sm: button.inline-flex.justify-center.py-2.px-4.border.border-transparent.text-sm.leading-5.font-medium.rounded-md.text-white.bg-indigo-600.transition.duration-150.ease-in-out(type="button" class="hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700" v-on:click='save()') Save
   AlertModal(title="Success" :isOpen="alertModalOpen" :onClose="closeAlert" :text="message")
 </template>
 
@@ -41,6 +41,8 @@ export default {
   },
   methods: {
     save() {
+      const isFirstTeam = this.$store.state.teams.length === 0
+
       this.$axios({
         method: 'post',
         url: '/team/create',
@@ -56,6 +58,12 @@ export default {
           this.showAlert('The team was added successfully!')
           this.team_name = null
           this.description = null
+          if (isFirstTeam)
+            this.$store
+              .dispatch('SET_CURRENT_TEAM', { selectedTeam: response.data.response.team.team_id })
+              .then((response2) => {
+                console.log('S', response2)
+              })
         })
         .catch((e) => {
           alert(e.message || 'An error has occured, please try again later.')

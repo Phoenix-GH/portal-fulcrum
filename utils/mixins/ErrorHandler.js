@@ -24,7 +24,6 @@ export default {
     'sharedState.errorSet': {
       deep: true,
       handler(errorObject) {
-        console.log('watcher -->', errorObject)
         const arr = errorObject && Object.values(errorObject)
         this.sharedState.errors = arr
         this.sharedState.hasErrors = arr.length > 0
@@ -57,7 +56,6 @@ export default {
       } else this.sharedState.errorSet = [err.message]
     },
     async post(url, payload) {
-      console.log('POST', url)
       this.sharedState.errorSet = []
       let data = null
       try {

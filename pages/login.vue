@@ -20,14 +20,14 @@
           PasswordField(v-model="password")
           //-.mt-1.rounded-md.shadow-sm
             input#password.appearance-none.block.w-full.px-3.py-2.border.border-gray-300.rounded-md.placeholder-gray-400.transition.duration-150.ease-in-out(type='password' v-model="password" required='' class='focus:outline-none focus:shadow-outline-blue focus:border-blue-300 sm:text-sm sm:leading-5')
-        
+
         .mt-6
           span.block.w-full.rounded-md.shadow-sm
             button.w-full.flex.justify-center.py-2.px-4.border.border-transparent.text-sm.font-medium.rounded-md.text-white.bg-cool-gray-600.transition.duration-150.ease-in-out(type='submit' class='hover:bg-cool-gray-500 focus:outline-none focus:border-cool-gray-700 focus:shadow-outline-cool-gray active:bg-cool-gray-700') Sign in
-    p.mt-4.text-sm.text-center 
+    p.mt-4.text-sm.text-center
       span.mr-1 Don't have an account?
       nuxt-link.font-medium.text-indigo-600.transition.ease-in-out.duration-150(to='/account/register' class='hover:text-indigo-500 focus:outline-none focus:underline') Sign up
- 
+
 </template>
 
 <script>
@@ -58,7 +58,7 @@ export default {
 
       if (!this.hasErrors) {
         await this.$store.dispatch('LOAD_STATE')
-        this.$router.push(this.$route.query.p || '/')
+        this.$router.push(`/`)
       }
     },
     async onSubmit() {
