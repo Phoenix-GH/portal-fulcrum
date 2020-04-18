@@ -1,5 +1,6 @@
 import { COOKIE_NAME } from '../utils'
 export default async ({ store, redirect, route, app }) => {
+  console.log('AUTH M')
   // Check cookie to see if the user has already logged in
   const cookie = app.$cookies.get(COOKIE_NAME)
   // If the user is not authenticated

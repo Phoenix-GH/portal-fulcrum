@@ -104,8 +104,7 @@ export default {
       this.description = selectedItem.description
     },
     selectTeam(id) {
-      this.$store.commit('SELECT_TEAM', { selectedTeam: id })
-      this.$router.push(`/teams/${id}`)
+      this.$store.dispatch('SET_CURRENT_TEAM', { selectedTeam: id }).then(() => this.$router.push(`/teams/${id}`))
     },
     deleteTeam() {
       this.$axios({

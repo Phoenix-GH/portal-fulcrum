@@ -19,6 +19,9 @@
           .shadow.overflow-hidden(class="sm:rounded-md")
             .px-4.py-5.bg-white(class="sm:p-6")
               .rounded-lg.border
+                template(v-if="emails.length === 0 ")
+                  div.min-h-20
+                    p.p-8.text-gray-500 No Emails addresses are associated with this account
                 template(v-for="(item, index) in emails")
                   div.active-hover-anchor.p-4.h-20(:class="{'border-t border-gray-200': index > 0 }" :key="item.email")
                     .flex.justify-between
@@ -32,9 +35,9 @@
                         //-template(v-else)
                           svg.w-4.h-4.text-green-600(viewBox="0 0 20 20" fill="currentColor" strokewidth="2")
                             path(fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd")
-                      template(v-if="canDelete")
-                        button.text-red-700(type="button" @click="onEmailDelete($event, item.email)")
-                          svg.w-4.h-4.active-hover(fill="none" viewBox="0 0 24 24" stroke="currentColor" )
+                      template(v-if="canDelete || item.email_status[0] === 'u'")
+                        button.text-gray-700.bg-gray-50.p-2.rounded-full(type="button" @click="onEmailDelete($event, item.email)" class="hover:text-red-700 hover:bg-red-50" title="Remove email address.")
+                          svg.w-4.h-4(fill="none" viewBox="0 0 24 24" stroke="currentColor" )
                             path(stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16")
 
                     ul.mt-2.text-sm(v-if="item.email_status[0] === 'u'")
@@ -157,13 +160,13 @@ export default {
   },
   computed: {
     canDelete() {
-      return this.emails && this.emails.length > 1
+      return this.emails && this.emails.filter((x) => x.email_status[0] !== 'u') > 1
     },
     user() {
       return this.$store.state.user
     },
     emails() {
-      return Array.from(this.$store.state.user_emails)
+      return Array.from((this.$store.state && this.$store.state.emails) || [])
     }
   },
   watch: {
@@ -242,7 +245,7 @@ export default {
 
 <style>
 .active-hover-anchor .active-hover {
-  opacity: 0.2;
+  opacity: 0.6;
 }
 
 .active-hover-anchor:hover .active-hover {
