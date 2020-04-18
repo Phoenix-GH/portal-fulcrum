@@ -135,14 +135,14 @@
 <script>
 import ErrorHandlerMixin from '@/utils/mixins/ErrorHandler'
 import { delay } from '@/utils'
-import AlertModal from '@/components/controls/AlertModal'
+
 const defaultEmail = {
   address: '',
   label: 'work'
 }
 export default {
   name: 'EmailSection',
-  components: { AlertModal },
+  inject: ['alert'],
   mixins: [ErrorHandlerMixin],
   data() {
     return {
@@ -174,11 +174,8 @@ export default {
     }
   },
   methods: {
-    openAlert() {
-      this.sharedState.alert(this.alertMode, this.alertTitle, this.alertMessage)
-    },
     async onEmailDelete(e, email) {
-      if (window.confirm('Are you sure')) {
+      if (await this.alert.confirm('Are you sure you want to delete this email account.')) {
         try {
           e.target.blur()
           const { data } = await this.$axios.post('/email/delete', { email })

@@ -7,43 +7,31 @@ div
       nuxt
   pre.text-xs.p-3.bg-gray-800.text-gray-50.whitespace-pre-wrap {{  $store.state }}
   
+  AlertModal(ref="alertModal")
+  DeleteModal(ref="deleteModal")
   portal-target(name="modal")
 </template>
 <script>
+import DeleteModal from '@/components/controls/DeleteModal.vue'
+import AlertModal from '@/components/controls/AlertModal.vue'
 import GlobalNavigation from '@/components/parts/GlobalNavigation.vue'
 import Navigation from '@/components/parts/Navigation.vue'
 import ErrorHandlerMixin from '@/utils/mixins/ErrorHandler'
+import AlertsMixin from '@/utils/mixins/Alerts'
 export default {
   name: 'DefaultLayout',
-  components: { GlobalNavigation, Navigation },
-  mixins: [ErrorHandlerMixin]
-
-  //   methods: {
-  //     alert(mode, title, message, showButton) {
-  //       if (mode instanceof Error)
-  // {}
-  //       else  {
-  //       console.log('ALERT', mode, title, message, showButton)
-  //       this.alertMode = mode || 'success'
-  //       this.alertTitle = title
-  //       this.alertText = message
-  //       this.alertVisible = true
-  //       this.showAlertButton = showButton !== undefined ? showButton : mode === 'error'
-  //       }
-  //     },
-  //     closeAlert(){
-  //       this.alertVisible = false
-  //     },
-  //     async post(url, payload) {
-  //       try {
-  //         const { data } = await this.$axios.post(url, payload)
-  //         return data.response || data
-  //       } catch (err) {
-  //         this.handleErrors(err)
-  //         this.alert('error', 'Error', null, false)
-  //       }
-  //     }
-  //   }
+  components: { GlobalNavigation, Navigation, AlertModal, DeleteModal },
+  mixins: [ErrorHandlerMixin, AlertsMixin],
+  provide() {
+    return {
+      alert: {
+        success: this.success,
+        error: this.error,
+        confirm: this.confirm
+      },
+      post(url, payload, header) {}
+    }
+  }
 }
 </script>
 <style>

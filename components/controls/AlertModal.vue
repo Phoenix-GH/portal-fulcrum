@@ -1,12 +1,8 @@
 <template lang="pug">
-portal(to="modal" v-if="local.isOpen")
-  .fixed.bottom-0.inset-x-0.px-4.pb-6(class="sm:inset-0 sm:p-0 sm:flex sm:items-center sm:justify-center")
-    .fixed.inset-0.transition-opacity
-      .absolute.inset-0.bg-gray-500.opacity-75(@click="close")
-    transition(name="fade")
-      .bg-white.rounded-lg.px-4.pt-5.pb-4.overflow-hidden.shadow-xl.transform.transition-all(class="sm:max-w-sm sm:w-full sm:p-6")
+BaseModal(ref="base" v-model="isOpenProxy" v-slot="{ onHandler }" :onClose="local.onClose" :closeOnBackground="local.closeOnBackground"  :showCloseIcon="local.showCloseIcon")
+  div
         template(v-if="local.mode === 'error'")
-          //- ErrorPanel()
+
           .mx-auto.flex.items-center.justify-center.h-12.w-12.rounded-full.bg-red-100
 
             svg.h-6.w-6.text-red-600(stroke="currentColor" fill="none" viewBox="0 0 24 24")
@@ -29,19 +25,30 @@ portal(to="modal" v-if="local.isOpen")
         template(v-if="local.showButton")
           .mt-5(class="sm:mt-6")
             span.flex.w-full.rounded-md.shadow-sm
-              button.inline-flex.justify-center.w-full.rounded-md.border.border-transparent.px-4.py-2.bg-indigo-600.text-base.leading-6.font-medium.text-white.shadow-sm.transition.ease-in-out.duration-150(@click="close" type="button" class="hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo sm:text-sm sm:leading-5") {{local.buttonText}}
+              button.inline-flex.justify-center.w-full.rounded-md.border.border-transparent.px-4.py-2.text-base.leading-6.font-medium.text-white.shadow-sm.transition.ease-in-out.duration-150(
+                @click="onHandler(local.onClose)" 
+                type="button" 
+                class="hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo sm:text-sm sm:leading-5" 
+                :class="[ local.mode  === 'success'? 'bg-indigo-600' : 'bg-red-700']") {{local.buttonText}}
+        //- pre {{ $data }}
 </template>
 
 <script>
+import BaseModal from '@/components/controls/BaseModal'
 export default {
+  components: { BaseModal },
+  model: {
+    prop: 'isOpen'
+  },
   props: {
     title: { type: String, default: null },
     text: { type: String, default: null },
     errors: { type: Array, default: () => [] },
     buttonText: { type: String, default: 'OK' },
-    onClose: { type: Function, default: () => {} },
+    onClose: { type: Function, default: undefined },
     isOpen: { type: Boolean, default: false },
-    showButton: { type: Boolean, default: true },
+    showButton: { type: Boolean, default: false },
+    showCloseIcon: { type: Boolean, default: false },
     mode: {
       type: String,
       default: 'success',
@@ -53,15 +60,32 @@ export default {
   data() {
     return {
       local: {
+        isOpen: this.isOpen,
         title: this.title,
         text: this.text,
         buttonText: this.buttonText,
         onClose: this.onClose,
-        isOpen: this.isOpen,
         showButton: this.showButton,
         mode: this.mode,
-        errors: this.errors
+        errors: this.errors,
+        showCloseIcon: this.showCloseIcon
       }
+    }
+  },
+  computed: {
+    isOpenProxy: {
+      get() {
+        return this.local.isOpen
+      },
+      set(value) {
+        this.local.isOpen = value
+        this.$emit('input', value)
+      }
+    }
+  },
+  watch: {
+    isOpen(open) {
+      this.local.isOpen = open
     }
   },
   methods: {
@@ -69,45 +93,45 @@ export default {
       this.local.onClose()
       this.$emit('close')
     },
-    success({ title, text, onClose }) {
-      this.show('success', title, text, onClose)
+    success(context) {
+      this.show({ mode: 'success', title: 'Success', ...context, errors: [] })
     },
-    error({ title, text, errors, onClose }) {
+    error(context) {
+      let { errors } = context
+      const { title } = context
       if (errors !== null && errors !== undefined) {
         if (errors instanceof Error) {
           if (errors.response && errors.response.status === 409) {
-            this.local.errors = errors.response.data.errors
-          } else this.local.errors = [errors.message]
+            errors = errors.response.data.errors
+          } else {
+            errors = [errors.message]
+          }
         } else if (typeof errors === 'string') {
-          this.local.errors = [errors]
-        } else {
-          this.local.errors = errors
+          errors = [errors]
         }
       }
-      this.show('error', title || 'Error', text, onClose)
+      this.show({ mode: 'error', title: 'Error', ...context, errors })
     },
-    show(mode, title, text, onClose) {
-      const def = () => {
-        this.local.isOpen = false
-        this.reset()
+    show(context) {
+      const onClose = () => {
+        console.log('Close')
+        this.reset(this)
+        console.log(context.onClose)
+        if (context.onClose) context.onClose()
       }
-      this.local.mode = mode
+      this.reset({ ...this.local, ...context, onClose })
+      this.isOpenProxy = true
+    },
+    reset({ mode, title, text, buttonText, onClose, showButton, errors, showCloseIcon }) {
       this.local.title = title
       this.local.text = text
-      this.local.showButton = false
-      this.local.onClose = onClose || def
-
-      this.local.isOpen = true
-    },
-    reset() {
-      this.local.title = this.title
-      this.local.text = this.text
-      this.local.buttonText = this.buttonText
-      this.local.onClose = this.onClose
-      this.local.isOpen = this.isOpen
-      this.local.showButton = this.showButton
-      this.local.mode = this.mode
-      this.local.errors = this.errors
+      this.local.buttonText = buttonText
+      this.local.onClose = onClose
+      this.local.showButton = showButton
+      this.local.mode = mode
+      this.local.errors = errors
+      this.local.showCloseIcon = showCloseIcon
+      this.isOpenProxy = false
     }
   }
 }

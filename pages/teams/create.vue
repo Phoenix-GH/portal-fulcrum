@@ -11,7 +11,7 @@
             .mt-6.grid.grid-cols-1.row-gap-6.col-gap-4(class="sm:grid-cols-6")
               div(class="sm:col-span-4")
                 label.block.text-sm.font-medium.leading-5.text-gray-700(for="teamname") Team Name
-                .mt-1.flex.rounded-md.shadow-sm: input#teamname.flex-1.form-input.block.w-full.rounded-none.rounded-r-md.transition.duration-150.ease-in-out(v-model="team_name" class="sm:text-sm sm:leading-5")
+                .mt-1.flex.rounded-md.shadow-sm: input#teamname.flex-1.form-input.transition.duration-150.ease-in-out(v-model="team_name" class="sm:text-sm sm:leading-5")
               div(class="sm:col-span-6")
                 label.block.text-sm.font-medium.leading-5.text-gray-700(for="description") Team Description
                 .mt-1.rounded-md.shadow-sm: textarea#description.form-textarea.block.w-full.transition.duration-150.ease-in-out(rows="3" class="sm:text-sm sm:leading-5" v-model="description")
@@ -20,22 +20,21 @@
               .flex.justify-end
                 span.inline-flex.rounded-md.shadow-sm: button.py-2.px-4.border.border-gray-300.rounded-md.text-sm.leading-5.font-medium.text-gray-700.transition.duration-150.ease-in-out(type="button" class="hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-50 active:text-gray-800" v-on:click='cancel()') Cancel
                 span.ml-3.inline-flex.rounded-md.shadow-sm: button.inline-flex.justify-center.py-2.px-4.border.border-transparent.text-sm.leading-5.font-medium.rounded-md.text-white.bg-indigo-600.transition.duration-150.ease-in-out(type="button" class="hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700" v-on:click='save()') Save
-  AlertModal(title="Success" :isOpen="alertModalOpen" :onClose="closeAlert" :text="message")
+  portal(to="navigation-title")
+    nuxt-link.text-lg.leading-6.font-semibold.text-gray-900.text-indigo-600(to="/teams") Teams
+    span.mx-3.text-gray-300 \\
+    h2.text-lg.leading-6.font-semibold.text-gray-900 Create a new team
 </template>
 
 <script>
-import AlertModal from '@/components/controls/AlertModal.vue'
 export default {
   layout: 'default',
   name: 'TeamCreate',
-  components: {
-    AlertModal
-  },
+  inject: ['alert'],
   data() {
     return {
       team_name: '',
       description: '',
-      alertModalOpen: false,
       message: ''
     }
   },
@@ -55,31 +54,33 @@ export default {
         }
       })
         .then((response) => {
-          this.showAlert('The team was added successfully!')
           this.team_name = null
           this.description = null
-          if (isFirstTeam)
+          if (isFirstTeam) {
             this.$store
               .dispatch('SET_CURRENT_TEAM', { selectedTeam: response.data.response.team.team_id })
               .then((response2) => {
-                console.log('S', response2)
+                this.alert.success({
+                  title: 'Success',
+                  text: 'The team was added successfully!',
+                  onClose: this.closeAlert
+                })
               })
+          } else {
+            this.alert.success({ title: 'Success', text: 'The team was added successfully!', onClose: this.closeAlert })
+          }
         })
         .catch((e) => {
-          alert(e.message || 'An error has occured, please try again later.')
+          this.alert.error(e.message || 'An error has occured, please try again later.')
         })
     },
     cancel() {
       this.$router.go(-1)
     },
-    showAlert(message) {
-      this.message = message
-      this.alertModalOpen = true
-    },
+
     closeAlert() {
+      console.log('closeAlert')
       this.$router.go(-1)
-      this.message = null
-      this.alertModalOpen = false
     }
   }
 }
