@@ -145,7 +145,6 @@ export default {
   components: { AlertModal },
   mixins: [ErrorHandlerMixin],
   data() {
-    console.log(':', this.user)
     return {
       currentEmail: defaultEmail,
       verificationModelOpen: false,
@@ -173,9 +172,6 @@ export default {
     modalOpen(state) {
       if (state === false) this.modalState = 'fill'
     }
-  },
-  mounted() {
-    console.log('!', this)
   },
   methods: {
     openAlert() {

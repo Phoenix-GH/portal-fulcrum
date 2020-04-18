@@ -127,7 +127,6 @@ export default {
       //  }
     },
     async onSavePersonal() {
-      console.log('oSP')
       try {
         const { data } = await this.$axios.post('/user/edit', {
           custom_user_params: {
@@ -145,7 +144,6 @@ export default {
       }
     },
     createLocalState(key) {
-      console.log('cls', this.localUser, this.user)
       return {
         get() {
           return this.localUser[key] || this.user[key]

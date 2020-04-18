@@ -66,7 +66,6 @@ export default {
   },
   methods: {
     close() {
-      console.log('close')
       this.local.onClose()
       this.$emit('close')
     },
@@ -74,7 +73,6 @@ export default {
       this.show('success', title, text, onClose)
     },
     error({ title, text, errors, onClose }) {
-      console.error(errors)
       if (errors !== null && errors !== undefined) {
         if (errors instanceof Error) {
           if (errors.response && errors.response.status === 409) {
@@ -89,7 +87,6 @@ export default {
       this.show('error', title || 'Error', text, onClose)
     },
     show(mode, title, text, onClose) {
-      console.log(this.local)
       const def = () => {
         this.local.isOpen = false
         this.reset()

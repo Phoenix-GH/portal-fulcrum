@@ -52,7 +52,7 @@ export const mutations = {
 
 export const actions = {
   async GENERATE_SESSION({ state, commit }) {
-    console.log('A::GENERATE_SESSION')
+    // console.log('A::GENERATE_SESSION')
     const {
       data: { response }
     } = await this.$axios.post('/auth/get', {}, { headers: { 'x-source': 'GENERATE_SESSION' } })
@@ -61,7 +61,7 @@ export const actions = {
   },
   async REFRESH_SESSION({ state, commit }, auth_id) {
     try {
-      console.log('A::REFRESH_SESSION', auth_id)
+      // console.log('A::REFRESH_SESSION', auth_id)
       const {
         data: { response }
       } = await this.$axios.post('/auth/get', { auth_id }, { headers: { 'x-source': 'REFRESH_SESSION' } })

@@ -55,16 +55,15 @@ export default {
         }
       })
         .then((response) => {
-          console.log(response)
-
           this.showAlert('The team was added successfully!')
           this.team_name = null
           this.description = null
-          this.$store
-            .dispatch('SET_CURRENT_TEAM', { selectedTeam: response.data.response.team.team_id })
-            .then((response2) => {
-              console.log('S', response2)
-            })
+          if (isFirstTeam)
+            this.$store
+              .dispatch('SET_CURRENT_TEAM', { selectedTeam: response.data.response.team.team_id })
+              .then((response2) => {
+                console.log('S', response2)
+              })
         })
         .catch((e) => {
           alert(e.message || 'An error has occured, please try again later.')

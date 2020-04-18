@@ -1,6 +1,6 @@
 import { COOKIE_NAME } from '../utils'
 export default async ({ store, redirect, route, app }) => {
-  console.log('AUTH M')
+  // console.log('AUTH M')
   // Check cookie to see if the user has already logged in
   const cookie = app.$cookies.get(COOKIE_NAME)
   // If the user is not authenticated
@@ -22,7 +22,6 @@ export default async ({ store, redirect, route, app }) => {
   // TODO redo this logic with reduce
   if (route.meta && route.meta[0] && route.meta[0].isPublic === true) return
 
-  console.log('~')
   const param = route.fullPath.length === 1 || route.fullPath === '/logout' ? '' : `?p=${route.fullPath}`
   return redirect(`/login${param}`)
 

@@ -56,7 +56,7 @@ export default {
     $route: {
       immediate: true,
       handler() {
-        console.log({ title: this.$route.title, name: this.$route.name })
+        // console.log({ title: this.$route.title, name: this.$route.name })
         // TODO: once we get further along we can modify this to build a bread crumb trail
 
         this.title = this.$store.state.meta.reduce(
