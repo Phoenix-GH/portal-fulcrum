@@ -10,8 +10,8 @@ div
   p.mt-4.text-sm.text-center 
     | Don't have an account? 
     nuxt-link.font-medium.text-indigo-600.transition.ease-in-out.duration-150(to='./register' class='hover:text-indigo-500 focus:outline-none focus:underline') register      
-    | -- or go 
-    nuxt-link.font-medium.text-indigo-600.transition.ease-in-out.duration-150(to="/login") back 
+    | -- 
+    nuxt-link.font-medium.text-indigo-600.transition.ease-in-out.duration-150(to="/login") back to login
     | .
 </template>
 

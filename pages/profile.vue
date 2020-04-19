@@ -58,10 +58,9 @@ div
 <script>
 import GeneralSection from '@/components/parts/profile/GeneralSection'
 import EmailSection from '@/components/parts/profile/EmailSection'
-import AlertModal from '@/components/controls/AlertModal'
 
 export default {
   name: 'ProfilePage',
-  components: { AlertModal, GeneralSection, EmailSection }
+  components: { GeneralSection, EmailSection }
 }
 </script>

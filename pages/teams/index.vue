@@ -31,16 +31,16 @@
             td.px-6.py-4.whitespace-no-wrap.text-right.border-b.border-gray-200.text-sm.leading-5.font-medium
               a.text-indigo-600(v-on:click='showEditTeamModal(team.team_id)' href='#' class='hover:text-indigo-900 focus:outline-none focus:underline') Edit
               span &nbsp;|&nbsp;
-              a.text-red-600.leading-4(v-on:click='showDeleteTeamModal(team.team_id)' class='hover:text-indigo-900 focus:outline-none focus:underline') Delete
+              a.text-red-600.leading-4(v-on:click='deleteTeam(team.team_id)' class='hover:text-indigo-900 focus:outline-none focus:underline') Delete
         tbody.bg-white(v-if="!teams || teams.length == 0")
           tr
             td.px-6.py-4.whitespace-no-wrap.border-b.border-gray-200.text-sm.leading-5.font-medium.text-gray-900(colspan=5)
               | No teams are available. Please create a new one.
-  DeleteModal(:isOpen="deleteModalOpen" :onOK="deleteTeam" :onCancel="closeDeleteModal")
-
+  //-DeleteModal(:isOpen="deleteModalOpen" :onOK="deleteTeam" :onCancel="closeDeleteModal")
+  
   .fixed.bottom-0.inset-x-0.px-4.pb-4(v-if="editModalOpen" class="sm:inset-0 sm:flex sm:items-center sm:justify-center")
-    .fixed.inset-0.transition-opacity(x-show="open" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"): .absolute.inset-0.bg-gray-500.opacity-75
-    .relative.bg-white.rounded-lg.px-4.pt-5.pb-4.overflow-hidden.shadow-xl.transform.transition-all(x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100" x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" class="sm:max-w-lg sm:w-full sm:p-6")
+    .fixed.inset-0.transition-opacity(): .absolute.inset-0.bg-gray-500.opacity-75
+    .relative.bg-white.rounded-lg.px-4.pt-5.pb-4.overflow-hidden.shadow-xl.transform.transition-all(class="sm:max-w-lg sm:w-full sm:p-6")
       .bg-white.border-gray-200
         div
           h3.text-lg.leading-6.font-medium.text-gray-900 Edit Team
@@ -59,16 +59,12 @@
 </template>
 
 <script>
-import DeleteModal from '@/components/controls/DeleteModal'
 export default {
   layout: 'default',
   name: 'TeamManagement',
-  components: {
-    DeleteModal
-  },
+  inject: ['alert'],
   data() {
     return {
-      deleteModalOpen: false,
       editModalOpen: false,
       selectedTeamId: null,
       teams: null,
@@ -92,10 +88,6 @@ export default {
     createTeam() {
       this.$router.push('/teams/create')
     },
-    showDeleteTeamModal(id) {
-      this.deleteModalOpen = true
-      this.selectedTeamId = id
-    },
     showEditTeamModal(id) {
       this.editModalOpen = true
       this.selectedTeamId = id
@@ -106,23 +98,22 @@ export default {
     selectTeam(id) {
       this.$store.dispatch('SET_CURRENT_TEAM', { selectedTeam: id }).then(() => this.$router.push(`/teams/${id}`))
     },
-    deleteTeam() {
-      this.$axios({
-        method: 'post',
-        url: '/team/delete',
-        data: {
-          auth_id: this.$state.sessionKey.auth_id,
-          team_id: this.selectedTeamId
-        }
-      })
-        .catch((e) => {
-          alert(e.message || 'An error has occured, please try again later.')
+    async deleteTeam(teamId) {
+      const cont = await this.alert.confirm()
+      if (cont === false) return
+      try {
+        await this.$axios({
+          method: 'post',
+          url: '/team/delete',
+          data: {
+            auth_id: this.$state.sessionKey.auth_id,
+            team_id: teamId
+          }
         })
-        .finally((f) => {
-          this.loadData()
-          this.selectedTeamId = null
-          this.deleteModalOpen = false
-        })
+        this.loadData()
+      } catch (e) {
+        this.alert.error(e)
+      }
     },
     cancelEditTeam() {
       this.editModalOpen = false
@@ -149,12 +140,8 @@ export default {
           this.loadData()
         })
         .catch((e) => {
-          alert(e.message || 'An error has occured, please try again later.')
+          this.alert.error(e.message || 'An error has occured, please try again later.')
         })
-    },
-    closeDeleteModal() {
-      this.deleteModalOpen = false
-      this.selectedTeamId = null
     }
   }
 }

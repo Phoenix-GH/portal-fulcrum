@@ -73,7 +73,7 @@
                           a.text-indigo-600(v-on:click='showEditInvitationModal(invitation)' href='#' class='hover:text-indigo-900 focus:outline-none focus:underline') Edit
                           span &nbsp;|&nbsp;
                           a.text-red-600.leading-4(v-on:click='showDeleteInvitationModal(invitation)' class='hover:text-indigo-900 focus:outline-none focus:underline') Delete
-  DeleteModal(:isOpen="deleteMemberModalOpen" :onOK="deleteMember" :onCancel="closeDeleteMemberModal")
+  
   .fixed.bottom-0.inset-x-0.px-4.pb-4(v-if="editMemberModalOpen" x-show="open" class="sm:inset-0 sm:flex sm:items-center sm:justify-center")
     .fixed.inset-0.transition-opacity(x-show="open" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"): .absolute.inset-0.bg-gray-500.opacity-75
     .relative.bg-white.rounded-lg.px-4.pt-5.pb-4.overflow-hidden.shadow-xl.transform.transition-all(x-show="open" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100" x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" class="sm:max-w-lg sm:w-full sm:p-6")
@@ -98,8 +98,8 @@
           .flex.justify-end
             span.inline-flex.rounded-md.shadow-sm: button.py-2.px-4.border.border-gray-300.rounded-md.text-sm.leading-5.font-medium.text-gray-700.transition.duration-150.ease-in-out(type="button" class="hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-50 active:text-gray-800" v-on:click='editMemberModalOpen=false;') Cancel
             span.ml-3.inline-flex.rounded-md.shadow-sm: button.inline-flex.justify-center.py-2.px-4.border.border-transparent.text-sm.leading-5.font-medium.rounded-md.text-white.bg-indigo-600.transition.duration-150.ease-in-out(type="submit" class="hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700" v-on:click='saveMember()') Save
+  
   DeleteModal(:isOpen="deleteInvitationModalOpen" :onOK="deleteInvitation" :onCancel="closeDeleteMemberModal")
-
   portal(to="navigation-title")
     nuxt-link.text-lg.leading-6.font-semibold.text-gray-900.text-indigo-600(to="/teams") Teams
     span.mx-3.text-gray-300 \\
@@ -111,6 +111,7 @@ import DeleteModal from '@/components/controls/DeleteModal'
 export default {
   layout: 'default',
   name: 'Team',
+  inject: ['alert'],
   middleware({ params, redirect }) {
     // if id is not a number... then redirect back to teams page
     if (/^\d+$/.test(params.id) === false) return redirect('/teams')
@@ -148,7 +149,8 @@ export default {
     }
   },
   mounted() {
-    this.loadData()
+    // this.alert.success('Page Loaded', 'this is a test')
+    // this.loadData()
   },
   methods: {
     loadData() {
@@ -161,12 +163,16 @@ export default {
           auth_id: this.$state.sessionKey.auth_id,
           team_id: parseInt(teamId)
         }
-      }).then((res) => {
-        const { data } = res
-        this.team = data.response.team
-        this.users = data.response.users
-        this.invitations = data.response.invitations
       })
+        .then((res) => {
+          const { data } = res
+          this.team = data.response.team
+          this.users = data.response.users
+          this.invitations = data.response.invitations
+        })
+        .catch((err) => {
+          console.error(err)
+        })
     },
     showEditMemberModal(member) {
       this.editMemberModalOpen = true

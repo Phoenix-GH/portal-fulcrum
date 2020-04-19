@@ -55,6 +55,9 @@ export default {
         this.sharedState.errorSet = err.response.data.errors
       } else this.sharedState.errorSet = [err.message]
     },
+    resetErrors() {
+      this.sharedState.errorSet = []
+    },
     async post(url, payload) {
       this.sharedState.errorSet = []
       let data = null
