@@ -32,7 +32,7 @@
               .flex.justify-end
                 span.inline-flex.rounded-md.shadow-sm: button.py-2.px-4.border.border-gray-300.rounded-md.text-sm.leading-5.font-medium.text-gray-700.transition.duration-150.ease-in-out(type="button" class="hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-50 active:text-gray-800" v-on:click='cancel()') Cancel
                 span.ml-3.inline-flex.rounded-md.shadow-sm: button.inline-flex.justify-center.py-2.px-4.border.border-transparent.text-sm.leading-5.font-medium.rounded-md.text-white.bg-indigo-600.transition.duration-150.ease-in-out(type="submit" class="hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700" v-on:click='save()') Save
-  AlertModal(title="Success" :isOpen="alertModalOpen" :onClose="closeAlert" :text="alert")
+  AlertModal(ref="alert")
 </template>
 
 <script>
@@ -47,8 +47,6 @@ export default {
     return {
       email: '',
       message: '',
-      alertModalOpen: false,
-      alert: '',
       selectedRole: null,
       roles: [
         {
@@ -89,25 +87,26 @@ export default {
           }
         })
           .then((response) => {
-            this.showAlert('The invitation was sent!')
+            this.$refs.alert.success({
+              title: 'The invitation was sent!',
+              onClose: this.closeAlert(),
+              showButton: true
+            })
             this.email = null
             this.message = null
           })
           .catch((e) => {
-            alert(e.message || 'An error has occured, please try again later.')
+            this.$refs.alert.error({
+              title: e.message || 'An error has occured, please try again later.',
+              showButton: true
+            })
           })
       }
     },
     cancel() {
       this.$router.go(-1)
     },
-    showAlert(message) {
-      this.alert = message
-      this.alertModalOpen = true
-    },
     closeAlert() {
-      this.alert = null
-      this.alertModalOpen = false
       this.$router.go(-1)
       /* Temporary solution */
       setTimeout(this.$router.go(-1), 500)

@@ -11,7 +11,7 @@
             .mt-6.grid.grid-cols-1.row-gap-6.col-gap-4(class="sm:grid-cols-6")
               div(class="sm:col-span-4")
                 label.block.text-sm.font-medium.leading-5.text-gray-700(for="teamname") Team Name
-                .mt-1.flex.rounded-md.shadow-sm: input#teamname.flex-1.form-input.transition.duration-150.ease-in-out(v-model="team_name" class="sm:text-sm sm:leading-5")
+                .mt-1.flex.rounded-md.shadow-sm: input#teamname.flex-1.form-input.block.w-full.rounded-none.rounded-r-md.transition.duration-150.ease-in-out(v-model="team_name" class="sm:text-sm sm:leading-5")
               div(class="sm:col-span-6")
                 label.block.text-sm.font-medium.leading-5.text-gray-700(for="description") Team Description
                 .mt-1.rounded-md.shadow-sm: textarea#description.form-textarea.block.w-full.transition.duration-150.ease-in-out(rows="3" class="sm:text-sm sm:leading-5" v-model="description")
@@ -34,14 +34,12 @@ export default {
   data() {
     return {
       team_name: '',
-      description: '',
-      message: ''
+      description: ''
     }
   },
   methods: {
     save() {
       const isFirstTeam = this.$store.state.teams.length === 0
-
       this.$axios({
         method: 'post',
         url: '/team/create',
@@ -77,9 +75,7 @@ export default {
     cancel() {
       this.$router.go(-1)
     },
-
     closeAlert() {
-      console.log('closeAlert')
       this.$router.go(-1)
     }
   }
