@@ -61,7 +61,7 @@ export default {
                 this.alert.success({
                   title: 'Success',
                   text: 'The team was added successfully!',
-                  onClose: this.closeAlert
+                  onClose: this.cancel
                 })
               })
           } else {
@@ -73,9 +73,6 @@ export default {
         })
     },
     cancel() {
-      this.$router.go(-1)
-    },
-    closeAlert() {
       this.$router.go(-1)
     }
   }
