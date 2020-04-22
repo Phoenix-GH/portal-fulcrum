@@ -49,6 +49,7 @@ export default {
     isOpen: { type: Boolean, default: false },
     showButton: { type: Boolean, default: false },
     showCloseIcon: { type: Boolean, default: false },
+    closeOnBackground: { type: Boolean, default: true },
     mode: {
       type: String,
       default: 'success',
