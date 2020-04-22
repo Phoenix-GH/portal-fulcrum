@@ -1,15 +1,6 @@
 <template lang="pug">
 .mt-10(class="sm:mt-0")
 
-  //-AlertModal(mode="error" :showButton="false" :isOpen="true")
-  //-div
-    p: a(@click="openAlert") Open Alert
-
-    p: input(type="text" v-model="alertTitle")
-    p: input(type="text" v-model="alertMessage")
-    p: select(v-model="alertMode")
-      option error
-      option success
   div(class="md:grid md:grid-cols-3 md:gap-6")
       div(class="md:col-span-1")
         .px-4(class="sm:px-0")
@@ -30,10 +21,7 @@
                         .flex.flex-col
                           .flex
                             button.mr-2.text-indigo-600.flex.items-center.border-b.border-dashed(class="hover:text-indigo-700 hover:border-indigo-400" type="button" @click="onEmailEdit($event, item)")  {{ item.email }}
-                              //-svg.w-4.h-4(fill="none" viewBox="0 0 24 24" stroke="currentColor" )
-                                //-path(stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z")
 
-                                path(stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z")
                             span.ml-4.align-center.bg-indigo-50.rounded-full.text-xs.text-indigo-600.px-2.uppercase.tracking.flex.items-center.text-xs.font-semibold(v-if="item.default") Primary
 
 
@@ -51,12 +39,8 @@
 
 
                       .flex.items-center
-                        //-button.text-gray-700.bg-gray-50.p-2.rounded-full(type="button" @click="onEmailEdit($event, item)" class="hover:text-red-700 hover:bg-red-50" title="Edit email details.")
-                          svg.w-4.h-4(fill="none" viewBox="0 0 24 24" stroke="currentColor")
-                            path(stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z")
 
                         template(v-if="canDelete || item.email_status[0] === 'u'")
-                            
 
                           button.ml-4.text-gray-700.bg-gray-50.p-2.rounded-full(type="button" @click="onEmailDelete($event, item.email)" class="hover:text-red-700 hover:bg-red-50" title="Remove email address.")
                             svg.w-4.h-4(fill="none" viewBox="0 0 24 24" stroke="currentColor" )
@@ -136,7 +120,7 @@
                   label.block(class="md:w-2/3")
                     input.form-checkbox.leading-tight.text-indigo-600.w-5.h-5(type="checkbox" v-model="currentEmail.isPrimary")
                     span.ml-2 Primary email address
-            //-pre {{ currentEmail }}
+
             .mt-5(class="sm:mt-6")
               span.flex.w-full.rounded-md.shadow-sm
                 button.inline-flex.justify-center.w-full.rounded-md.border.border-transparent.px-4.py-2.bg-indigo-600.text-base.leading-6.font-medium.text-white.shadow-sm.transition.ease-in-out.duration-150(
