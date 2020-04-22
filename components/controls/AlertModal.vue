@@ -26,9 +26,9 @@ BaseModal(ref="base" v-model="isOpenProxy" v-slot="{ onHandler }" :onClose="loca
           .mt-5(class="sm:mt-6")
             span.flex.w-full.rounded-md.shadow-sm
               button.inline-flex.justify-center.w-full.rounded-md.border.border-transparent.px-4.py-2.text-base.leading-6.font-medium.text-white.shadow-sm.transition.ease-in-out.duration-150(
-                @click="onHandler(local.onClose)" 
-                type="button" 
-                class="hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo sm:text-sm sm:leading-5" 
+                @click="onHandler(local.onClose)"
+                type="button"
+                class="hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo sm:text-sm sm:leading-5"
                 :class="[ local.mode  === 'success'? 'bg-indigo-600' : 'bg-red-700']") {{local.buttonText}}
         //- pre {{ $data }}
 </template>
@@ -94,7 +94,7 @@ export default {
       this.$emit('close')
     },
     success(context) {
-      this.show({ mode: 'success', title: 'Success', ...context, errors: [] })
+      return this.show({ mode: 'success', title: 'Success', ...context, errors: [] })
     },
     error(context) {
       let { errors } = context
@@ -110,17 +110,20 @@ export default {
           errors = [errors]
         }
       }
-      this.show({ mode: 'error', title: 'Error', ...context, errors })
+      return this.show({ mode: 'error', title: 'Error', ...context, errors })
     },
     show(context) {
-      const onClose = () => {
-        console.log('Close')
-        this.reset(this)
-        console.log(context.onClose)
-        if (context.onClose) context.onClose()
-      }
-      this.reset({ ...this.local, ...context, onClose })
-      this.isOpenProxy = true
+      return new Promise((resolve) => {
+        const onClose = () => {
+          this.reset(this)
+          setTimeout(() => {
+            if (context.onClose) context.onClose()
+            resolve()
+          }, 100)
+        }
+        this.reset({ ...this.local, ...context, onClose })
+        this.isOpenProxy = true
+      })
     },
     reset({ mode, title, text, buttonText, onClose, showButton, errors, showCloseIcon }) {
       this.local.title = title
