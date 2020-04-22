@@ -65,7 +65,7 @@ export default {
     save() {
       const selectedTeam = this.$store.state.selectedTeam
       if (!this.selectedRole) {
-        alert('Please select a team role!')
+        this.alert.error({ title: 'Please select a team role!', showButton: true })
         return
       }
       if (selectedTeam) {
@@ -85,13 +85,14 @@ export default {
           .then((response) => {
             this.alert.success({
               title: 'The invitation was sent!',
-              onClose: this.closeAlert
+              onClose: this.closeAlert,
+              showButton: true
             })
             this.email = null
             this.message = null
           })
           .catch((e) => {
-            this.alert.error(e.message || 'An error has occured, please try again later.')
+            this.alert.error({ title: e.message || 'An error has occured, please try again later.', showButton: true })
           })
       }
     },
