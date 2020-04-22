@@ -61,15 +61,21 @@ export default {
                 this.alert.success({
                   title: 'Success',
                   text: 'The team was added successfully!',
+                  showButton: true,
                   onClose: this.cancel
                 })
               })
           } else {
-            this.alert.success({ title: 'Success', text: 'The team was added successfully!', onClose: this.closeAlert })
+            this.alert.success({
+              title: 'Success',
+              text: 'The team was added successfully!',
+              showButton: true,
+              onClose: this.closeAlert
+            })
           }
         })
         .catch((e) => {
-          this.alert.error(e.message || 'An error has occured, please try again later.')
+          this.alert.error({ title: e.message || 'An error has occured, please try again later.', showButton: true })
         })
     },
     cancel() {

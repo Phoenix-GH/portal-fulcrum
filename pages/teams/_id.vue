@@ -38,7 +38,7 @@
                           | {{user['p.companyname']}}
                         td.px-6.py-4.whitespace-no-wrap.border-b.border-gray-200.text-sm.leading-5.text-gray-500
                           | {{user.team_role}}
-                        td.px-6.py-4.whitespace-no-wrap.text-right.border-b.border-gray-200.text-sm.leading-5.font-medium
+                        td.px-6.py-4.whitespace-no-wrap.text-right.border-b.border-gray-200.text-sm.leading-5.font-medium(v-if="roles.find(item => item.id === user.team_role).value >= currentUserRoleValue")
                           a.text-indigo-600(v-on:click='showEditMemberModal(user)' href='#' class='hover:text-indigo-900 focus:outline-none focus:underline') Edit
                           span &nbsp;|&nbsp;
                           a.text-red-600.leading-4(v-on:click='showDeleteMemberModal(user)' class='hover:text-indigo-900 focus:outline-none focus:underline') Delete
@@ -75,7 +75,7 @@
                           a.text-red-600.leading-4(v-on:click='showDeleteInvitationModal(invitation)' class='hover:text-indigo-900 focus:outline-none focus:underline') Delete
   .fixed.bottom-0.inset-x-0.px-4.pb-4(v-if="editMemberModalOpen" x-show="open" class="sm:inset-0 sm:flex sm:items-center sm:justify-center")
     .fixed.inset-0.transition-opacity(x-show="open" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"): .absolute.inset-0.bg-gray-500.opacity-75
-    .relative.bg-white.rounded-lg.px-4.pt-5.pb-4.overflow-hidden.shadow-xl.transform.transition-all(x-show="open" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100" x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" class="sm:max-w-lg sm:w-full sm:p-6")
+    .relative.bg-white.rounded-lg.px-4.pt-5.pb-4.overflow-visible.shadow-xl.transform.transition-all(x-show="open" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100" x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" class="sm:max-w-lg sm:w-full sm:p-6")
       .bg-white.border-gray-200
         div
           h3.text-lg.leading-6.font-medium.text-gray-900 Edit Member Role
@@ -130,18 +130,27 @@ export default {
       selectedMember: null,
       selectedInvitation: null,
       dropdownOpen: false,
+      currentUserRoleValue: 0,
       roles: [
         {
           id: 'owner',
-          label: 'Owner'
+          label: 'Owner',
+          value: 0
         },
         {
           id: 'admin',
-          label: 'Admin'
+          label: 'Admin',
+          value: 1
         },
         {
           id: 'lead',
-          label: 'Lead'
+          label: 'Lead',
+          value: 2
+        },
+        {
+          id: 'member',
+          label: 'Member',
+          value: 3
         }
       ],
       selectedRole: null
@@ -166,6 +175,9 @@ export default {
           const { data } = res
           this.team = data.response.team
           this.users = data.response.users
+          const currentUserRole = data.response.users.find((item) => item.user_id === this.$store.state.user.user_id)
+            .team_role
+          this.currentUserRoleValue = this.roles.find((item) => item.id === currentUserRole).value
           this.invitations = data.response.invitations
         })
         .catch((err) => {
@@ -204,7 +216,7 @@ export default {
         }
       })
         .catch((e) => {
-          alert(e.message || 'An error has occured, please try again later.')
+          this.alert.error({ title: e.message || 'An error has occured, please try again later.', showButton: true })
         })
         .finally((f) => {
           this.loadData()
@@ -229,7 +241,7 @@ export default {
         }
       })
         .catch((e) => {
-          alert(e.message || 'An error has occured, please try again later.')
+          this.alert.error({ title: e.message || 'An error has occured, please try again later.', showButton: true })
         })
         .finally((f) => {
           this.loadData()
@@ -251,7 +263,7 @@ export default {
         }
       })
         .catch((e) => {
-          alert(e.message || 'An error has occured, please try again later.')
+          this.alert.error({ title: e.message || 'An error has occured, please try again later.', showButton: true })
         })
         .finally((f) => {
           this.loadData()
