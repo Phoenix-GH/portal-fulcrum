@@ -41,7 +41,7 @@
                         td.px-6.py-4.whitespace-no-wrap.text-right.border-b.border-gray-200.text-sm.leading-5.font-medium(v-if="roles.find(item => item.id === user.team_role).value >= currentUserRoleValue")
                           a.text-indigo-600(v-on:click='showEditMemberModal(user)' href='#' class='hover:text-indigo-900 focus:outline-none focus:underline') Edit
                           span &nbsp;|&nbsp;
-                          a.text-red-600.leading-4(v-on:click='showDeleteMemberModal(user)' class='hover:text-indigo-900 focus:outline-none focus:underline') Delete
+                          a.text-red-600.leading-4(v-on:click='deleteMember(user)' class='hover:text-indigo-900 focus:outline-none focus:underline') Delete
             .mt-6(class="sm:mt-5 sm:grid sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5")
               label.block.text-sm.font-medium.leading-5.text-gray-700(for="about" class="sm:mt-px sm:pt-2") Invitations
               .ml-4.mt-2.flex-shrink-0.text-right: span.inline-flex.rounded-md.shadow-sm: button.relative.inline-flex.items-center.px-4.py-2.border.border-transparent.text-sm.leading-5.font-medium.rounded-md.text-white.bg-indigo-600(type="button" class="hover:bg-indigo-500 focus:outline-none focus:shadow-outline-indigo focus:border-indigo-700 active:bg-indigo-700" v-on:click='createInvitation()') Create Invitation
@@ -72,7 +72,7 @@
                         td.px-6.py-4.whitespace-no-wrap.text-right.border-b.border-gray-200.text-sm.leading-5.font-medium
                           a.text-indigo-600(v-on:click='showEditInvitationModal(invitation)' href='#' class='hover:text-indigo-900 focus:outline-none focus:underline') Edit
                           span &nbsp;|&nbsp;
-                          a.text-red-600.leading-4(v-on:click='showDeleteInvitationModal(invitation)' class='hover:text-indigo-900 focus:outline-none focus:underline') Delete
+                          a.text-red-600.leading-4(v-on:click='deleteInvitation(invitation)' class='hover:text-indigo-900 focus:outline-none focus:underline') Delete
   .fixed.bottom-0.inset-x-0.px-4.pb-4(v-if="editMemberModalOpen" x-show="open" class="sm:inset-0 sm:flex sm:items-center sm:justify-center")
     .fixed.inset-0.transition-opacity(x-show="open" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"): .absolute.inset-0.bg-gray-500.opacity-75
     .relative.bg-white.rounded-lg.px-4.pt-5.pb-4.overflow-visible.shadow-xl.transform.transition-all(x-show="open" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100" x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" class="sm:max-w-lg sm:w-full sm:p-6")
@@ -98,7 +98,6 @@
             span.inline-flex.rounded-md.shadow-sm: button.py-2.px-4.border.border-gray-300.rounded-md.text-sm.leading-5.font-medium.text-gray-700.transition.duration-150.ease-in-out(type="button" class="hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-50 active:text-gray-800" v-on:click='editMemberModalOpen=false;') Cancel
             span.ml-3.inline-flex.rounded-md.shadow-sm: button.inline-flex.justify-center.py-2.px-4.border.border-transparent.text-sm.leading-5.font-medium.rounded-md.text-white.bg-indigo-600.transition.duration-150.ease-in-out(type="submit" class="hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700" v-on:click='saveMember()') Save
 
-  DeleteModal(:isOpen="deleteInvitationModalOpen" :onOK="deleteInvitation" :onCancel="closeDeleteMemberModal")
   portal(to="navigation-title")
     nuxt-link.text-lg.leading-6.font-semibold.text-gray-900.text-indigo-600(to="/teams") Teams
     span.mx-3.text-gray-300 \\
@@ -106,7 +105,6 @@
 </template>
 
 <script>
-import DeleteModal from '@/components/controls/DeleteModal'
 export default {
   layout: 'default',
   name: 'Team',
@@ -115,17 +113,13 @@ export default {
     // if id is not a number... then redirect back to teams page
     if (/^\d+$/.test(params.id) === false) return redirect('/teams')
   },
-  components: {
-    DeleteModal
-  },
+
   data() {
     return {
       team: null,
       users: [],
       invitations: [],
-      deleteMemberModalOpen: false,
       editMemberModalOpen: false,
-      deleteInvitationModalOpen: false,
       editInvitationModalOpen: false,
       selectedMember: null,
       selectedInvitation: null,
@@ -189,30 +183,24 @@ export default {
       this.selectedMember = member
       this.selectedRole = this.roles.find((item) => item.id === member.team_role)
     },
-    showDeleteMemberModal(member) {
-      this.deleteMemberModalOpen = true
-      this.selectedMember = member
-    },
     showEditInvitationModal(invitation) {
       this.selectedInvitation = invitation
-      this.showEditInvitationModal = true
-    },
-    showDeleteInvitationModal(invitation) {
-      this.selectedInvitation = invitation
-      this.deleteInvitationModalOpen = true
+      this.invitationModalOpen = true
     },
     changeTeam() {
       this.$router.push('/teams/')
     },
-    deleteMember() {
-      this.$axios({
+    async deleteMember(user) {
+      const cont = await this.alert.confirm()
+      if (!cont) return
+      await this.$axios({
         method: 'post',
         url: '/team/member-delete',
         data: {
           auth_id: this.$state.sessionKey.auth_id,
           team_id: this.$store.state.selectedTeam,
-          user_id: this.selectedMember.user_id,
-          current_member_team_role: this.selectedMember.team_role
+          user_id: user.user_id,
+          current_member_team_role: user.team_role
         }
       })
         .catch((e) => {
@@ -220,13 +208,7 @@ export default {
         })
         .finally((f) => {
           this.loadData()
-          this.selectedMember = null
-          this.deleteMemberModalOpen = false
         })
-    },
-    closeDeleteMemberModal() {
-      this.deleteMemberModalOpen = false
-      this.selectedMember = null
     },
     saveMember() {
       this.$axios({
@@ -252,14 +234,16 @@ export default {
       this.selectedRole = role
       this.dropdownOpen = false
     },
-    deleteInvitation() {
+    async deleteInvitation(invitation) {
+      const cont = await this.alert.confirm()
+      if (!cont) return
       this.$axios({
         method: 'post',
         url: '/team/invite-delete',
         data: {
           auth_id: this.$state.sessionKey.auth_id,
-          invitation_code: this.selectedInvitation.invitation_code,
-          team_role: this.selectedInvitation.team_role
+          invitation_code: invitation.invitation_code,
+          team_role: invitation.team_role
         }
       })
         .catch((e) => {
@@ -267,12 +251,7 @@ export default {
         })
         .finally((f) => {
           this.loadData()
-          this.selectedInvitation = null
-          this.deleteInvitationModalOpen = false
         })
-    },
-    closeDeleteInvitationModal() {
-      this.deleteInvitationModalOpen = false
     },
     createInvitation() {
       this.$router.push('/teams/create-invitation/')
