@@ -1,4 +1,7 @@
 import { COOKIE_NAME } from '../utils'
+
+let last = new Date().valueOf()
+
 export const state = () => ({
   authenticated: false,
   session: null,
@@ -16,15 +19,15 @@ export const state = () => ({
 
 export const mutations = {
   ADD_SESSION(state, session) {
-    // console.log('M::ADD_SESSION', session)
+    console.log('M::ADD_SESSION', session)
     state.session = session
     if (session['p.current_team']) this.state.selectedTeam = session['p.current_team']
-    this.$cookies.set(COOKIE_NAME, session.auth_id)
-    state.last = +new Date()
+    this.$cookies.set(COOKIE_NAME, { ...session, n: +new Date() })
+    this.SET_LAST() // state.last = Date.now().valueOf()
   },
   ADD_INVITE_KEY(state, code) {
     state.invite = code
-    console.log('M::ADD_INVITE_KEY', code, state)
+    // console.log('M::ADD_INVITE_KEY', code, state)
   },
   // ADD_SESSION_ERROR(state, error) {
   //   console.log('M::ADD_SESSION_ERROR', error)
@@ -35,14 +38,15 @@ export const mutations = {
     // localStorage.setItem('SELECTED_TEAM', source.selectedTeam)
   },
   SET_STATE(state, source) {
-    // console.log('M::SET_STATE', source)
+    console.log('M::SET_STATE', source)
     state.user = source.user
     state.teams = source.teams
     // state.selectedTeam = source.selectedTeam
     state.invites = source.invites
     state.emails = source.user_emails
     state.authenticated = true
-    state.last = +new Date()
+    // state.last = Date.now().valueOf()
+    this.SET_LAST()
   },
   CLEAR_STATE(state) {
     // console.log('M::CLEAR_STATE', source)
@@ -55,21 +59,35 @@ export const mutations = {
   },
   SET_META(state, meta) {
     state.meta = meta
+  },
+  SET_LAST(state) {
+    console.log('M::SET_LAST', last)
+    last = new Date().valueOf()
   }
 }
 
 export const actions = {
   async GENERATE_SESSION({ state, commit }) {
-    console.log('A::GENERATE_SESSION', state.session)
-    const {
-      data: { response }
-    } = await this.$axios.post('/auth/get', {}, { headers: { 'x-source': 'GENERATE_SESSION' } })
-
-    commit('ADD_SESSION', response.auth)
-  },
-  async REFRESH_SESSION({ state, commit }, auth_id) {
     try {
-      console.log('A::REFRESH_SESSION', auth_id, state.session)
+      console.log('A::GENERATE_SESSION', {
+        session: state.session,
+        updated: state.session && state.session.updated,
+        last,
+        diff: Date.now().valueOf() - last
+      })
+      const {
+        data: { response }
+      } = await this.$axios.post('/auth/get', {}, { headers: { 'x-source': 'GENERATE_SESSION' } })
+
+      commit('ADD_SESSION', response)
+    } catch (err) {
+      commit('SET_LAST')
+      if (err.response) console.error(err.response.status, err.response.data)
+    }
+  },
+  async REFRESH_SESSION({ state, commit }, cookie) {
+    /* try {
+      console.log('A::REFRESH_SESSION', { auth_id, session: state.session, updated: state.session && state.session.updated, last, diff:Date.now().valueOf() -  last })
       const {
         data: { response }
       } = await this.$axios.post('/auth/get', { auth_id }, { headers: { 'x-source': 'REFRESH_SESSION' } })
@@ -81,8 +99,9 @@ export const actions = {
         commit('SET_STATE', response)
       }
     } catch (err) {
+      commit('SET_LAST')
       if (err.response) console.error(err.response.status, err.response.data)
-    }
+    } */
   },
   async LOAD_STATE({ state, commit }) {
     // console.log('A::LOAD_STATE', this.$state)
