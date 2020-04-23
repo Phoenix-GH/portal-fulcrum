@@ -12,9 +12,14 @@ export default async ({ store, redirect, route, app }) => {
 
   if (store.state.user && !Array.isArray(store.state.user)) {
     if (route.name === 'login') return redirect('/')
+    // if this is an invitation and the user is authenticated go to profile page
+    if (route.path === '/invite') return redirect('/profile')
     return // continue to page we are trying to load
   }
 
+  if (route.path === '/invite') {
+    redirect(302, '/login', { type: 'invite', code: route.query.code })
+  }
   // If we are on the login page do nothing
   if (route.name === 'login') return
 

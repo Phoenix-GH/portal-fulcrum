@@ -23,7 +23,7 @@ export default {
   },
   watch: {
     $route(to, from) {
-      console.log('Route change')
+      if (this.isOpen) this.close()
     }
   },
   methods: {
@@ -33,7 +33,6 @@ export default {
       }
     },
     handler(func) {
-      console.log('BASE onClose', typeof func)
       if (typeof func === 'function') func()
       else this.close()
     },

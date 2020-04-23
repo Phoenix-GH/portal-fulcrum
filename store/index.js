@@ -9,7 +9,9 @@ export const state = () => ({
   teams: [],
   invites: [],
   emails: [],
-  meta: null
+  meta: null,
+  invite: null,
+  last: null
 })
 
 export const mutations = {
@@ -18,6 +20,11 @@ export const mutations = {
     state.session = session
     if (session['p.current_team']) this.state.selectedTeam = session['p.current_team']
     this.$cookies.set(COOKIE_NAME, session.auth_id)
+    state.last = +new Date()
+  },
+  ADD_INVITE_KEY(state, code) {
+    state.invite = code
+    console.log('M::ADD_INVITE_KEY', code, state)
   },
   // ADD_SESSION_ERROR(state, error) {
   //   console.log('M::ADD_SESSION_ERROR', error)
@@ -35,6 +42,7 @@ export const mutations = {
     state.invites = source.invites
     state.emails = source.user_emails
     state.authenticated = true
+    state.last = +new Date()
   },
   CLEAR_STATE(state) {
     // console.log('M::CLEAR_STATE', source)
@@ -52,7 +60,7 @@ export const mutations = {
 
 export const actions = {
   async GENERATE_SESSION({ state, commit }) {
-    // console.log('A::GENERATE_SESSION')
+    console.log('A::GENERATE_SESSION', state.session)
     const {
       data: { response }
     } = await this.$axios.post('/auth/get', {}, { headers: { 'x-source': 'GENERATE_SESSION' } })
@@ -61,7 +69,7 @@ export const actions = {
   },
   async REFRESH_SESSION({ state, commit }, auth_id) {
     try {
-      // console.log('A::REFRESH_SESSION', auth_id)
+      console.log('A::REFRESH_SESSION', auth_id, state.session)
       const {
         data: { response }
       } = await this.$axios.post('/auth/get', { auth_id }, { headers: { 'x-source': 'REFRESH_SESSION' } })

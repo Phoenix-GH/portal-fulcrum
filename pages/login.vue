@@ -47,6 +47,11 @@ export default {
       password: process.env.DEFAULT_PASSWORD
     }
   },
+  mounted() {
+    if (this.$route.query.code) {
+      this.$store.commit('ADD_INVITE_KEY', this.$route.query.code)
+    }
+  },
   methods: {
     async login() {
       const { username: email, password } = this
@@ -58,6 +63,10 @@ export default {
 
       if (!this.hasErrors) {
         await this.$store.dispatch('LOAD_STATE')
+        const url = this.$route.query.p
+        if (url) {
+          this.$router.push(decodeURIComponent(url))
+        }
         this.$router.push(`/`)
       }
     },

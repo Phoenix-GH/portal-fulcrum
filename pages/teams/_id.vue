@@ -61,7 +61,7 @@
                         th.px-6.py-3.border-b.border-gray-200.bg-gray-50
                     tbody.bg-white(v-for="invitation in invitations" v-bind:key="invitation.invitation_code")
                       tr
-                        td.px-6.py-4.whitespace-no-wrap.border-b.border-gray-200.text-sm.leading-5.text-gray-500
+                        td.px-6.py-4.border-b.border-gray-200.text-sm.leading-5.text-gray-500
                           | {{invitation.message}}
                         td.px-6.py-4.whitespace-no-wrap.border-b.border-gray-200.text-sm.leading-5.text-gray-500
                           | {{invitation.invitation_status}}
