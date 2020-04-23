@@ -1,0 +1,35 @@
+{
+  "activities": ["teamDelete", "editTeamInfo", "teamInfoView", "teamViewIssues", "teamConversationManage"],
+  "roles": {
+    "owner": {
+      "description": "default role for user which creates team. any permission check returns true",
+      "manageRoles": [],
+      "activities": {}
+    },
+    "admin": {
+      "description": "can perform all functions except manageRoles.owner activites.teamDelete",
+      "manageRoles": ["admin", "lead", "member"],
+      "activities": {
+        "editTeamInfo": true,
+        "teamInfoView": true,
+        "teamViewIssues": true,
+        "teamConversationManage": true
+      }
+    },
+    "lead": {
+      "description": "used to manage team members.",
+      "manageRoles": ["lead", "member"],
+      "activities": {
+        "teamInfoView": true,
+        "teamViewIssues": true,
+        "teamConversationManage": true
+      }
+    },
+    "member": {
+      "manageRoles": [],
+      "activities": {
+        "teamViewIssues": true
+      }
+    }
+  }
+}
