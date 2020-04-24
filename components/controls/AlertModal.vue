@@ -112,7 +112,7 @@ export default {
           errors = [errors]
         }
       }
-      return this.show({ mode: 'error', title: 'Error', ...context, errors })
+      return this.show({ mode: 'error', title: title || 'Error', ...context, errors })
     },
     show(context) {
       return new Promise((resolve) => {

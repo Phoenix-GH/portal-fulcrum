@@ -3,6 +3,8 @@ export const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 export const COOKIE_NAME = 'auth.session'
 
 export const toDate = (date) => {
+  if (date === undefined) return null
+
   const strDate = date.toString()
 
   const dateObject = new Date()

@@ -33,7 +33,6 @@
 <script>
 import PasswordField from '../components/controls/PasswordField'
 import ErrorHandlerMixin from '../utils/mixins/ErrorHandler'
-import { COOKIE_NAME } from '../utils'
 
 export default {
   layout: 'account',

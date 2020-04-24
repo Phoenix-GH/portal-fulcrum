@@ -108,12 +108,8 @@ export default {
       return this.$store.state.user
     }
   },
-  mounted() {
-    console.log('!', this)
-  },
   methods: {
     async onResetPassword() {
-      console.log('onResetPassword')
       try {
         await this.$axios.post('/password/reset-request', {
           email: this.primaryEmail
@@ -124,9 +120,8 @@ export default {
       }
     },
     async onSavePersonal() {
-      console.log('onSavePersonal')
       try {
-        const { data } = await this.$axios.post('/user/edit', {
+        await this.$axios.post('/user/edit', {
           custom_user_params: {
             'p.firstname': this.firstname,
             'p.lastname': this.lastname,

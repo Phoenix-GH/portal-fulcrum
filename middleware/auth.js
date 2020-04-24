@@ -2,7 +2,7 @@ import { COOKIE_NAME } from '../utils'
 export default async ({ store, redirect, route, app }) => {
   // Check cookie to see if the user has already logged in
   const cookie = app.$cookies.get(COOKIE_NAME)
-  console.log('AUTH M', cookie)
+  // console.log('AUTH M', route.path)
   // If the user is not authenticated
   if (cookie === undefined) {
     await store.dispatch('GENERATE_SESSION')
@@ -11,17 +11,18 @@ export default async ({ store, redirect, route, app }) => {
   }
 
   if (store.state.user && !Array.isArray(store.state.user)) {
-    if (route.name === 'login') return redirect('/')
+    // console.log(' -- authenticated')
+    if (route.path === '/login') return redirect('/')
     // if this is an invitation and the user is authenticated go to profile page
     if (route.path === '/invite' || route.path === '/team/invite-accept') return redirect('/profile')
     return // continue to page we are trying to load
   }
 
   if (route.path === '/invite' || route.path === '/team/invite-accept') {
-    redirect(302, '/login', { type: 'invite', code: route.query.code })
+    return redirect('/login', { type: 'invite', code: route.query.code })
   }
   // If we are on the login page do nothing
-  if (route.name === 'login') return
+  if (route.path === '/login') return
 
   // If the page is public allow passage
   // TODO redo this logic with reduce

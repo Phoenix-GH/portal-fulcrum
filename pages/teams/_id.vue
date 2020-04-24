@@ -245,7 +245,7 @@ export default {
           this.currentUserRoleValue = this.roles.find((item) => item.id === currentUserRole).value
           this.invitations = data.response.invitations
 
-          console.error(err)
+          this.alert.error(err)
         })
     },
     showEditMemberModal(member) {
