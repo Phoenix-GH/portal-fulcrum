@@ -60,9 +60,9 @@ export const mutations = {
 }
 
 export const actions = {
-  async GENERATE_SESSION({ state, commit }, ipAddress) {
+  async GENERATE_SESSION({ state, commit }, { ipAddress }) {
     try {
-      // console.log('  A::GENERATE_SESSION')
+      console.log('  A::GENERATE_SESSION')
       const headers = { 'X-Source': 'GENERATE_SESSION' }
       if (ipAddress) headers['X-Forwarded'] = ipAddress
 
@@ -76,15 +76,15 @@ export const actions = {
       if (err.response) console.error(err.response.status, err.response.data)
     }
   },
-  async REFRESH_SESSION({ state, commit }, ipAddress, cookie) {
+  async REFRESH_SESSION({ state, commit }, { ipAddress, cookie }) {
+    console.log('  A::REFRESH_SESSION', { cookie, ipAddress })
     const dt = +Date.now()
     const { auth_id, n } = cookie
     // if the last call was less than 1 sec this was probably part of the redirect no need to call again
     const diff = dt - n
 
     try {
-      // console.log('  A::REFRESH_SESSION', { cookie, diff })
-
+      console.log('     -- diff ', diff)
       if (diff > 1000) {
         const headers = { 'X-Source': 'REFRESH_SESSION' }
         if (ipAddress) headers['X-Forwarded'] = ipAddress

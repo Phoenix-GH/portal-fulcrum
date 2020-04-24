@@ -7,15 +7,15 @@ export default async (context) => {
     const { req } = context
     ipAddress = getClientIp(req)
   }
-  // console.log('AUTH M', route.path)
   // Check cookie to see if the user has already logged in
   const cookie = app.$cookies.get(COOKIE_NAME)
 
+  console.log('AUTH M', route.path, { ipAddress, cookie })
   // If the user is not authenticated
   if (cookie === undefined) {
-    await store.dispatch('GENERATE_SESSION', ipAddress)
+    await store.dispatch('GENERATE_SESSION', { ipAddress })
   } else {
-    await store.dispatch('REFRESH_SESSION', ipAddress, cookie)
+    await store.dispatch('REFRESH_SESSION', { ipAddress, cookie })
   }
 
   if (store.state.user && !Array.isArray(store.state.user)) {
