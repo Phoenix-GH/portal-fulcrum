@@ -1,6 +1,6 @@
 export const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
-export const COOKIE_NAME = 'auth.session'
+export const COOKIE_NAME = 'auth.session.20200424'
 
 export const toDate = (date) => {
   if (date === undefined) return null
