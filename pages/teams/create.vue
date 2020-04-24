@@ -69,7 +69,7 @@ export default {
               title: 'Success',
               text: 'The team was added successfully!',
               showButton: true,
-              onClose: this.closeAlert
+              onClose: this.cancel
             })
           }
         })

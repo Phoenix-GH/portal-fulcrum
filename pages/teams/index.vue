@@ -80,7 +80,7 @@ export default {
       const {
         data: { response }
       } = await this.$axios.post('/auth/get', {
-        auth_id: this.$state.sessionKey.auth_id
+        auth_id: this.$store.state.session.auth_id
       })
       this.teams = response.teams
     },
