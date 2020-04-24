@@ -4,7 +4,7 @@ export default async (context) => {
   const { store, redirect, route, app } = context
   let ipAddress
   if (process.server) {
-    const { req, res, beforeNuxtRender } = context
+    const { req } = context
     ipAddress = getClientIp(req)
   }
   // console.log('AUTH M', route.path)
