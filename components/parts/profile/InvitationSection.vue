@@ -52,7 +52,9 @@ export default {
   inject: ['alert'],
   computed: {
     invites() {
-      return this.$store.state.invites.filter((x) => x.invitation_status === 'invitation')
+      return this.$store.state.invites === undefined
+        ? []
+        : this.$store.state.invites.filter((x) => x.invitation_status === 'invitation')
     }
   },
   methods: {

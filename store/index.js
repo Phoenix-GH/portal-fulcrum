@@ -17,15 +17,13 @@ export const state = () => ({
 
 export const mutations = {
   ADD_SESSION(state, session) {
-    // console.log('  M::ADD_SESSION', session)
+    console.log('  M::ADD_SESSION', session)
     state.session = session
     if (session['p.current_team']) this.state.selectedTeam = session['p.current_team']
-    this.$cookies.set(COOKIE_NAME, { ...session, n: +Date.now() })
-    this.SET_LAST() // state.last = Date.now().valueOf()
+    this.$cookies.set(COOKIE_NAME, session)
   },
   ADD_INVITE_KEY(state, code) {
     state.invite = code
-    // console.log('  M::ADD_INVITE_KEY', code, state)
   },
   // ADD_SESSION_ERROR(state, error) {
   //   console.log('  M::ADD_SESSION_ERROR', error)
@@ -33,20 +31,17 @@ export const mutations = {
   // },
   SELECT_TEAM(state, source) {
     state.selectedTeam = source.selectedTeam
-    // localStorage.setItem('SELECTED_TEAM', source.selectedTeam)
   },
   SET_STATE(state, source) {
-    // console.log('  M::SET_STATE', source)
+    console.log('  M::SET_STATE', source)
     state.user = source.user
     state.teams = source.teams
-    // state.selectedTeam = source.selectedTeam
     state.invites = source.invites
     state.emails = source.user_emails
     state.authenticated = true
-    // state.last = Date.now().valueOf()
   },
   CLEAR_STATE(state) {
-    // console.log('  M::CLEAR_STATE', source)
+    console.log('  M::CLEAR_STATE')
     state.selectedTeam = null
     state.user = null
     state.teams = []
@@ -78,26 +73,21 @@ export const actions = {
   },
   async REFRESH_SESSION({ state, commit }, { ipAddress, cookie }) {
     console.log('  A::REFRESH_SESSION', { cookie, ipAddress })
-    const dt = +Date.now()
-    const { auth_id, n } = cookie
-    // if the last call was less than 1 sec this was probably part of the redirect no need to call again
-    const diff = dt - n
+
+    const { auth_id } = cookie
 
     try {
-      console.log('     -- diff ', diff)
-      if (diff > 1000) {
-        const headers = { 'X-Source': 'REFRESH_SESSION' }
-        if (ipAddress) headers['X-Forwarded'] = ipAddress
+      const headers = { 'X-Source': 'REFRESH_SESSION' }
+      if (ipAddress) headers['X-Forwarded'] = ipAddress
 
-        const {
-          data: { response }
-        } = await this.$axios.post('/auth/get', { auth_id }, { headers })
+      const {
+        data: { response }
+      } = await this.$axios.post('/auth/get', { auth_id }, { headers })
 
-        commit('ADD_SESSION', response.auth)
+      commit('ADD_SESSION', response.auth)
 
-        if (response.auth.auth_id === auth_id) {
-          commit('SET_STATE', response)
-        }
+      if (response.auth.auth_id === auth_id) {
+        commit('SET_STATE', response)
       }
     } catch (err) {
       // eslint-disable-next-line no-console
