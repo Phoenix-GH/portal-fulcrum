@@ -60,16 +60,15 @@ export const mutations = {
 }
 
 export const actions = {
-  async GENERATE_SESSION({ state, commit }) {
+  async GENERATE_SESSION({ state, commit }, ipAddress) {
     try {
       // console.log('  A::GENERATE_SESSION')
+      const headers = { 'X-Source': 'GENERATE_SESSION' }
+      if (ipAddress) headers['X-Forwarded'] = ipAddress
+
       const {
         data: { response }
-      } = await this.$axios.post(
-        '/auth/get',
-        {},
-        { headers: { 'x-source': 'GENERATE_SESSION', 'x-diff': +new Date() } }
-      )
+      } = await this.$axios.post('/auth/get', {}, { headers })
 
       commit('ADD_SESSION', response.auth)
     } catch (err) {
@@ -77,7 +76,7 @@ export const actions = {
       if (err.response) console.error(err.response.status, err.response.data)
     }
   },
-  async REFRESH_SESSION({ state, commit }, cookie) {
+  async REFRESH_SESSION({ state, commit }, ipAddress, cookie) {
     const dt = +Date.now()
     const { auth_id, n } = cookie
     // if the last call was less than 1 sec this was probably part of the redirect no need to call again
@@ -87,13 +86,12 @@ export const actions = {
       // console.log('  A::REFRESH_SESSION', { cookie, diff })
 
       if (diff > 1000) {
+        const headers = { 'X-Source': 'REFRESH_SESSION' }
+        if (ipAddress) headers['X-Forwarded'] = ipAddress
+
         const {
           data: { response }
-        } = await this.$axios.post(
-          '/auth/get',
-          { auth_id },
-          { headers: { 'x-source': 'REFRESH_SESSION', 'x-diff': diff } }
-        )
+        } = await this.$axios.post('/auth/get', { auth_id }, { headers })
 
         commit('ADD_SESSION', response.auth)
 
@@ -114,7 +112,7 @@ export const actions = {
       {
         auth_id: state.session.auth_id
       },
-      { headers: { 'x-source': 'LOAD_STATE' } }
+      { headers: { 'X-Source': 'LOAD_STATE' } }
     )
     commit('SET_STATE', response)
   },
@@ -127,7 +125,7 @@ export const actions = {
           'p.current_team': selectedTeam
         }
       },
-      { headers: { 'x-source': 'SET_CURRENT_TEAM' } }
+      { headers: { 'X-Source': 'SET_CURRENT_TEAM' } }
     )
     // if (data.error_state === true) {
     //   console.log('error_state', data.error_state)
