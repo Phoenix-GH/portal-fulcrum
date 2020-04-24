@@ -208,7 +208,6 @@ export default {
         method: 'post',
         url: '/team/get-info',
         data: {
-          auth_id: this.$state.sessionKey.auth_id,
           team_id: parseInt(teamId)
         }
       })
@@ -247,7 +246,6 @@ export default {
         method: 'post',
         url: '/team/member-delete',
         data: {
-          auth_id: this.$state.sessionKey.auth_id,
           team_id: this.$store.state.selectedTeam,
           user_id: user.user_id,
           current_member_team_role: user.team_role
@@ -265,7 +263,6 @@ export default {
         method: 'post',
         url: '/team/member-edit',
         data: {
-          auth_id: this.$state.sessionKey.auth_id,
           team_id: this.$store.state.selectedTeam,
           user_id: this.selectedMember.user_id,
           current_member_team_role: this.selectedMember.team_role,
@@ -285,7 +282,6 @@ export default {
         method: 'post',
         url: '/team/invite-edit',
         data: {
-          auth_id: this.$state.sessionKey.auth_id,
           invitation_code: this.selectedInvitation.invitation_code,
           email: this.invitationEmail,
           current_invite_team_role: this.selectedInvitation.team_role,
@@ -318,7 +314,6 @@ export default {
         method: 'post',
         url: '/team/invite-delete',
         data: {
-          auth_id: this.$state.sessionKey.auth_id,
           invitation_code: invitation.invitation_code,
           team_role: invitation.team_role
         }

@@ -10,7 +10,7 @@ export default async (context) => {
   // console.log('AUTH M', route.path)
   // Check cookie to see if the user has already logged in
   const cookie = app.$cookies.get(COOKIE_NAME)
-  // console.log('AUTH M', route.path)
+
   // If the user is not authenticated
   if (cookie === undefined) {
     await store.dispatch('GENERATE_SESSION', ipAddress)

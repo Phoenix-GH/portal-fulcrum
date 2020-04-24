@@ -77,7 +77,6 @@ export default {
           method: 'post',
           url: '/team/invite-create',
           data: {
-            auth_id: this.$state.sessionKey.auth_id,
             email: this.email,
             team_role: this.selectedRole.id,
             team_id: selectedTeam,

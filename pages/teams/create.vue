@@ -44,7 +44,6 @@ export default {
         method: 'post',
         url: '/team/create',
         data: {
-          auth_id: this.$state.sessionKey.auth_id,
           team_name: this.team_name,
           custom_team_params: {
             description: this.description
