@@ -1,13 +1,20 @@
+import { getClientIp } from 'request-ip'
 import { COOKIE_NAME } from '../utils'
-export default async ({ store, redirect, route, app }) => {
+export default async (context) => {
+  const { store, redirect, route, app } = context
+  let ipAddress
+  if (process.server) {
+    const { req, res, beforeNuxtRender } = context
+    ipAddress = getClientIp(req)
+  }
   // console.log('AUTH M')
   // Check cookie to see if the user has already logged in
   const cookie = app.$cookies.get(COOKIE_NAME)
   // If the user is not authenticated
   if (cookie === undefined) {
-    await store.dispatch('GENERATE_SESSION')
+    await store.dispatch('GENERATE_SESSION', ipAddress)
   } else {
-    await store.dispatch('REFRESH_SESSION', cookie)
+    await store.dispatch('REFRESH_SESSION', ipAddress, cookie)
   }
 
   if (store.state.user && !Array.isArray(store.state.user)) {

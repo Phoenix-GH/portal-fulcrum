@@ -51,20 +51,24 @@ export const mutations = {
 }
 
 export const actions = {
-  async GENERATE_SESSION({ state, commit }) {
+  async GENERATE_SESSION({ state, commit }, ipAddress) {
     // console.log('A::GENERATE_SESSION')
+    const headers = { 'X-Source': 'GENERATE_SESSION' }
+    if (ipAddress) headers['X-Forwarded'] = ipAddress
     const {
       data: { response }
-    } = await this.$axios.post('/auth/get', {}, { headers: { 'x-source': 'GENERATE_SESSION' } })
+    } = await this.$axios.post('/auth/get', {}, { headers })
 
     commit('ADD_SESSION', response.auth)
   },
-  async REFRESH_SESSION({ state, commit }, auth_id) {
+  async REFRESH_SESSION({ state, commit }, ipAddress, auth_id) {
     try {
       // console.log('A::REFRESH_SESSION', auth_id)
+      const headers = { 'X-Source': 'REFRESH_SESSION' }
+      if (ipAddress) headers['X-Forwarded'] = ipAddress
       const {
         data: { response }
-      } = await this.$axios.post('/auth/get', { auth_id }, { headers: { 'x-source': 'REFRESH_SESSION' } })
+      } = await this.$axios.post('/auth/get', { auth_id }, { headers })
 
       commit('ADD_SESSION', response.auth)
 
@@ -73,6 +77,7 @@ export const actions = {
         commit('SET_STATE', response)
       }
     } catch (err) {
+      console.error(err)
       if (err.response) console.error(err.response.status, err.response.data)
     }
   },
@@ -86,7 +91,7 @@ export const actions = {
       {
         auth_id: state.session.auth_id
       },
-      { headers: { 'x-source': 'LOAD_STATE' } }
+      { headers: { 'X-Source': 'LOAD_STATE' } }
     )
 
     // if (data.error_state === true) {
@@ -109,7 +114,7 @@ export const actions = {
           'p.current_team': selectedTeam
         }
       },
-      { headers: { 'x-source': 'SET_CURRENT_TEAM' } }
+      { headers: { 'X-Source': 'SET_CURRENT_TEAM' } }
     )
     // if (data.error_state === true) {
     //   console.log('error_state', data.error_state)
