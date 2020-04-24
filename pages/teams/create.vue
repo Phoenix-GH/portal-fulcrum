@@ -39,7 +39,7 @@ export default {
   },
   methods: {
     save() {
-      const isFirstTeam = this.$store.state.teams.length === 0
+      const isFirstTeam = (this.$store.state.teams || []).length === 0
       this.$axios({
         method: 'post',
         url: '/team/create',
