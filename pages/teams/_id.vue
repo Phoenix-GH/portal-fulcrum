@@ -351,10 +351,13 @@ export default {
     },
     createInvitation() {
       this.$router.push('/teams/create-invitation/')
-    }
-  },
-  showEditInstanceModal() {},
-  deleteInstance() {}
+    },
+    createInstance() {
+      this.$router.push(`/teams/create-instance/`)
+    },
+    showEditInstanceModal() {},
+    deleteInstance() {}
+  }
 }
 </script>
 
