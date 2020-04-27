@@ -13,7 +13,7 @@
                 .mt-1.flex.rounded-md.shadow-sm: input#name.form-input.block.w-full.rounded-none.rounded-r-md.transition.duration-150.ease-in-out(v-model="name" class="sm:text-sm sm:leading-5")
               div(class="sm:col-span-4")
                 label.block.text-sm.font-medium.leading-5.text-gray-700(for="email") Time Zone Offset
-                .mt-1.flex.rounded-md.shadow-sm: input#name.form-input.block.w-full.rounded-none.rounded-r-md.transition.duration-150.ease-in-out(v-model="offset" class="sm:text-sm sm:leading-5")
+                .mt-1.flex.rounded-md.shadow-sm: input#name.form-input.block.w-full.rounded-none.rounded-r-md.transition.duration-150.ease-in-out(v-model="offset" class="sm:text-sm sm:leading-5" type="number")
               div(class="sm:col-span-6")
                 label.block.text-sm.font-medium.leading-5.text-gray-700(for="message") Description
                 .mt-1.rounded-md.shadow-sm: textarea#description.form-textarea.block.w-full.transition.duration-150.ease-in-out(rows="3" class="sm:text-sm sm:leading-5" v-model="description")
@@ -33,7 +33,7 @@ export default {
     return {
       name: null,
       offset: 0,
-      descripion: null
+      description: null
     }
   },
   methods: {
