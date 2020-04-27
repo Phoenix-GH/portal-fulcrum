@@ -7,10 +7,37 @@
           .ml-4.mt-2: h3.text-lg.leading-6.font-medium.text-gray-900 {{team && team.team_name}}
         div
           div
-            .mt-6(class="sm:mt-5")
-              div(class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5")
-                label.block.text-sm.font-medium.leading-5.text-gray-700(for="username" class="sm:mt-px sm:pt-2") Instances
-                .mt-1(class="sm:mt-0 sm:col-span-2")
+            .mt-6(class="sm:mt-12 sm:grid sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5")
+              label.block.text-sm.font-medium.leading-5.text-gray-700(for="username" class="sm:mt-px sm:pt-2") Instances
+              .ml-4.mt-2.flex-shrink-0.text-right: span.inline-flex.rounded-md.shadow-sm: button.relative.inline-flex.items-center.px-4.py-2.border.border-transparent.text-sm.leading-5.font-medium.rounded-md.text-white.bg-indigo-600(type="button" class="hover:bg-indigo-500 focus:outline-none focus:shadow-outline-indigo focus:border-indigo-700 active:bg-indigo-700" v-on:click='createInstance()') Create Instance
+              .mt-1(class="sm:mt-0 sm:col-span-2")
+                .align-middle.inline-block.min-w-full.shadow.overflow-hidden.border-b.border-gray-200(class="sm:rounded-lg")
+                  table.min-w-full
+                    thead
+                      tr
+                        th.px-6.py-3.border-b.border-gray-200.bg-gray-50.text-left.text-xs.leading-4.font-medium.text-gray-500.uppercase.tracking-wider
+                          | Name
+                        th.px-6.py-3.border-b.border-gray-200.bg-gray-50.text-left.text-xs.leading-4.font-medium.text-gray-500.uppercase.tracking-wider
+                          | Time Zone Offset
+                        th.px-6.py-3.border-b.border-gray-200.bg-gray-50.text-left.text-xs.leading-4.font-medium.text-gray-500.uppercase.tracking-wider
+                          | Instance Status
+                        th.px-6.py-3.border-b.border-gray-200.bg-gray-50.text-left.text-xs.leading-4.font-medium.text-gray-500.uppercase.tracking-wider
+                          | Description
+                        th.px-6.py-3.border-b.border-gray-200.bg-gray-50
+                    tbody.bg-white(v-for="instance in instances" v-bind:key="instance.instance_id")
+                      tr
+                        td.px-6.py-4.whitespace-no-wrap.border-b.border-gray-200.text-sm.leading-5.text-gray-500
+                          | {{instance.instance_name}}
+                        td.px-6.py-4.whitespace-no-wrap.border-b.border-gray-200.text-sm.leading-5.text-gray-500
+                          | {{instance.time_zone_offset}}
+                        td.px-6.py-4.whitespace-no-wrap.border-b.border-gray-200.text-sm.leading-5.text-gray-500
+                          | {{instance.instance_status}}
+                        td.px-6.py-4.whitespace-no-wrap.border-b.border-gray-200.text-sm.leading-5.text-gray-500
+                          | {{instance.description}}
+                        td.px-6.py-4.whitespace-no-wrap.text-right.border-b.border-gray-200.text-sm.leading-5.font-medium
+                          a.text-indigo-600(v-on:click='showEditInstanceModal(instance)' href='#' class='hover:text-indigo-900 focus:outline-none focus:underline') Edit
+                          span &nbsp;|&nbsp;
+                          a.text-red-600.leading-4(v-on:click='deleteInstance(instance)' class='hover:text-indigo-900 focus:outline-none focus:underline') Delete
             .mt-6(class="sm:mt-12 sm:grid sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5")
               .flex.h-10.items-center.justify-between
                 label.block.text-sm.font-medium.leading-5.text-gray-700(for="about" class="sm:mt-px sm:pt-2") Members
@@ -155,6 +182,7 @@ export default {
       team: null,
       users: [],
       invitations: [],
+      instances: [],
       editMemberModalOpen: false,
       editInvitationModalOpen: false,
       selectedMember: null,
@@ -215,6 +243,7 @@ export default {
           const { data } = res
           this.team = data.response.team
           this.users = data.response.users
+          this.instances = data.response.instances
           const currentUserRole = data.response.users.find((item) => item.user_id === this.$store.state.user.user_id)
             .team_role
           this.currentUserRoleValue = this.roles.find((item) => item.id === currentUserRole).value
@@ -328,7 +357,9 @@ export default {
     createInvitation() {
       this.$router.push('/teams/create-invitation/')
     }
-  }
+  },
+  showEditInstanceModal() {},
+  deleteInstance() {}
 }
 </script>
 
