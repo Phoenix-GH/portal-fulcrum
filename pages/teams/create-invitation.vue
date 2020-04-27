@@ -10,7 +10,7 @@
             .mt-6.grid.grid-cols-1.row-gap-6.col-gap-4(class="sm:grid-cols-6")
               div(class="sm:col-span-4")
                 label.block.text-sm.font-medium.leading-5.text-gray-700(for="email") Email
-                .mt-1.flex.rounded-md.shadow-sm: input#email.form-input.block.w-full.rounded-none.rounded-r-md.transition.duration-150.ease-in-out(v-model="email" class="sm:text-sm sm:leading-5")
+                .mt-1.flex.rounded-md.shadow-sm: input#email.form-input.block.w-full.rounded-md.transition.duration-150.ease-in-out(v-model="email" class="sm:text-sm sm:leading-5")
               div(class="sm:col-span-4")
                 label.block.text-sm.font-medium.leading-5.text-gray-700(for="role") Member Role
                 span#role.relative.z-0.inline-flex.shadow-sm
@@ -56,6 +56,10 @@ export default {
         {
           id: 'lead',
           label: 'Lead'
+        },
+        {
+          id: 'member',
+          label: 'Member'
         }
       ],
       dropdownOpen: false
@@ -73,7 +77,6 @@ export default {
           method: 'post',
           url: '/team/invite-create',
           data: {
-            auth_id: this.$state.sessionKey.auth_id,
             email: this.email,
             team_role: this.selectedRole.id,
             team_id: selectedTeam,

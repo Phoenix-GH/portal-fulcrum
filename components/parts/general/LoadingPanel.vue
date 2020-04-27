@@ -9,7 +9,7 @@
 export default {
   name: 'LoadingPanel',
   props: {
-    text: String
+    text: { type: String, default: null }
   }
 }
 </script>

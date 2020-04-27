@@ -177,12 +177,12 @@ export default {
       if (await this.alert.confirm('Are you sure you want to delete this email account.')) {
         try {
           e.target.blur()
-          const { data } = await this.$axios.post('/email/delete', { email })
+          await this.$axios.post('/email/delete', { email })
 
           this.$store.dispatch('LOAD_STATE')
           // this.modalOpen = false
         } catch (error) {
-          alert(error.message)
+          this.alert.error(error)
           // AlertModal.
         }
       }

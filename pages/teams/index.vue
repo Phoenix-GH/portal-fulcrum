@@ -80,7 +80,7 @@ export default {
       const {
         data: { response }
       } = await this.$axios.post('/auth/get', {
-        auth_id: this.$state.sessionKey.auth_id
+        auth_id: this.$store.state.session.auth_id
       })
       this.teams = response.teams
     },
@@ -105,7 +105,6 @@ export default {
           method: 'post',
           url: '/team/delete',
           data: {
-            auth_id: this.$state.sessionKey.auth_id,
             team_id: teamId
           }
         })
@@ -124,7 +123,6 @@ export default {
         method: 'post',
         url: '/team/edit',
         data: {
-          auth_id: this.$state.sessionKey.auth_id,
           team_id: this.selectedTeamId,
           custom_team_params: {
             team_name: this.team_name,

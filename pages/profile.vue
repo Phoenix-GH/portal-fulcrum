@@ -7,6 +7,8 @@ div
   EmailSection()
 
   .hidden(class="sm:block"): .py-5: .border-t.border-gray-200
+
+  InvitationSection()
   //-.mt-10(class="sm:mt-0")
     div(class="md:grid md:grid-cols-3 md:gap-6")
       div(class="md:col-span-1")
@@ -58,9 +60,10 @@ div
 <script>
 import GeneralSection from '@/components/parts/profile/GeneralSection'
 import EmailSection from '@/components/parts/profile/EmailSection'
+import InvitationSection from '@/components/parts/profile/InvitationSection'
 
 export default {
   name: 'ProfilePage',
-  components: { GeneralSection, EmailSection }
+  components: { GeneralSection, EmailSection, InvitationSection }
 }
 </script>

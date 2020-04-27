@@ -19,7 +19,9 @@
 export default {
   name: 'PasswordField',
   components: {},
-  props: { value: String },
+  props: {
+    value: { type: String, default: null }
+  },
   data() {
     return {
       hidden: true

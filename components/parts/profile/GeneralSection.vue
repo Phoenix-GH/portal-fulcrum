@@ -63,7 +63,7 @@ export default {
   computed: {
     password: {
       get() {
-        return this.localUser['p.password'] || this.user['p.password']
+        return this.localUser['p.password'] || (this.user && this.user['p.password'])
       },
       set(value) {
         this.$set(this.localUser, 'p.password', value)
@@ -71,7 +71,7 @@ export default {
     },
     firstname: {
       get() {
-        return this.localUser['p.firstname'] || this.user['p.firstname']
+        return this.localUser['p.firstname'] || (this.user && this.user['p.firstname'])
       },
       set(value) {
         this.$set(this.localUser, 'p.firstname', value)
@@ -79,7 +79,7 @@ export default {
     },
     lastname: {
       get() {
-        return this.localUser['p.lastname'] || this.user['p.lastname']
+        return this.localUser['p.lastname'] || (this.user && this.user['p.lastname'])
       },
       set(value) {
         this.$set(this.localUser, 'p.lastname', value)
@@ -87,7 +87,7 @@ export default {
     },
     companyname: {
       get() {
-        return this.localUser['p.companyname'] || this.user['p.companyname']
+        return this.localUser['p.companyname'] || (this.user && this.user['p.companyname'])
       },
       set(value) {
         this.$set(this.localUser, 'p.companyname', value)
@@ -95,7 +95,7 @@ export default {
     },
     postcode: {
       get() {
-        return this.localUser['p.postcode'] || this.user['p.postcode']
+        return this.localUser['p.postcode'] || (this.user && this.user['p.postcode'])
       },
       set(value) {
         this.$set(this.localUser, 'p.postcode', value)
@@ -108,12 +108,8 @@ export default {
       return this.$store.state.user
     }
   },
-  mounted() {
-    console.log('!', this)
-  },
   methods: {
     async onResetPassword() {
-      console.log('onResetPassword')
       try {
         await this.$axios.post('/password/reset-request', {
           email: this.primaryEmail
@@ -124,9 +120,8 @@ export default {
       }
     },
     async onSavePersonal() {
-      console.log('onSavePersonal')
       try {
-        const { data } = await this.$axios.post('/user/edit', {
+        await this.$axios.post('/user/edit', {
           custom_user_params: {
             'p.firstname': this.firstname,
             'p.lastname': this.lastname,

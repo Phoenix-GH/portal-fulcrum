@@ -1,4 +1,5 @@
 import { COOKIE_NAME } from '../utils'
+
 export const state = () => ({
   authenticated: false,
   session: null,
@@ -9,35 +10,38 @@ export const state = () => ({
   teams: [],
   invites: [],
   emails: [],
-  meta: null
+  meta: null,
+  invite: null,
+  last: null
 })
 
 export const mutations = {
   ADD_SESSION(state, session) {
-    // console.log('M::ADD_SESSION', session)
+    console.log('  M::ADD_SESSION', session)
     state.session = session
     if (session['p.current_team']) this.state.selectedTeam = session['p.current_team']
-    this.$cookies.set(COOKIE_NAME, session.auth_id)
+    this.$cookies.set(COOKIE_NAME, session)
+  },
+  ADD_INVITE_KEY(state, code) {
+    state.invite = code
   },
   // ADD_SESSION_ERROR(state, error) {
-  //   console.log('M::ADD_SESSION_ERROR', error)
+  //   console.log('  M::ADD_SESSION_ERROR', error)
   //   state.sessionKey = error
   // },
   SELECT_TEAM(state, source) {
     state.selectedTeam = source.selectedTeam
-    // localStorage.setItem('SELECTED_TEAM', source.selectedTeam)
   },
   SET_STATE(state, source) {
-    // console.log('M::SET_STATE', source)
+    console.log('  M::SET_STATE', source)
     state.user = source.user
     state.teams = source.teams
-    // state.selectedTeam = source.selectedTeam
     state.invites = source.invites
     state.emails = source.user_emails
     state.authenticated = true
   },
   CLEAR_STATE(state) {
-    // console.log('M::CLEAR_STATE', source)
+    console.log('  M::CLEAR_STATE')
     state.selectedTeam = null
     state.user = null
     state.teams = []
@@ -51,21 +55,31 @@ export const mutations = {
 }
 
 export const actions = {
-  async GENERATE_SESSION({ state, commit }, ipAddress) {
-    // console.log('A::GENERATE_SESSION')
-    const headers = { 'X-Source': 'GENERATE_SESSION' }
-    if (ipAddress) headers['X-Forwarded'] = ipAddress
-    const {
-      data: { response }
-    } = await this.$axios.post('/auth/get', {}, { headers })
-
-    commit('ADD_SESSION', response.auth)
-  },
-  async REFRESH_SESSION({ state, commit }, ipAddress, auth_id) {
+  async GENERATE_SESSION({ state, commit }, { ipAddress }) {
     try {
-      // console.log('A::REFRESH_SESSION', auth_id)
+      console.log('  A::GENERATE_SESSION')
+      const headers = { 'X-Source': 'GENERATE_SESSION' }
+      if (ipAddress) headers['X-Forwarded'] = ipAddress
+
+      const {
+        data: { response }
+      } = await this.$axios.post('/auth/get', {}, { headers })
+
+      commit('ADD_SESSION', response.auth)
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      if (err.response) console.error(err.response.status, err.response.data)
+    }
+  },
+  async REFRESH_SESSION({ state, commit }, { ipAddress, cookie }) {
+    console.log('  A::REFRESH_SESSION', { cookie, ipAddress })
+
+    const { auth_id } = cookie
+
+    try {
       const headers = { 'X-Source': 'REFRESH_SESSION' }
       if (ipAddress) headers['X-Forwarded'] = ipAddress
+
       const {
         data: { response }
       } = await this.$axios.post('/auth/get', { auth_id }, { headers })
@@ -73,17 +87,14 @@ export const actions = {
       commit('ADD_SESSION', response.auth)
 
       if (response.auth.auth_id === auth_id) {
-        // if (process.client) response.selectedTeam = parseInt(localStorage.getItem('SELECTED_TEAM'))
         commit('SET_STATE', response)
       }
     } catch (err) {
-      console.error(err)
+      // eslint-disable-next-line no-console
       if (err.response) console.error(err.response.status, err.response.data)
     }
   },
   async LOAD_STATE({ state, commit }) {
-    // console.log('A::LOAD_STATE', this.$state)
-
     const {
       data: { response }
     } = await this.$axios.post(
@@ -93,20 +104,10 @@ export const actions = {
       },
       { headers: { 'X-Source': 'LOAD_STATE' } }
     )
-
-    // if (data.error_state === true) {
-    //   console.log('error_state', data.error_state)
-    //   commit(' ADD_SESSION_ERROR', data.errors)
-    //   return
-    // }
-
-    // response.selectedTeam = parseInt(localStorage.getItem('SELECTED_TEAM'))
     commit('SET_STATE', response)
   },
   async SET_CURRENT_TEAM({ state, commit }, { selectedTeam }) {
-    const {
-      data: { response }
-    } = await this.$axios.post(
+    await this.$axios.post(
       '/auth/get',
       {
         auth_id: state.session.auth_id,
