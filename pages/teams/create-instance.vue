@@ -17,7 +17,7 @@
               div(class="sm:col-span-6")
                 label.block.text-sm.font-medium.leading-5.text-gray-700(for="message") Description
                 .mt-1.rounded-md.shadow-sm: textarea#description.form-textarea.block.w-full.transition.duration-150.ease-in-out(rows="3" class="sm:text-sm sm:leading-5" v-model="description")
-                p.mt-2.text-sm.text-gray-500 Write a few sentences about the invitation.
+                p.mt-2.text-sm.text-gray-500 Write a few sentences about the instance.
             .mt-8.border-t.border-gray-200.pt-5
               .flex.justify-end
                 span.inline-flex.rounded-md.shadow-sm: button.py-2.px-4.border.border-gray-300.rounded-md.text-sm.leading-5.font-medium.text-gray-700.transition.duration-150.ease-in-out(type="button" class="hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-50 active:text-gray-800" v-on:click='cancel()') Cancel
