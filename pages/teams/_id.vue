@@ -25,7 +25,7 @@
                           | Description
                         th.px-6.py-3.border-b.border-gray-200.bg-gray-50
                     tbody.bg-white(v-for="instance in instances" v-bind:key="instance.instance_id")
-                      tr
+                      tr(v-if="instance.instance_status!=='deleted'")
                         td.px-6.py-4.whitespace-no-wrap.border-b.border-gray-200.text-sm.leading-5.text-gray-500
                           | {{instance.instance_name}}
                         td.px-6.py-4.whitespace-no-wrap.border-b.border-gray-200.text-sm.leading-5.text-gray-500
@@ -73,7 +73,7 @@
             .mt-6(class="sm:mt-5 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5")
               .flex.h-10.items-center.justify-between
                 label.block.text-sm.font-medium.leading-5.text-gray-700(class="sm:mt-px") Invitations
-                
+
                 span.inline-flex.rounded-md.shadow-sm
                     button.relative.inline-flex.items-center.px-4.py-2.border.border-transparent.text-sm.leading-5.font-medium.rounded-md.text-white.bg-indigo-600(type="button" class="hover:bg-indigo-500 focus:outline-none focus:shadow-outline-indigo focus:border-indigo-700 active:bg-indigo-700" @click='createInvitation()') Create Invitation
               .mt-3
@@ -399,7 +399,7 @@ export default {
         method: 'post',
         url: '/instance/edit',
         data: {
-          auth_id: this.$state.sessionKey.auth_id,
+          auth_id: this.$store.state.session.auth_id,
           instance_id: this.selectedInstance.instance_id,
           instance_name: this.instanceName,
           time_zone_offset: parseInt(this.instanceOffset),
@@ -426,7 +426,25 @@ export default {
           this.editInstanceModalOpen = false
         })
     },
-    async deleteInstance() {}
+    async deleteInstance(instance) {
+      const cont = await this.alert.confirm()
+      if (!cont) return
+      this.$axios({
+        method: 'post',
+        url: '/instance/edit',
+        data: {
+          auth_id: this.$store.state.session.auth_id,
+          instance_id: instance.instance_id,
+          instance_status: 'deleted'
+        }
+      })
+        .catch((e) => {
+          this.alert.error({ title: e.message || 'An error has occured, please try again later.', showButton: true })
+        })
+        .finally((f) => {
+          this.loadData()
+        })
+    }
   }
 }
 </script>
