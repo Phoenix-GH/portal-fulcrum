@@ -43,7 +43,7 @@ export default {
         method: 'post',
         url: '/instance/create',
         data: {
-          auth_id: this.$state.sessionKey.auth_id,
+          auth_id: this.$store.state.session.auth_id,
           team_id: teamId,
           instance_name: this.name,
           time_zone_offset: parseInt(this.offset),
