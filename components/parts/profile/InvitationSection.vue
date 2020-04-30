@@ -68,7 +68,7 @@ export default {
     },
     async onAccept({ invitation_code }) {
       try {
-        await this.$axios.post('/invitation/invite-accept', { invitation_code })
+        await this.$axios.post('/team/invite-accept', { invitation_code })
         await this.alert.success({ title: 'Finished', text: 'Invitation has been accepted.' })
       } catch (err) {
         this.alert.error(err)
