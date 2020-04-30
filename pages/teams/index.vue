@@ -36,7 +36,6 @@
           tr
             td.px-6.py-4.whitespace-no-wrap.border-b.border-gray-200.text-sm.leading-5.font-medium.text-gray-900(colspan=5)
               | No teams are available. Please create a new one.
-  //-DeleteModal(:isOpen="deleteModalOpen" :onOK="deleteTeam" :onCancel="closeDeleteModal")
   .fixed.bottom-0.inset-x-0.px-4.pb-4(v-if="editModalOpen" class="sm:inset-0 sm:flex sm:items-center sm:justify-center")
     .fixed.inset-0.transition-opacity(): .absolute.inset-0.bg-gray-500.opacity-75
     .relative.bg-white.rounded-lg.px-4.pt-5.pb-4.shadow-xl.transform.transition-all(class="sm:max-w-lg sm:w-full sm:p-6")
