@@ -74,9 +74,6 @@ export default {
   },
   mounted() {},
   methods: {
-    changeTeam() {
-      this.$router.push('/teams/')
-    },
     async deleteMember(user) {
       const cont = await this.alert.confirm()
       if (!cont) return
