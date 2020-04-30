@@ -58,7 +58,7 @@
 <script>
 export default {
   layout: 'default',
-  name: 'Instance',
+  name: 'Instances',
   inject: ['alert'],
   props: {
     instances: { type: Array, default: () => [] },
