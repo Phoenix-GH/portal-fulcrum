@@ -7,7 +7,7 @@
           .ml-4.mt-2: h3.text-lg.leading-6.font-medium.text-gray-900 {{team && team.team_name}}
 
         Instances(:instances="instances" :loadData="loadData")
-        Members(:users="users" :loadData="loadData")
+        Members(:users="users" :loadData="loadData" :currentUserRoleValue="currentUserRoleValue")
         Invitations(:invitations="invitations" :loadData="loadData")
 
   portal(to="navigation-title")

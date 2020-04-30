@@ -67,7 +67,8 @@ export default {
   inject: ['alert'],
   props: {
     users: { type: Array, default: () => [] },
-    loadData: { type: Function, default: () => {} }
+    loadData: { type: Function, default: () => {} },
+    currentUserRoleValue: { type: Number, default: 0 }
   },
   data() {
     return {
@@ -75,7 +76,7 @@ export default {
       editMemberModalOpen: false,
       selectedMember: null,
       dropdownOpen: false,
-      currentUserRoleValue: 0,
+
       roles: [
         {
           id: 'owner',
