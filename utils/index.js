@@ -29,3 +29,11 @@ export const debounce = (fn, wait) => {
     }, wait)
   }
 }
+
+export const coalesce = (...args) => {
+  for (const item of args) {
+    if (item === null || item === undefined) continue
+
+    return item
+  }
+}

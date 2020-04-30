@@ -208,7 +208,6 @@ export default {
     async signOut() {
       try {
         await this.$axios.post('/user/logout')
-        await this.$store.dispatch('REFRESH_SESSION')
 
         this.$store.commit('CLEAR_STATE')
         this.$router.push('/logout')

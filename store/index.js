@@ -42,6 +42,7 @@ export const mutations = {
   },
   CLEAR_STATE(state) {
     console.log('  M::CLEAR_STATE')
+    this.$cookies.remove(COOKIE_NAME)
     state.selectedTeam = null
     state.user = null
     state.teams = []
@@ -55,7 +56,7 @@ export const mutations = {
 }
 
 export const actions = {
-  async GENERATE_SESSION({ state, commit }, { ipAddress }) {
+  async GENERATE_SESSION({ state, commit }, { ipAddress } = {}) {
     try {
       console.log('  A::GENERATE_SESSION')
       const headers = { 'X-Source': 'GENERATE_SESSION' }
@@ -71,7 +72,7 @@ export const actions = {
       if (err.response) console.error(err.response.status, err.response.data)
     }
   },
-  async REFRESH_SESSION({ state, commit }, { ipAddress, cookie }) {
+  async REFRESH_SESSION({ state, commit }, { ipAddress, cookie } = {}) {
     console.log('  A::REFRESH_SESSION', { cookie, ipAddress })
 
     const { auth_id } = cookie
