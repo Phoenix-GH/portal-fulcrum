@@ -27,11 +27,11 @@
                             button.text-sm.py-1.px-3.rounded-md.font-semibold.text-gray-600(
                               class="hover:text-red-700"
                               type="button"
-                              @click="onReject(inv)"
+                              @click="onDecline(inv)"
                               )
                               //-svg.w-5.h-5(fill="none" viewBox="0 0 24 24" stroke="currentColor" strokewidth="1.5")
                                 path(stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12")
-                              | Ignore
+                              | Decline
                             button.text-sm.ml-2.py-1.px-3.rounded-md.font-semibold.border-2.text-gray-600(
                               class="hover:border-green-500 hover:text-green-600"
                               type="button"
@@ -58,12 +58,12 @@ export default {
     }
   },
   methods: {
-    async onReject({ invitation_code }) {
+    async onDecline({ invitation_code }) {
       try {
         await this.$axios.post('/team/invite-accept', { invitation_code })
-        await this.alert.success({ title: 'Finished', text: 'Invitation has been rejected.' })
+        await this.alert.success({ title: 'Finished', text: 'Invitation has been declined.' })
       } catch (err) {
-        this.alert.error({ errors: [err], showButton: true, closeOnBackground: false })
+        this.alert.error(err)
       }
     },
     async onAccept({ invitation_code }) {
@@ -71,7 +71,7 @@ export default {
         await this.$axios.post('/invitation/invite-accept', { invitation_code })
         await this.alert.success({ title: 'Finished', text: 'Invitation has been accepted.' })
       } catch (err) {
-        this.alert.error({ errors: [err], showButton: true, closeOnBackground: false })
+        this.alert.error(err)
       }
     }
   }
