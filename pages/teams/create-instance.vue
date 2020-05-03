@@ -55,7 +55,7 @@ export default {
         .then((response) => {
           this.alert.success({
             title: 'The instance was created successfully!',
-            onClose: this.closeAlert,
+            onClose: this.cancel,
             showButton: true
           })
           this.name = null
@@ -67,9 +67,6 @@ export default {
         })
     },
     cancel() {
-      this.$router.go(-1)
-    },
-    closeAlert() {
       this.$router.go(-1)
     }
   }
