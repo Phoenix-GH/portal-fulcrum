@@ -24,7 +24,8 @@
                 td.px-6.py-4.whitespace-no-wrap.border-b.border-gray-200.text-sm.leading-5.text-gray-500
                   | {{instance.time_zone_offset}}
                 td.px-6.py-4.whitespace-no-wrap.border-b.border-gray-200.text-sm.leading-5.text-gray-500
-                  | {{instance.instance_status}}
+                  a.text-indigo-600(href='#' class="hover:text-indigo-900 focus:outline-none focus:underline" v-on:click='selectTeam(team.team_id)')
+                    | {{instance.instance_status === 'active' ? 'Currently active' : 'Select'}}
                 td.px-6.py-4.whitespace-no-wrap.border-b.border-gray-200.text-sm.leading-5.text-gray-500
                   | {{instance.description}}
                 td.px-6.py-4.whitespace-no-wrap.text-right.border-b.border-gray-200.text-sm.leading-5.font-medium
