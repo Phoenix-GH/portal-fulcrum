@@ -24,7 +24,7 @@
                 td.px-6.py-4.whitespace-no-wrap.border-b.border-gray-200.text-sm.leading-5.text-gray-500
                   | {{instance.time_zone_offset}}
                 td.px-6.py-4.whitespace-no-wrap.border-b.border-gray-200.text-sm.leading-5.text-gray-500
-                  a.text-indigo-600(href='#' class="hover:text-indigo-900 focus:outline-none focus:underline" v-on:click='selectTeam(team.team_id)')
+                  a.text-indigo-600(href='#' class="hover:text-indigo-900 focus:outline-none focus:underline" v-on:click='selectInstance(instance.instance_id)')
                     | {{instance.instance_status === 'active' ? 'Currently active' : 'Select'}}
                 td.px-6.py-4.whitespace-no-wrap.border-b.border-gray-200.text-sm.leading-5.text-gray-500
                   | {{instance.description}}
@@ -158,7 +158,8 @@ export default {
         .finally((f) => {
           this.loadData()
         })
-    }
+    },
+    selectInstance() {}
   }
 }
 </script>
