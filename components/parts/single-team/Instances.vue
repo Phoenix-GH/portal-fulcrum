@@ -25,7 +25,7 @@
                   | {{instance.time_zone_offset}}
                 td.px-6.py-4.whitespace-no-wrap.border-b.border-gray-200.text-sm.leading-5.text-gray-500
                   a.text-indigo-600(href='#' class="hover:text-indigo-900 focus:outline-none focus:underline" v-on:click='selectInstance(instance.instance_id)')
-                    | {{instance.instance_status === 'active' ? 'Currently active' : 'Select'}}
+                    | {{currentInstance !== instance.instance_id ? 'Select' : 'Currently active'}}
                 td.px-6.py-4.whitespace-no-wrap.border-b.border-gray-200.text-sm.leading-5.text-gray-500
                   | {{instance.description}}
                 td.px-6.py-4.whitespace-no-wrap.text-right.border-b.border-gray-200.text-sm.leading-5.font-medium
@@ -70,7 +70,8 @@ export default {
       editInstanceModalOpen: false,
       selectedInstance: null,
       instanceDescription: null,
-      instanceOffset: 0
+      instanceOffset: 0,
+      currentInstance: this.$store.state.selectedInstance
     }
   },
   mounted() {},
@@ -159,7 +160,10 @@ export default {
           this.loadData()
         })
     },
-    selectInstance() {}
+    selectInstance(id) {
+      this.currentInstance = id
+      this.$store.dispatch('SET_CURRENT_INSTANCE', { selectedInstance: id })
+    }
   }
 }
 </script>

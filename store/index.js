@@ -5,6 +5,7 @@ export const state = () => ({
   session: null,
   sessionKey: null,
   selectedTeam: null,
+  selectedInstance: null,
   // sessionError: null,
   user: null,
   teams: [],
@@ -20,6 +21,7 @@ export const mutations = {
     console.log('  M::ADD_SESSION', session)
     state.session = session
     if (session['p.current_team']) this.state.selectedTeam = session['p.current_team']
+    if (session['p.current_instance']) this.state.selectedInstance = session['p.current_instance']
     this.$cookies.set(COOKIE_NAME, session)
   },
   ADD_INVITE_KEY(state, code) {
@@ -31,6 +33,9 @@ export const mutations = {
   // },
   SELECT_TEAM(state, source) {
     state.selectedTeam = source.selectedTeam
+  },
+  SELECT_INSTANCE(state, source) {
+    state.selectedInstance = source.selectedInstance
   },
   SET_STATE(state, source) {
     console.log('  M::SET_STATE', source)
@@ -44,6 +49,7 @@ export const mutations = {
     console.log('  M::CLEAR_STATE')
     this.$cookies.remove(COOKIE_NAME)
     state.selectedTeam = null
+    state.selectedInstance = null
     state.user = null
     state.teams = []
     state.invites = []
@@ -125,5 +131,8 @@ export const actions = {
     // }
 
     commit('SELECT_TEAM', { selectedTeam })
+  },
+  SET_CURRENT_INSTANCE({ state, commit }, { selectedInstance }) {
+    commit('SELECT_INSTANCE', { selectedInstance })
   }
 }
