@@ -10,6 +10,7 @@ export default async (context) => {
   // Check cookie to see if the user has already logged in
   const cookie = app.$cookies.get(COOKIE_NAME)
 
+  // eslint-disable-next-line no-console
   console.log('AUTH M', route.path, { ipAddress, cookie, session: store.state.session })
   // If the user is not authenticated
   if (cookie === undefined) {

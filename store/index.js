@@ -6,7 +6,6 @@ export const state = () => ({
   sessionKey: null,
   selectedTeam: null,
   selectedInstance: null,
-  // sessionError: null,
   user: null,
   teams: [],
   invites: [],
@@ -18,7 +17,6 @@ export const state = () => ({
 
 export const mutations = {
   ADD_SESSION(state, session) {
-    console.log('  M::ADD_SESSION', session)
     state.session = session
     if (session['p.current_team']) this.state.selectedTeam = session['p.current_team']
     if (session['p.current_instance']) this.state.selectedInstance = session['p.current_instance']
@@ -38,6 +36,7 @@ export const mutations = {
     state.selectedInstance = source.selectedInstance
   },
   SET_STATE(state, source) {
+    // eslint-disable-next-line no-console
     console.log('  M::SET_STATE', source)
     state.user = source.user
     state.teams = source.teams
@@ -46,6 +45,7 @@ export const mutations = {
     state.authenticated = true
   },
   CLEAR_STATE(state) {
+    // eslint-disable-next-line no-console
     console.log('  M::CLEAR_STATE')
     this.$cookies.remove(COOKIE_NAME)
     state.selectedTeam = null
@@ -64,6 +64,7 @@ export const mutations = {
 export const actions = {
   async GENERATE_SESSION({ state, commit }, { ipAddress } = {}) {
     try {
+      // eslint-disable-next-line no-console
       console.log('  A::GENERATE_SESSION')
       const headers = { 'X-Source': 'GENERATE_SESSION' }
       if (ipAddress) headers['X-Forwarded'] = ipAddress
@@ -79,6 +80,7 @@ export const actions = {
     }
   },
   async REFRESH_SESSION({ state, commit }, { ipAddress, cookie } = {}) {
+    // eslint-disable-next-line no-console
     console.log('  A::REFRESH_SESSION', { cookie, ipAddress })
 
     const { auth_id } = cookie
